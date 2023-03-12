@@ -75,6 +75,6 @@ You can complete this workshop using only your browser using [GitHub Codespaces]
 
 A: Make sure you have [configured your Rust toolchain](https://www.rust-lang.org/tools/install), and have added the `wasm32-wasi` target using `rustup target add wasm32-wasi`.
 
-### Q: I cannot build my JavaScript or TypeScript application with `spin build`.
+#### Q: I cannot build my JavaScript or TypeScript application with `spin build`.
 
 A: Make sure you have [configured Node.js and `npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and that you have executed `npm install` in the directory with your component's `package.json` file that contains the dependencies.
