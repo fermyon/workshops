@@ -178,7 +178,7 @@ command = "npm run build"
 
 > Note: you can [learn more about the Spin manifest file in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
 
-You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
+First install the dependencies for the template with `npm install`. You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
 
 ```bash
 spin build
@@ -233,6 +233,6 @@ $ curl -v localhost:3000
 Hello, WebAssembly!
 ```
 
-You are now ready to expand your application. You can follow the [guide for building Rust components from the Spin documentation](https://developer.fermyon.com/spin/rust-components).
+You are now ready to expand your application. You can follow the [guide for building JavaScript components from the Spin documentation](https://developer.fermyon.com/spin/javascript-components).
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
