@@ -1,0 +1,39 @@
+# Magic 8 Ball Frontend
+
+Let's make our Magic 8 Ball application more interactive by adding a frontend where you can submit your question to the omniscient ball! To do this, we will want to add a new component to our Spin application that can serve the frontend of our application. Fortunately, Spin has a [static file server component](https://github.com/fermyon/spin-fileserver) that can be added to any Spin application using `spin add`. Since this will be the base of our application, set the component trigger to match on all routes with the wildcard `/...`. We also need to tell the fileserver which files to serve. For the purposes of the workshop, we have already prepared an HTML JS [frontend](apps/frontend/). Also, specify the path to that directory when adding the component.
+
+```bash
+$ spin add static-fileserver fileserver
+HTTP path: /...
+Directory containing the files to serve: ../spin/apps/frontend
+```
+
+Let's take a look at the `fileserver` component that has now been added to the application manifest (`spin.toml`). In the component there is a [`files` field](https://developer.fermyon.com/spin/writing-apps#including-files-with-components). Since Wasm has a [capability-based](https://github.com/WebAssembly/WASI/blob/ddfe3d1dda5d1473f37ecebc552ae20ce5fd319a/README.md#capability-based-security) security model, a module can only access files that have been explicitly allowed by the Wasm runtime (wasmtime). This tells Spin to enable the module to read those files at runtime. We set the destination for the files to be the root directory as this is where the [`fileserver`](https://github.com/fermyon/spin-fileserver/blob/main/src/lib.rs#L81) module is configured to look for them.
+
+```toml
+[[component]]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm", digest = "sha256:650376c33a0756b1a52cad7ca670f1126391b79050df0321407da9c741d32375" }
+id = "fileserver"
+files = [ { source = "../spin/apps/frontend/", destination = "/" } ]
+[component.trigger]
+route = "/..."
+```
+
+Let's look at the frontend implementation. It takes in a question and calls our Magic 8 Ball `magic-8` component to get the response. This is done in the `fetch('../magic-8')` call in the JS portion of the frontend shared below. You can see that we are also passing the question in the body of the request. We will use this in a later step of the workshop. Don't worry about copying the code snippet below. This is just for illustrative purposes.
+
+```js
+    const btn= document.getElementById("btn");
+    btn.addEventListener('click', function(){
+        document.getElementById("answer").innerHTML = "";
+        var name = document.getElementById("question").value;
+        fetch('../magic-8', { method: 'POST', body: name }).then(response => response.json()).then(data => {
+                document.getElementById("answer").innerHTML = data.answer;
+        })
+    });
+```
+
+Now, we are ready to build and run our application.
+
+```bash
+spin build --up
+```
