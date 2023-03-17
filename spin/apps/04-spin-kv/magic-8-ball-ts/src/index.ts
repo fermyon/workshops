@@ -18,6 +18,10 @@ function getOrSetAnswer(question: string): string {
   let response = "";
   if (store.exists(question)) {
     response = decoder.decode(store.get(question));
+    if (response == "Ask again later.") {
+      response = answer();
+      store.set(question, response);
+    }
   } else {
     response = answer();
     store.set(question, response);
@@ -26,14 +30,12 @@ function getOrSetAnswer(question: string): string {
 }
 
 function answer(): string {
-  let rand = Math.random();
-  if ( rand < 0.25 ) {
-    return "Ask again later."
-  } else if ( rand < 0.50 ) {
-    return "Absolutely!"
-  } else if ( rand < 0.75 ) {
-    return "Unlikely"
-  } else {
-    return "Simply put, no."
-  }
+  let answers = [
+    'Ask again later.',
+    'Absolutely!',
+    'Unlikely',
+    'Simply put, no'
+  ];
+  let idx = Math.floor(Math.random() * answers.length);
+  return answers[idx];
 }

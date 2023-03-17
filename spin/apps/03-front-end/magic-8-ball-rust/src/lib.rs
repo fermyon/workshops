@@ -15,15 +15,12 @@ fn handle_magic_8_ball(_req: Request) -> Result<Response> {
 }
 
 fn answer<'a>() -> &'a str {
-    let x = rand::random::<u8>();
-    let fourth = u8::MAX / 4;
-    if x < fourth {
-        "Ask again later."
-    } else if x < fourth * 2 {
-        "Absolutely!"
-    } else if x < fourth * 3 {
-        "Unlikely"
-    } else {
-        "Simply put, no."
-    }
+    let answers = vec![
+        "Ask again later.",
+        "Absolutely!",
+        "Unlikely",
+        "Simply put, no",
+    ];
+    let idx = (answers.len() as f32 * rand::random::<f32>()) as usize;
+    answers[idx]
 }

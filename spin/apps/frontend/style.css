@@ -16,3 +16,42 @@ button {
     outline: none;
     margin: 1rem;
 }
+
+main {
+    max-width: 610px;
+    margin: auto;
+    }
+
+#btn, #magicEightBall {
+    text-align: center;
+    color: black;
+    margin: 5px;
+}
+
+#circle {
+    background-color: white;
+    color: black;
+    position: absolute;
+    margin-left: 70px;
+    margin-top: 70px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: none;
+}
+
+#triangle {
+    display: none;
+    font-size: 14pt;
+    width: 120px;
+    height: 110px;
+    margin-left: 85px;
+    margin-top: 70px;
+    background-image:
+     linear-gradient(to bottom right, transparent 50%, #d385e8 0),
+     linear-gradient(to top right, #d385e8 50%, transparent 0);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    background-position: left, right;
+    position:absolute; 
+}
