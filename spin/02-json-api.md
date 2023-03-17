@@ -1,6 +1,6 @@
 # Building a Magic 8 Ball JSON API with Spin
 
-For the rest of the workshop we will build a Magic 8 Ball Spin application. Adding more features to our Magic 8 Ball with each exercise.Soon you will have all your questions answered!
+For the rest of the workshop we will build a Magic 8 Ball Spin application. Adding more features to our Magic 8 Ball with each exercise. Soon you will have all your questions answered!
 
 A [Magic 8 Ball](https://en.wikipedia.org/wiki/Magic_8_Ball) is a plastic ball that contains a 20-sided die with responses.
 You vocalize your question, spin the ball, and turn the ball to see an answer revealed.
@@ -56,14 +56,13 @@ $ curl http://127.0.0.1:3000/magic-8
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
-## Building your Magic 8 Ball application with Python
-
-TODO
-
 ### Learning Summary
+
 In this section you learned how to:
+
 - [x] Host a JSON API with a Spin app which uses an HTTP trigger
 
 ### Navigation
-* Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
-* Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)
+
+- Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
+- Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)

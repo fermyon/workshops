@@ -36,9 +36,12 @@ command = "cargo build --target wasm32-wasi --release"
 Follow the documentation on using the [Spin key/value SDK](https://developer.fermyon.com/spin/kv-store.md#using-the-spin-sdk) to set and a check previous question and answer pairs.
 
 ### Learning Summary
+
 In this section you learned how to:
+
 - [x] Persist non-relational data using Spin's default key-value store using the Spin key/value API
 
 ### Navigation
-* Go back to [03 -Magic 8 Ball Frontend](03-frontend.md) if you still have questions on previous section
-* Otherwise, proceed to [05 - Storing data in an external database](05-external-db.md)
+
+- Go back to [04 - Deploy to Fermyon Cloud](04-deploy-fermyon-cloud.md) if you still have questions on previous section
+- Otherwise, proceed to [06 - Storing data in an external database](06-external-db.md)

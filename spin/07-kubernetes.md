@@ -1,6 +1,6 @@
 # Magic K8s Ball
 
-We can also run our Magic 8 Ball Spin application on Kubernetes using a [Wasm `containerd` shim](https://github.com/deislabs/containerd-wasm-shims/blob/main/containerd-shim-spin-v1/quickstart.md).
+We can also run our Magic 8 Ball Spin application on Kubernetes using a [Wasm `containerd` shim](https://github.com/deislabs/containerd-wasm-shims/blob/main/containerd-shim-spin-v1/quickstart.md). This exercise is a continuation of [exercise 3](./03-frontend.md), as currently, KV support is not available on K8s.
 
 ## Pre-requisites
 
@@ -17,10 +17,10 @@ Before you begin, you need to have the following installed:
 Start a k3d cluster with the wasm shims already installed:
 
 ```bash
-k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.3.3 -p "8081:80@loadbalancer" --agents 2 --registry-create mycluster-registry:12345
+k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.5.1 -p "8081:80@loadbalancer" --agents 2
 ```
 
-Apply RuntimeClass for spin applications to use the spin wasm shim:
+Apply RuntimeClass for spin applications to use the Spin containerd Wasm shim:
 
 ```bash
 cat <<EOF | kubectl create -f -
@@ -41,7 +41,7 @@ The plugin requires that all modules are available locally and that files are wi
 ```bash
 
 curl -LRO https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm
-cp -r ../../../../frontend .
+cp -r spin/apps/frontend .
 ```
 
 Update your `fileserver` component manifest:
@@ -55,20 +55,26 @@ files = [ { source = "frontend/", destination = "/" } ]
 route = "/..."
 ```
 
-Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). 
+
+> Note: To skip building your own container and instead use an existing public one, first copy a pre-scaffolded `deploy.yaml` from the completed apps directory like so: `cp apps/07-kubernetes/magic-8-ball-rust/deploy.yaml .` Then, proceed with the `spin k8s deploy` step.
 
 ```bash
 # Install the plugin
 $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
+# Build your app locally
+$ spin build
 # Scaffold your Dockerfile, passing in the namespace of your registry
 $ spin k8s scaffold ghcr.io/kate-goldenring  && spin k8s build
 # Push the container to your container registry
-spin k8s push ghcr.io/kate-goldenring 
+$ spin k8s push ghcr.io/kate-goldenring 
 # After making sure it is a publicly accessible container or adding a regcred to your `deploy.yaml`
-spin k8s deploy
+$ spin k8s deploy
+# Watch the applications become ready
+$ kubectl get pods --watch
 ```
 
-Now, spin your Magic 8 Ball at `http://127.0.0.1:3000/`.
+Now, spin your Magic 8 Ball at `http://0.0.0.0:8081/`.
 
 ## Cleanup
 
@@ -79,10 +85,12 @@ k3d cluster delete wasm-cluster
 ```
 
 ### Learning Summary
+
 In this section you learned how to:
-- [x] Use the containerd shim to package a Spin app within a Docker container
+- [x] Use the containerd Wasm shim to package a Spin app within a Docker container
 - [x] Deploy a containerized Spin app to a Kubernetes cluster 
 
 ### Navigation
-* Go back to [06 - Deploy your Magic Ball Spin Application to Fermyon Cloud](06-deploy-fermyon-cloud.md) if you still have questions on previous section
-* Otherwise, congrats on finishing the workshop! 
+
+- Go back to [06 - Storing data in an external database](06-external-db.md) if you still have questions on previous section
+- Otherwise, congrats on finishing the workshop!
