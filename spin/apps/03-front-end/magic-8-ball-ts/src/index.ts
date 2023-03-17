@@ -7,7 +7,7 @@ export const handleRequest: HandleRequest = async function(request: HttpRequest)
     return {
       status: 200,
         headers: { "Content-Type": "application/json" },
-      body: encoder.encode(answerJson).buffer
+      body: answerJson
     }
 }
 

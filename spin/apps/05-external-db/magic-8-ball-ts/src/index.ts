@@ -9,17 +9,16 @@ export const handleRequest: HandleRequest = async function(request: HttpRequest)
     return {
       status: 200,
         headers: { "Content-Type": "application/json" },
-      body: encoder.encode(answerJson).buffer
+      body: answerJson
     }
 }
 
 function getOrSetAnswer(question: string): string {
   let address = process.env["REDIS_ADDRESS"] as string;
-  let store = spinSdk.kv.openDefault();
   let response = decoder.decode(spinSdk.redis.get(address, question));
   if ( response.length == 0 || response == "Ask again later." ) {
     response = answer();
-    store.set(question, response);
+    spinSdk.redis.set(address, question, encoder.encode(response).buffer);
   }
   return response;
 }
