@@ -1,0 +1,15 @@
+spin_manifest_version = "1"
+authors = ["Kate Goldenring <kate.goldenring@fermyon.com>"]
+description = ""
+name = "magic-8-ball"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "magic-8-ball"
+source = "target/wasm32-wasi/release/magic_8_ball.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/magic-8"
+[component.build]
+command = "cargo build --target wasm32-wasi --release"

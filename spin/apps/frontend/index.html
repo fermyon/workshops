@@ -1,0 +1,22 @@
+<html>
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png" />
+    <link rel="stylesheet" href="./style.css" />
+
+<body>
+    <h1>Ask the Magic 8 Ball a Question</h1>
+    <input type="text" id="question" placeholder="Ask Question">
+    <button id="btn">Spin</button>
+    <span id="answer"></span>
+    <script>
+        const btn= document.getElementById("btn");
+        btn.addEventListener('click', function(){
+            document.getElementById("answer").innerHTML = "";
+            var name = document.getElementById("question").value;
+            fetch('../magic-8', { method: 'POST', body: name }).then(response => response.json()).then(data => {
+                    document.getElementById("answer").innerHTML = data.answer;
+            })
+        });
+    </script>
+</body>
+</html>

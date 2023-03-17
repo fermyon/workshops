@@ -1,0 +1,18 @@
+html {
+    background-color: #ECE5EE;
+}
+
+body {
+    text-align: center;
+}
+
+canvas {
+    margin: 0 auto;
+}
+
+button {
+    padding: 0.4rem;
+    border-radius: 0.667em;
+    outline: none;
+    margin: 1rem;
+}
