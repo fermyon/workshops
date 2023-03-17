@@ -1,4 +1,4 @@
-import { HandleRequest, HttpRequest, HttpResponse} from "@fermyon/spin-sdk"
+import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
 
 const encoder = new TextEncoder()
 
@@ -12,14 +12,12 @@ export const handleRequest: HandleRequest = async function(request: HttpRequest)
 }
 
 function answer(): string {
-  let rand = Math.random();
-  if ( rand < 0.25 ) {
-    return "Ask again later."
-  } else if ( rand < 0.50 ) {
-    return "Absolutely!"
-  } else if ( rand < 0.75 ) {
-    return "Unlikely"
-  } else {
-    return "Simply put, no."
-  }
+  let answers = [
+    'Ask again later.',
+    'Absolutely!',
+    'Unlikely',
+    'Simply put, no'
+  ];
+  let idx = Math.floor(Math.random() * answers.length);
+  return answers[idx];
 }

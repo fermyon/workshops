@@ -22,14 +22,15 @@ route = "/..."
 Let's look at the frontend implementation. It takes in a question and calls our Magic 8 Ball `magic-8` component to get the response. This is done in the `fetch('../magic-8')` call in the JS portion of the frontend shared below. You can see that we are also passing the question in the body of the request. We will use this in a later step of the workshop. Don't worry about copying the code snippet below. This is just for illustrative purposes.
 
 ```js
-    const btn= document.getElementById("btn");
-    btn.addEventListener('click', function(){
-        document.getElementById("answer").innerHTML = "";
-        var name = document.getElementById("question").value;
-        fetch('../magic-8', { method: 'POST', body: name }).then(response => response.json()).then(data => {
-                document.getElementById("answer").innerHTML = data.answer;
-        })
-    });
+const btn= document.getElementById("btn");
+btn.addEventListener('click', function(){
+    var question = document.getElementById("question").value;
+    fetch('../magic-8', { method: 'POST', body: question }).then(response => response.json()).then(data => {
+        document.getElementById("triangle").style.display = 'inline-block';
+        document.getElementById("circle").style.display = 'inline-block';
+        document.getElementById("triangle").innerHTML = '<br><br>' + data.answer;
+    })
+});
 ```
 
 Now, we are ready to build and run our application.
