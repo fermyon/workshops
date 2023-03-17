@@ -216,7 +216,7 @@ export async function handleRequest(request: HttpRequest): Promise<HttpResponse>
   return {
     status: 200,
     headers: { "foo": "bar" },
-    body: encoder.encode("Hello, WebAssembly!").buffer
+    body: "Hello, WebAssembly!"
   }
 }
 ```
