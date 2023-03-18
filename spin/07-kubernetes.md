@@ -23,7 +23,13 @@ k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/e
 Apply RuntimeClass for spin applications to use the spin wasm shim:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/deislabs/containerd-wasm-shims/main/deployments/workloads/runtime.yaml
+cat <<EOF | kubectl create -f -
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: wasmtime-spin
+handler: spin
+EOF
 ```
 
 ## Package your Spin app inside a container
@@ -66,6 +72,8 @@ Now, spin your Magic 8 Ball at `http://127.0.0.1:3000/`.
 
 ## Cleanup
 
-TODO 
+Bring down your `k3d` cluster:
 
-Bring down cluster ...
+```bash
+k3d cluster delete wasm-cluster
+```
