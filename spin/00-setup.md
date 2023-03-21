@@ -2,9 +2,9 @@
 
 There are a few ways to set up the development environment in order to follow this workshop:
 
-- configuring your local environment
-- using a local dev container
-- using GitHub Codespaces
+- [configuring your local environment](#configuring-your-local-environment)
+- [using a local dev container](#using-a-local-dev-container-with-vs-code)
+- [using GitHub Codespaces](#using-github-codespaces)
 
 If working on your machine (i.e. not using GitHub Codespaces), first clone the repository locally:
 
