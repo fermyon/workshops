@@ -60,6 +60,10 @@ $ curl http://127.0.0.1:3000/magic-8
 
 TODO
 
+### Learning Summary
+In this section you learned how to:
+- [x] Host a JSON API with a Spin app which uses an HTTP trigger
+
 ### Navigation
 * Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
 * Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)

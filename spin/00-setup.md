@@ -79,5 +79,11 @@ A: Make sure you have [configured your Rust toolchain](https://www.rust-lang.org
 
 A: Make sure you have [configured Node.js and `npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and that you have executed `npm install` in the directory with your component's `package.json` file that contains the dependencies.
 
+### Learning Summary
+In this section you learned how to:
+- [x] Install the latest Spin CLI version
+- [x] Install the latest Spin templates 
+- [x] Install the latest Spin plugins 
+
 ### Navigation
 * Proceed to [01 - Getting started with Spin](./01-getting-started.md)

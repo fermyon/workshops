@@ -77,6 +77,12 @@ Bring down your `k3d` cluster:
 ```bash
 k3d cluster delete wasm-cluster
 ```
+
+### Learning Summary
+In this section you learned how to:
+- [x] Use the containerd shim to package a Spin app within a Docker container
+- [x] Deploy a containerized Spin app to a Kubernetes cluster 
+
 ### Navigation
 * Go back to [06 - Deploy your Magic Ball Spin Application to Fermyon Cloud](06-deploy-fermyon-cloud.md) if you still have questions on previous section
 * Otherwise, congrats on finishing the workshop! 
