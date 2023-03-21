@@ -236,3 +236,7 @@ Hello, WebAssembly!
 You are now ready to expand your application. You can follow the [guide for building JavaScript components from the Spin documentation](https://developer.fermyon.com/spin/javascript-components).
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
+
+### Navigation
+* Go back to [00 - Setup](00-setup.md) if you still have questions on previous section
+* Otherwise, proceed to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md)

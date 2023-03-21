@@ -59,3 +59,7 @@ $ curl http://127.0.0.1:3000/magic-8
 ## Building your Magic 8 Ball application with Python
 
 TODO
+
+### Navigation
+* Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
+* Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)

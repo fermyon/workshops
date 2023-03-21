@@ -77,3 +77,6 @@ Bring down your `k3d` cluster:
 ```bash
 k3d cluster delete wasm-cluster
 ```
+### Navigation
+* Go back to [06 - Deploy your Magic Ball Spin Application to Fermyon Cloud](06-deploy-fermyon-cloud.md) if you still have questions on previous section
+* Otherwise, congrats on finishing the workshop! 

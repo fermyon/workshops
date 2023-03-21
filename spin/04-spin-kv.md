@@ -34,3 +34,7 @@ command = "cargo build --target wasm32-wasi --release"
 ## 3: Storing questions and answers in our key/value store
 
 Follow the documentation on using the [Spin key/value SDK](https://developer.fermyon.com/spin/kv-store.md#using-the-spin-sdk) to set and a check previous question and answer pairs.
+
+### Navigation
+* Go back to [03 -Magic 8 Ball Frontend](03-frontend.md) if you still have questions on previous section
+* Otherwise, proceed to [05 - Storing data in an external database](05-external-db.md)

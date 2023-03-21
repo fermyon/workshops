@@ -78,3 +78,6 @@ A: Make sure you have [configured your Rust toolchain](https://www.rust-lang.org
 #### Q: I cannot build my JavaScript or TypeScript application with `spin build`.
 
 A: Make sure you have [configured Node.js and `npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and that you have executed `npm install` in the directory with your component's `package.json` file that contains the dependencies.
+
+### Navigation
+* Proceed to [01 - Getting started with Spin](./01-getting-started.md)

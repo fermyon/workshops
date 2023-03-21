@@ -38,3 +38,6 @@ Now, we are ready to build and run our application.
 ```bash
 spin build --up
 ```
+### Navigation
+* Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
+* Otherwise, proceed to [04 - Using the Spin Key/Value store to save responses](04-spin-kv.md)
