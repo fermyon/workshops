@@ -10,8 +10,6 @@ id = "magic-8-ball"
 source = "target/spin-http-js.wasm"
 exclude_files = ["**/node_modules"]
 key_value_stores = ["default"]
-# Be sure to set the username, password, and replace `my-redis-instance` for your Redis DB
-environment = { REDIS_ADDRESS = "redis://username:password@my-redis-instance.cloud.redislabs.com:1234" }
 [component.trigger]
 route = "/magic-8"
 [component.build]
@@ -20,6 +18,6 @@ command = "npm run build"
 [[component]]
 source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm", digest = "sha256:650376c33a0756b1a52cad7ca670f1126391b79050df0321407da9c741d32375" }
 id = "fileserver"
-files = [ { source = "../../frontend/", destination = "/" } ]
+files = [{ source = "../../frontend/", destination = "/" }]
 [component.trigger]
 route = "/..."

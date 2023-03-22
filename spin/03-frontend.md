@@ -1,6 +1,6 @@
 # Magic 8 Ball Frontend
 
-Let's make our Magic 8 Ball application more interactive by adding a frontend where you can submit your question to the omniscient ball! To do this, we will want to add a new component to our Spin application that can serve the frontend of our application. Fortunately, Spin has a [static file server component](https://github.com/fermyon/spin-fileserver) that can be added to any Spin application using `spin add`. Since this will be the base of our application, set the component trigger to match on all routes with the wildcard `/...`. We also need to tell the fileserver which files to serve. For the purposes of the workshop, we have already prepared an HTML JS [frontend](apps/frontend/). Also, specify the path to that directory when adding the component.
+Let's make our Magic 8 Ball application more interactive by adding a frontend where you can submit your question to the omniscient ball! To do this, we will want to add a new component to our Spin application that can serve the frontend of our application. Fortunately, Spin has a [static file server component](https://github.com/fermyon/spin-fileserver) that can be added to any Spin application using `spin add`. Since this will be the base of our application, overwrite the default component trigger with the wildcard `/...` to match all routes. We also need to tell the fileserver which files to serve. For the purposes of the workshop, we have already prepared an HTML, CSS, JS [frontend](apps/frontend/). Also, specify the path to that directory when adding the component.
 
 ```bash
 $ spin add static-fileserver fileserver
@@ -40,9 +40,14 @@ spin build --up
 ```
 
 ### Learning Summary
+
 In this section you learned how to:
+
 - [x] Add a new component to an existing Spin app using `spin add`
+- [x] Use the Spin static fileserver component
+- [x] Call one Spin component from another Spin component
 
 ### Navigation
-* Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
-* Otherwise, proceed to [04 - Using the Spin Key/Value store to save responses](04-spin-kv.md)
+
+- Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
+- Otherwise, proceed to [04 - Using the Spin Key/Value store to save responses](04-spin-kv.md)

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magic-8-ball
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: magic-8-ball
+  template:
+    metadata:
+      labels:
+        app: magic-8-ball
+    spec:
+      runtimeClassName: wasmtime-spin
+      containers:
+        - name: magic-8-ball
+          image: ghcr.io/kate-goldenring/magic-8-ball:0.1.0
+          command: ["/"]
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magic-8-ball
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: magic-8-ball
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: magic-8-ball
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: magic-8-ball
+                port:
+                  number: 80
