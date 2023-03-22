@@ -5,6 +5,14 @@ name = "magic-8-ball"
 trigger = { type = "http", base = "/" }
 version = "0.1.0"
 
+
+[[component]]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm", digest = "sha256:650376c33a0756b1a52cad7ca670f1126391b79050df0321407da9c741d32375" }
+id = "fileserver"
+files = [{ source = "../../frontend/", destination = "/" }]
+[component.trigger]
+route = "/..."
+
 [[component]]
 id = "magic-8-ball"
 source = "target/spin-http-js.wasm"
@@ -14,10 +22,3 @@ key_value_stores = ["default"]
 route = "/magic-8"
 [component.build]
 command = "npm run build"
-
-[[component]]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm", digest = "sha256:650376c33a0756b1a52cad7ca670f1126391b79050df0321407da9c741d32375" }
-id = "fileserver"
-files = [ { source = "../../frontend/", destination = "/" } ]
-[component.trigger]
-route = "/..."
