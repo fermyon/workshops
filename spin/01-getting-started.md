@@ -237,6 +237,14 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
+### Learning Summary
+In this section you learned how to:
+- [x] Check your Spin CLI version
+- [x] Create a new Spin app using a template
+- [x] Build your Spin application with `spin build`
+- [x] Run your application locally with `spin up`
+- [x] Modify an HTTP trigger's rouute and entrypoint
+
 ### Navigation
 * Go back to [00 - Setup](00-setup.md) if you still have questions on previous section
 * Otherwise, proceed to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md)

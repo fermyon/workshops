@@ -2,9 +2,9 @@
 
 There are a few ways to set up the development environment in order to follow this workshop:
 
-- configuring your local environment
-- using a local dev container
-- using GitHub Codespaces
+- [configuring your local environment](#configuring-your-local-environment)
+- [using a local dev container](#using-a-local-dev-container-with-vs-code)
+- [using GitHub Codespaces](#using-github-codespaces)
 
 If working on your machine (i.e. not using GitHub Codespaces), first clone the repository locally:
 
@@ -78,6 +78,12 @@ A: Make sure you have [configured your Rust toolchain](https://www.rust-lang.org
 #### Q: I cannot build my JavaScript or TypeScript application with `spin build`.
 
 A: Make sure you have [configured Node.js and `npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and that you have executed `npm install` in the directory with your component's `package.json` file that contains the dependencies.
+
+### Learning Summary
+In this section you learned how to:
+- [x] Install the latest Spin CLI version
+- [x] Install the latest Spin templates 
+- [x] Install the latest Spin plugins 
 
 ### Navigation
 * Proceed to [01 - Getting started with Spin](./01-getting-started.md)
