@@ -94,4 +94,4 @@ In this section you learned how to:
 
 - Go back to [06 - Storing data in an external database](06-external-db.md) if you still have questions on previous section
 - Otherwise, congrats on finishing the workshop! Let us know what you thought of the Spin and the workshop (and if interested, opt in for a chance to win a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!) with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx)
-![Slats The Cat keycap](../media/slats-keycap-cropped.png)
+<img src=../media/slats-keycap-cropped.png width="150">
