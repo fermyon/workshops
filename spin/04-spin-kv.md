@@ -33,7 +33,7 @@ command = "cargo build --target wasm32-wasi --release"
 
 ## 3: Storing questions and answers in our key/value store
 
-Follow the documentation on using the [Spin key/value SDK](https://developer.fermyon.com/spin/kv-store.md#using-the-spin-sdk) to set and a check previous question and answer pairs.
+Reference the [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) to set and a check previous question and answer pairs. The [tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) my also be helpful to reference.
 
 ### Learning Summary
 
@@ -43,5 +43,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [04 - Deploy to Fermyon Cloud](04-deploy-fermyon-cloud.md) if you still have questions on previous section
-- Otherwise, proceed to [06 - Storing data in an external database](06-external-db.md)
+- Go back to [03 - Deploy to Fermyon Cloud](03-deploy-fermyon-cloud.md) if you still have questions on previous section
+- Otherwise, proceed to [05 - Deploy your Magic Ball Spin Application to Fermyon Cloud](05-deploy-fermyon-cloud.md)

@@ -1,6 +1,6 @@
 # Magic K8s Ball
 
-We can also run our Magic 8 Ball Spin application on Kubernetes using a [Wasm `containerd` shim](https://github.com/deislabs/containerd-wasm-shims/blob/main/containerd-shim-spin-v1/quickstart.md). This exercise is a continuation of [exercise 3](./03-frontend.md), as currently, KV support is not available on K8s.
+We can also run our Magic 8 Ball Spin application on Kubernetes using a [Wasm `containerd` shim](https://github.com/deislabs/containerd-wasm-shims/blob/main/containerd-shim-spin-v1/quickstart.md). This exercise is a continuation of [exercise 5](./05-spin-kv.md).
 
 ## Pre-requisites
 
@@ -55,7 +55,7 @@ files = [ { source = "frontend/", destination = "/" } ]
 route = "/..."
 ```
 
-Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). 
+Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). Since each application gets its own key value store, but there is a load balancer balancing requests, we only want one deployment replica. **Be sure to modify the `deploy.yaml` to set `replicas` to `1`.
 
 > Note: To skip building your own container and instead use an existing public one, first copy a pre-scaffolded `deploy.yaml` from the completed apps directory like so: `cp apps/07-kubernetes/magic-8-ball-rust/deploy.yaml .` Then, proceed with the `spin k8s deploy` step.
 
@@ -65,14 +65,16 @@ $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin
 # Build your app locally
 $ spin build
 # Scaffold your Dockerfile, passing in the namespace of your registry
-$ spin k8s scaffold ghcr.io/kate-goldenring  && spin k8s build
+$ spin k8s scaffold ghcr.io/my-registry  && spin k8s build
 # Push the container to your container registry
-$ spin k8s push ghcr.io/kate-goldenring 
+$ spin k8s push ghcr.io/my-registry
 # After making sure it is a publicly accessible container or adding a regcred to your `deploy.yaml`
 $ spin k8s deploy
 # Watch the applications become ready
 $ kubectl get pods --watch
 ```
+
+> To learn more about each of the `k8s` plugin steps, see the [documentation on running Spin on Kubernetes](https://developer.fermyon.com/spin/kubernetes).
 
 Now, spin your Magic 8 Ball at `http://0.0.0.0:8081/`.
 

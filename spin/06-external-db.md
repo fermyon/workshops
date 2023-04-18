@@ -18,5 +18,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [05 - Storing data in the Spin KV database](04-spin-kv.md) if you still have questions on previous section
+- Go back to [05 - Storing data in the Spin KV database](05-spin-kv.md) if you still have questions on previous section
 - Otherwise, proceed to [07 - Deploying a Spin Application on Kubernetes](07-kubernetes.md)

@@ -50,4 +50,4 @@ In this section you learned how to:
 ### Navigation
 
 - Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
-- Otherwise, proceed to [04 - Deploy your Magic Ball Spin Application to Fermyon Cloud](04-deploy-fermyon-cloud.md)
+- Otherwise, proceed to [04 - Persisting Magic 8 Ball Responses](04-spin-kv.md)

@@ -14,5 +14,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [03 - Magic 8 Ball Frontend](03-frontend.md) if you still have questions on previous section
-- Otherwise, proceed to [05 - Persisting Magic 8 Ball Responses](05-spin-kv.md)
+- Go back to [04 - Persisting Magic 8 Ball Responses](04-spin-kv.md) if you still have questions on previous section
+- Otherwise, proceed to [06 - Storing data in an external database](06-external-db.md)
