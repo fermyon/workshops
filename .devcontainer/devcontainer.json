@@ -1,10 +1,10 @@
 {
 	"name": "Fermyon Spin",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "mcr.microsoft.com/devcontainers/rust:0-1-bullseye",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
+	"image": "ghcr.io/fermyon/workshops/dev-container:20230610-183549-gf41b5aa",
+	// "build": {
+	// 	"dockerfile": "Dockerfile"
+	// },
 	"customizations": {
 		"vscode": {
 			"extensions": [
