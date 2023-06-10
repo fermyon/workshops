@@ -3,8 +3,9 @@ name: docker
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    paths:
+      - .devcontainer/Dockerfile
+      - .github/workflows/docker.yaml
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -28,7 +29,7 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v4
         with:
-          push: false
+          push: true
           context: ./.devcontainer
           platforms: linux/amd64
           tags: |
