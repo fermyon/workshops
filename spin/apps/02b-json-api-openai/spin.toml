@@ -1,6 +1,6 @@
 spin_manifest_version = "1"
 authors = ["teknicus"]
-description = ""
+description = "A Magic 8 Ball"
 name = "magic-8-ball"
 trigger = { type = "http", base = "/" }
 version = "0.1.0"
