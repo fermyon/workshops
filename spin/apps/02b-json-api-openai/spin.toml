@@ -1,0 +1,23 @@
+spin_manifest_version = "1"
+authors = ["teknicus"]
+description = ""
+name = "magic-8-ball"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "magic-8-ball"
+source = "target/magic-8-ball.wasm"
+exclude_files = ["**/node_modules"]
+allowed_http_hosts = ["api.openai.com"]
+[component.trigger]
+route = "/magic-8"
+[component.build]
+command = "npm run build"
+
+[[component]]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.2/spin_static_fs.wasm", digest = "sha256:65456bf4e84cf81b62075e761b2b0afaffaef2d0aeda521b245150f76b96421b" }
+id = "fileserver"
+files = [ { source = "../spin/apps/frontend", destination = "/" } ]
+[component.trigger]
+route = "/..."
