@@ -1,6 +1,5 @@
 import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
 
-const OPENAI_KEY = "YOUR_OPENAI_KEY"
 
 const encoder = new TextEncoder()
 const decoder = new TextDecoder("utf-8")
