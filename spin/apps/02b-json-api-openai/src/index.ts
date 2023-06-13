@@ -10,7 +10,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
 
   console.log("<------->")
   console.log("Question Received: " + question)
-
+  let openai_key = spinSdk.config.get("openai_key");
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
   const requestData = JSON.stringify({
     "model": "gpt-3.5-turbo",
