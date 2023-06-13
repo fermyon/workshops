@@ -10,7 +10,6 @@ Instead of the preset responses from the previous example, we will generate a re
 
 ### Note
 
-- Ensure that you replace `YOUR_OPENAI_KEY` in [index.ts](./apps/02b-json-api-openai/src/index.ts) with the key that you generated.
 
 - A system prompt has been added to restrict the response to five words or less.
 
