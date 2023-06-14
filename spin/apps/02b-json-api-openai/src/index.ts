@@ -40,7 +40,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': `Bearer ${OPENAI_KEY}`  // Replace with your actual API token
+      'Authorization': `Bearer ${openai_key}`  // Replace with your actual API token
     },
     body: requestData
   };
