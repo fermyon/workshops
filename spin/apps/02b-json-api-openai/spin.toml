@@ -7,6 +7,7 @@ version = "0.1.0"
 
 [variables]
 openai_key = { required = true }
+
 [[component]]
 id = "magic-8-ball"
 source = "target/magic-8-ball.wasm"
