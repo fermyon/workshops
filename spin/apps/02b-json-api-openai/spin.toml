@@ -19,10 +19,3 @@ route = "/magic-8"
 command = "npm run build"
 [component.config]
 openai_key = "{{ openai_key }}"
-
-[[component]]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.2/spin_static_fs.wasm", digest = "sha256:65456bf4e84cf81b62075e761b2b0afaffaef2d0aeda521b245150f76b96421b" }
-id = "fileserver"
-files = [ { source = "../spin/apps/frontend", destination = "/" } ]
-[component.trigger]
-route = "/..."
