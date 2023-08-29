@@ -29,7 +29,7 @@ At this point, you should be able to run Spin commands:
 
 ```bash
 $ spin --version
-spin 1.0.0
+spin 1.4.0
 ```
 
 Now you can configure the templates and plugins we will use as part of this workshop:
