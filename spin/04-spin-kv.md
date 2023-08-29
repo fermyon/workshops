@@ -1,8 +1,8 @@
 # Using the Spin Key/Value store to save responses
 
-When using a Magic 8 Ball, usually you can keep asking your question and spinning the ball until you get the answer you want. Not for ours! A no is a no! Let's give our Magic 8 Ball a memory by persisting the questions and responses using Spin's [key/value SDK](https://developer.fermyon.com/spin/kv-store.md).
+When using a Magic 8 Ball, usually you can keep asking your question and spinning the ball until you get the answer you want. Not for ours though! This Magic 8 Ball has a memory. This is achieved by persisting the questions and responses using Spin's [key/value SDK](https://developer.fermyon.com/spin/kv-store-api-guide).
 
-Let's modify our `magic-8` component to store the questions asked along with the random answer to Spin's key/value store.
+Let's modify our `magic-8` component to store the questions asked, along with the random answer to Spin's key/value store.
 
 We will need to:
 
@@ -10,12 +10,12 @@ We will need to:
 1. Enable a default key/value store for our component
 1. Check if that question has already been asked by looking it up in the key/value store.
     - a: If previously asked, return the previous answer.*
-    - b: If not previously asked, generate an answer, store it in the store, and return it.
+    - b: If not previously asked, generate an answer, store the answer in the KV store, and return it.
     > `*` if the previous answer was "Ask again later", follow step b.
 
-## 2: Giving our component access to a KV store
+## 1: Giving our component access to a KV store
 
-Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component. It should now look similar to the following:
+Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file. Here's how it would look in **Rust**
 
 ```toml
 [[component]]
@@ -29,11 +29,74 @@ route = "/magic-8"
 command = "cargo build --target wasm32-wasi --release"
 ```
 
-> Note: the TypeScript component also contains `exclude_files = ["**/node_modules"]`
+Here's how `spin.toml` would look like in **Typescript**
 
-## 3: Storing questions and answers in our key/value store
+```typescript
+[[component]]
+id = "magic-8-ball"
+source = "target/magic-8-ball.wasm"
+exclude_files = ["**/node_modules"]
+key_value_stores = ["default"]
+[component.trigger]
+route = "/magic-8"
+[component.build]
+command = "npm run build"
+```
 
-Reference the [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) to set and a check previous question and answer pairs. The [tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) my also be helpful to reference.
+## 2: Storing questions and answers in our key/value store
+
+The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete`  and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. Here's the code snippet in **Rust** to do this
+
+```rust
+// Checks key/value store to see if the question has already been answered. 
+// If not answered, generates an answer, sets it in the KV store and returns it.
+fn get_or_set_answer(question: &str) -> Result<String> {
+    // Open the default key/value store
+    let store = Store::open_default()?;
+
+    match store.get(question) {
+        Ok(value) => {
+            let ans = std::str::from_utf8(&value)?.to_owned();
+            if ans == "Ask again later." {
+                let answer = answer();
+                store.set(question, answer)?;
+                Ok(answer.to_owned())
+            } else {
+                Ok(ans)
+            }
+        }
+        Err(Error::NoSuchKey) => {
+            let answer = answer();
+            store.set(question, answer)?;
+            Ok(answer.to_owned())
+        }
+        Err(error) => Err(error.into()),
+    }
+}
+```
+Here's the code in **Typescript**
+
+```typescript
+function getOrSetAnswer(question: string): string {
+  let store = Kv.openDefault();
+  let response = "";
+  if (store.exists(question)) {
+    response = decoder.decode(store.get(question));
+    if (response == "Ask again later.") {
+      response = answer();
+      store.set(question, response);
+    }
+  } else {
+    response = answer();
+    store.set(question, response);
+  }
+  return response;
+}
+```
+
+In both code snippets, the answer is retrieved from the store, or if the key does not exist, it asks the user for an answer and stores it. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
+
+The [key value store tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) is a helpful resource for a deep-dive into data persistence.
 
 ### Learning Summary
 
