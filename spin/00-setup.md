@@ -12,7 +12,7 @@ If working on your machine (i.e. not using GitHub Codespaces), first clone the r
 $ git clone https://github.com/fermyon/workshops && cd workshops
 ```
 
-### Configuring your local environment
+### a. Configuring your local environment
 
 First, you have to configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install).
 
@@ -54,7 +54,7 @@ Depending on the programming languages you want to use, you will need to configu
 - [Go](https://go.dev/doc/install) and [TinyGo](https://tinygo.org/getting-started/install)
 - [.NET](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
-### Using a local dev container with VS Code
+### b. Using a local dev container with VS Code
 
 This repository contains the necessary files to open the project and develop inside a container, using [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
@@ -62,7 +62,7 @@ After [following the VS Code documentation](https://code.visualstudio.com/docs/d
 
 ![Open the workshops repository using a VS Code Dev Container](../media/dev-container.png)
 
-### Using GitHub Codespaces
+### c. Using GitHub Codespaces
 
 You can complete this workshop using only your browser using [GitHub Codespaces](https://github.com/features/codespaces). To achieve this, navigate to the GitHub repository for this workshop, https://github.com/fermyon/workshops, then click on the "Code" button, then select "Codespaces", click "Create codespace on main`, then follow the instructions:
 
