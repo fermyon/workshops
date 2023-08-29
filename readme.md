@@ -1,6 +1,6 @@
 # Fermyon Workshops
 
-Welcome to the home for all Fermyon workshops!
+This self-paced workshop will teach you the basics of Spin, with a Magic 8 Ball sample app. The workshop can be compelete in either Rust or Typescript. 
 
 ### Spin 101
 
