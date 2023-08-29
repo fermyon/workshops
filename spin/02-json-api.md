@@ -28,7 +28,7 @@ HTTP path: /magic-8
 $ cd magic-8-ball
 ```
 
-We will now write a HTTP component in our `lib.rs` file that returns Magic 8 Ball responses. Your `lib.rs` file should look like this:
+We will now write a HTTP component in our `lib.rs` file that returns a Magic 8 Ball responses. Your `lib.rs` file should look like this:
 
 ```rust
 use anyhow::Result;
@@ -60,7 +60,7 @@ fn answer<'a>() -> &'a str {
 ```
 This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. This code snippet uses the `rand` crate. We need to add this dependancy to our `Cargo.toml` file. Your `Cargo.toml` file should look like this:
 
-```
+```toml
 [package]
 name = "magic-8-ball"
 authors = ["Joe <Joe@example.com>"]
@@ -91,7 +91,7 @@ That's it. We can now build the spin app using
 
 ```bash
 $ spin build
-Executing the build command for component hellomagic-8-ball: cargo build --target wasm32-wasi --release
+Executing the build command for component magic-8-ball: cargo build --target wasm32-wasi --release
 ...
 Successfully ran the build command for the Spin components.
 ```
@@ -117,7 +117,46 @@ HTTP path: /magic-8
 $ cd magic-8-ball
 ```
 
-Now, follow the criteria above to bring your Magic 8 Ball JSON API to life! The result should look similar to the following:
+We will now write a HTTP component in our `index.ts` file that returns a Magic 8 Ball responses. Your `index.ts` file should look like this:
+
+```typescript
+import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+
+const encoder = new TextEncoder()
+
+export const handleRequest: HandleRequest = async function(request: HttpRequest): Promise<HttpResponse> {
+    let answerJson = `{\"answer\": \"${answer()}\"}`;
+    return {
+      status: 200,
+        headers: { "Content-Type": "application/json" },
+      body: answerJson
+    }
+}
+
+function answer(): string {
+  let answers = [
+    'Ask again later.',
+    'Absolutely!',
+    'Unlikely',
+    'Simply put, no'
+  ];
+  let idx = Math.floor(Math.random() * answers.length);
+  return answers[idx];
+}
+```
+
+This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. 
+
+Install any dependanices with `npm install` and then build the spin app using 
+
+```bash
+$ spin build
+Executing the build command for component magic-8-ball: npm run build
+...
+Successfully ran the build command for the Spin components.
+```
+
+Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
 
 ```bash
 $ curl http://127.0.0.1:3000/magic-8
