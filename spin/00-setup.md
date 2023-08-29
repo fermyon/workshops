@@ -64,7 +64,7 @@ After [following the VS Code documentation](https://code.visualstudio.com/docs/d
 
 ### Using GitHub Codespaces
 
-You can complete this workshop using only your browser using [GitHub Codespaces](https://github.com/features/codespaces). To achieve this, navigate to the GitHub repository for this workshop, https://github.com/fermyon/workshops, then click on the "Clone, open, or download button", then select "Codespaces", click "Create codespace on main`, then follow the instructions:
+You can complete this workshop using only your browser using [GitHub Codespaces](https://github.com/features/codespaces). To achieve this, navigate to the GitHub repository for this workshop, https://github.com/fermyon/workshops, then click on the "Code" button, then select "Codespaces", click "Create codespace on main`, then follow the instructions:
 
 ![Open the repository using GitHub Codespaces](../media/gh-codespace.png)
 
