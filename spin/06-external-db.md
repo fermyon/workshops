@@ -1,6 +1,6 @@
 # Storing data in an external database
 
-Instead of using Spin's built in SQLite key/value store, you could use an external key/value store such as Redis.
+Instead of using Spin's built in SQLite key/value store, you could use an external key/value store such as Redis. This section is intended as a learning exercise for the user. The complete code can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/06-external-db)
 
 ## Rust
 
