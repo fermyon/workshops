@@ -1,6 +1,6 @@
 # Deploy your Magic Ball Spin Application to Fermyon Cloud
 
-Now, you can deploy our app to Fermyon Cloud and all of your friends & family can get their questions answered with the Magic 8 Ball! Deploying to the Fermyon Cloud is just one step
+Now, deploy your app to the Fermyon Cloud and your friends & family can get their questions answered with the Magic 8 Ball! Deploying to the Fermyon Cloud is just one simple step
 
 ```bash
 $ spin deploy
@@ -12,11 +12,11 @@ Available Routes:
   fileserver: https://magic-8-ball-xyz.fermyon.app (wildcard)
 ```
 
-In case you have not logged into your Fermyon account, you can run `spin login` and follow the steps. More details on [deploying to the Fermyon Cloud cam be found here](https://developer.fermyon.com/cloud/deploy) 
+In case you have not logged into your Fermyon account, you can run `spin login` and follow the steps. More details on [deploying to the Fermyon Cloud can be found here](https://developer.fermyon.com/cloud/deploy) 
 
 #### Custom Domains
 
-Fermyon Cloud also provides a way for you to use your own domain names to provide your users with human-friendly access to your Spin applications. If you do not own a domain and you are interested in purchasing one, you can purchase one through a domain registrar such as Namecheap and GoDaddy and then point your Spin application to the new custom domain. [This tutorial](https://developer.fermyon.com/cloud/custom-domains-tutorial ) runs you through the steps to apply a custom domain to your Spin application running on Fermyon Cloud.  
+Fermyon Cloud also provides a way for you to use your own domain names to provide your users with human-friendly access to your Spin applications. If you do not own a domain, you can purchase one through a domain registrar such as Namecheap and GoDaddy and then point your Spin application to the new custom domain. [This tutorial](https://developer.fermyon.com/cloud/custom-domains-tutorial ) runs you through the steps to apply a custom domain to your Spin application running on Fermyon Cloud.  
 
 ### Learning Summary
 
