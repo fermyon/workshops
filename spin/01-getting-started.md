@@ -4,7 +4,7 @@ This document assumes you have followed [the setup guide](./00-setup.md) and hav
 
 ```bash
 $ spin --version
-spin 1.0.0
+spin 1.4.0
 ```
 
 [Spin](https://github.com/fermyon/spin) is an open source framework for building, distributing, and running serverless applications and microservices with WebAssembly (or Wasm).
@@ -31,7 +31,7 @@ $ spin templates list
 
 You are now ready to create your first Spin applications. Depending on what language you are familiar with, you can choose to follow the rest of the guide in Rust or JavaScript/TypeScript.
 
-### Building your first Spin application with Rust
+### a. Building your first Spin application with Rust
 
 Rust has excellent [support for WebAssembly](https://www.rust-lang.org/what/wasm), and Spin has an SDK for Rust that simplifies building Spin applications in Rust.
 
@@ -47,6 +47,8 @@ $ tree
  -- src
      -- lib.rs
 ```
+
+You can `sudo apt-get install tree` if you do not have `tree` installed.
 
 Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard that matches any request sent to this application. In more complex applications, you can define multiple components that are triggered for requests on different routes.
 
@@ -71,7 +73,7 @@ route = "/..."
 command = "cargo build --target wasm32-wasi --release"
 ```
 
-> Note: you can [learn more about the Spin manifest file in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
+> Note: you can [learn more about the Spin manifest file and components in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
 
 You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
 
@@ -133,7 +135,7 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
-### Building your first Spin application with JavaScript or TypeScript
+### b. Building your first Spin application with JavaScript or TypeScript
 
 JavaScript is one of the most popular programming languages. Spin has an [experimental SDK and toolchain](https://github.com/fermyon/spin-js-sdk) for JavaScript and TypeScript which is based on [QuickJS](https://bellard.org/quickjs/), a small embeddable JavaScript runtime.
 
@@ -176,7 +178,7 @@ route = "/..."
 command = "npm run build"
 ```
 
-> Note: you can [learn more about the Spin manifest file in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
+> Note: you can [learn more about the Spin manifest file and components in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
 
 First install the dependencies for the template with `npm install`. You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
 
@@ -203,7 +205,7 @@ The command will start Spin on port 3000. You can now access the application by 
 
 ```bash
 $ curl localhost:3000
-Hello, from TS-SDK 
+Hello from TS-SDK 
 ```
 
 That response is coming from the handler function for this component — in the case of a TypeScript component, defined in the index file from `src/index.ts`. Our entire application consists of a single function, `handleRequest`, which takes the HTTP request as an argument and returns an HTTP response.
