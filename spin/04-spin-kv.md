@@ -1,6 +1,6 @@
 # Using the Spin Key/Value store to save responses
 
-When using a Magic 8 Ball, usually you can keep asking your question and spinning the ball until you get the answer you want. Not for ours though! This Magic 8 Ball has a memory. This is achieved by persisting the questions and responses using Spin's [key/value SDK](https://developer.fermyon.com/spin/kv-store-api-guide).
+When using a Magic 8 Ball, usually you can keep asking your question and spinning the ball until you get the answer you want. Not for ours though! This Magic 8 Ball has a memory. This is achieved by persisting the questions and responses using Spin's [key/value store](https://developer.fermyon.com/spin/kv-store-api-guide).
 
 Let's modify our `magic-8` component to store the questions asked, along with the random answer to Spin's key/value store.
 
@@ -94,7 +94,8 @@ function getOrSetAnswer(question: string): string {
 }
 ```
 
-In both code snippets, the answer is retrieved from the store, or if the key does not exist, it asks the user for an answer and stores it. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
+In both code snippets, the answer is retrieved from the key value store, or if the key does not exist, it stores both the question and reponse. There is also a separate check if the Magic 8 Ball's response to a stored question was previously "Ask me again later", in which case the 
+new response is stored along with the question. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
 
 The [key value store tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) is a helpful resource for a deep-dive into data persistence.
 
