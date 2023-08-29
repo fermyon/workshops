@@ -147,7 +147,7 @@ function answer(): string {
 
 This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. 
 
-Install any dependanices with `npm install` and then build the spin app using 
+Install any dependanices with `npm install` and then build the Spin app using 
 
 ```bash
 $ spin build
