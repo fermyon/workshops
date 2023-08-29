@@ -155,6 +155,7 @@ $ tree
 |-- webpack.config.js
 ```
 
+> You can `sudo apt-get install tree` if you do not have `tree` installed.
 
 Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard that matches any request sent to this application. In more complex applications, you can define multiple components that are triggered for requests on different routes.
 
