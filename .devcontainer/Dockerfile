@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     golang-go                            \
     build-essential libssl-dev pkg-config\
     glibc-source                         \
-    ca-certificates
+    ca-certificates                      \
+    tree
 
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
