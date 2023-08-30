@@ -6,6 +6,7 @@ on:
     paths:
       - .devcontainer/Dockerfile
       - .github/workflows/docker.yaml
+  workflow_dispatch:
 jobs:
   docker:
     runs-on: ubuntu-latest
