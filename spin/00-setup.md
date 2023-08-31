@@ -9,7 +9,7 @@ There are a few ways to set up the development environment in order to follow th
 If working on your machine (i.e. not using GitHub Codespaces), first clone the repository locally:
 
 ```bash
-$ git clone https://github.com/fermyon/workshops && cd workshops
+git clone https://github.com/fermyon/workshops && cd workshops
 ```
 
 ### a. Configuring your local environment
@@ -19,8 +19,8 @@ First, you have to configure [Spin](https://fermyon.com/spin) by following the [
 For example, to install Spin from Linux, macOS, or WSL2, run the following commands:
 
 ```bash
-$ curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
-$ sudo mv spin /usr/local/bin/
+curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+sudo mv spin /usr/local/bin/
 ```
 
 Alternatively, you can [manually install from a GitHub release](https://github.com/fermyon/spin/releases), or you can [build Spin from source](https://developer.fermyon.com/spin/contributing-spin).
@@ -28,23 +28,22 @@ Alternatively, you can [manually install from a GitHub release](https://github.c
 At this point, you should be able to run Spin commands:
 
 ```bash
-$ spin --version
-spin 1.4.0
+spin --version
 ```
 
 Now you can configure the templates and plugins we will use as part of this workshop:
 
 ```bash
 # Install the official Spin templates.
-$ spin templates install --git https://github.com/fermyon/spin --update
-$ spin templates install --git https://github.com/fermyon/spin-js-sdk --update
+spin templates install --git https://github.com/fermyon/spin --update
+spin templates install --git https://github.com/fermyon/spin-js-sdk --update
 
 # Install a few templates we will use to build applications.
-$ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
-$ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
+spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
+spin templates install --git https://github.com/radu-matei/spin-nextjs --update
 
 # Install the JavaScript plugin for Spin.
-$ spin plugin install js2wasm -y
+spin plugin install js2wasm -y
 ```
 
 Depending on the programming languages you want to use, you will need to configure their toolchains. For example:
