@@ -58,9 +58,14 @@ Depending on the programming languages you want to use, you will need to configu
 
 This repository contains the necessary files to open the project and develop inside a container, using [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
-After [following the VS Code documentation](https://code.visualstudio.com/docs/devcontainers/tutorial), you can open the directory in a container:
+First [following the VS Code documentation](https://code.visualstudio.com/docs/devcontainers/tutorial) to install and setup the Dev Containers extension for your VS Code. 
 
+Once its installed, clone this workshop repository to your machine using `git clone https://github.com/fermyon/workshops.git`. Open this folder on VS Code.  
+
+Click on View -> Command Palette and look for the "Dev Containers: Reopen in Container" option to open the repository in a Dev Container.
 ![Open the workshops repository using a VS Code Dev Container](../media/dev-container.png)
+
+To build this container, you can choose the "Dev Containers: Rebuild Container" option in the Command Palette. 
 
 ### c. Using GitHub Codespaces
 
