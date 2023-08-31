@@ -32,7 +32,7 @@ jobs:
         with:
           push: true
           context: ./.devcontainer
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
           tags: |
             ghcr.io/fermyon/workshops/dev-container:${{ env.VERSION }}
 
