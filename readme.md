@@ -1,6 +1,6 @@
 # Fermyon Workshops
 
-This self-paced workshop will teach you the basics of Spin, with a Magic 8 Ball sample app. The workshop can be compelete in either Rust or Typescript. 
+Welcome to the home for all Fermyon workshops!
 
 ### Spin 101
 
@@ -11,5 +11,6 @@ This self-paced workshop will teach you the basics of Spin, with a Magic 8 Ball 
 - [4. Persisting non-relational data with Spin's key/value store](./spin/04-spin-kv.md)
 - [5. Using external databases](./spin/05-external-db.md)
 - [6. Deploying to Fermyon Cloud](./spin/06-deploy-fermyon-cloud.md)
-- [7. Running your Spin application with Kubernetes](./spin/07-kubernetes.md)
+- [7. Enhaving JSON API with Fermyon Serverless AI](./spin/07-fermyon-ai.md)
+- [8. Running your Spin application with Kubernetes](./spin/08-kubernetes.md)
 - (_optionally_) - Let us know what you think about this workshop using this short [form](https://form.typeform.com/to/RK08OLSy).

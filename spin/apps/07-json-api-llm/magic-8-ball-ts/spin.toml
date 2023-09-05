@@ -1,0 +1,16 @@
+spin_manifest_version = "1"
+authors = ["Kate Goldenring <kate.goldenring@fermyon.com>"]
+description = "A Magic 8 Ball"
+name = "magic-8-ball"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "magic-8-ball"
+source = "target/spin-http-js.wasm"
+ai_models = ["llama2-chat"]
+exclude_files = ["**/node_modules"]
+[component.trigger]
+route = "/magic-8"
+[component.build]
+command = "npm run build"
