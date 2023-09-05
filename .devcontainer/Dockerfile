@@ -29,8 +29,8 @@ RUN rustup target add wasm32-wasi
 RUN go install golang.org/x/tools/gopls@latest
 
 # Install Spin and required plugins
-RUN (curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash && mv spin /usr/local/bin/) &&    \
-    spin plugin install js2wasm -y &&                                                                       \
+RUN (\curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary | bash && mv spin /usr/local/bin/) &&    \
+    spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json &&                                                                       \
     spin templates install --git https://github.com/fermyon/spin --update &&                                \
     spin templates install --git https://github.com/fermyon/spin-js-sdk --update &&                         \
     spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update &&                 \
