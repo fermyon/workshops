@@ -52,17 +52,24 @@ prompt should tell the system what type of responses it should give along with t
 question. Your `answer` function should look similar to the following:
 
 ```rs
-fn answer<'a>(question: &'a str) -> Result<String> {
-    let system_prefix = "System:";
-    let user_prefix = "User:";
-    let intro =  format!("{system_prefix} You are acting as an omniscient Magic 8 Ball, generating short responses to yes or no questions. You should be able to give an answer to everything, even if the reply is maybe or to ask again later. If the question is not a yes or no question, reply that they should only ask yes or no questions. Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. NEVER continue a prompt by generating a User question.\n");
-  
-    let prompt = intro + user_prefix + " " + question;
+fn answer(question: &str) -> Result<String> {
+    let prompt = format!(
+        r"<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
+        [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
+        If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
+        Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
+        NEVER continue a prompt by generating a user question.[/INST]
+        User: {question}"
+    );
+
     // Set model to default Llama2 or the one configured in runtime-config.toml
     let model = llm::InferencingModel::Llama2Chat;
-    let response = llm::infer(model, &prompt)?.text;
-    let answer = response[system_prefix.len()..].trim();
-    Ok(answer.to_string())
+    let answer = llm::infer(model, &prompt)?.text;
+    let mut answer = answer.trim();
+    while let Some(a) = answer.strip_prefix("Answer:") {
+        answer = a.trim();
+    }
+    Ok(answer.trim().to_string())
 }
 ```
 
