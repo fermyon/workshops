@@ -6,7 +6,7 @@
 # If the examples in this repository require it, update this Dockerfile to install
 # more language toolchains (such as .NET or TinyGo).
 
-FROM ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
     bash                                 \
@@ -29,9 +29,9 @@ RUN rustup target add wasm32-wasi
 RUN go install golang.org/x/tools/gopls@latest
 
 # Install Spin and required plugins
-RUN (\curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary | bash && mv spin /usr/local/bin/) &&    \
-    spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json &&                                                                       \
-    spin templates install --git https://github.com/fermyon/spin --update &&                                \
-    spin templates install --git https://github.com/fermyon/spin-js-sdk --update &&                         \
-    spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update &&                 \
+RUN (curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary && mv spin /usr/local/bin/) &&    \
+spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json -y &&                  \
+    spin templates install --git https://github.com/fermyon/spin --update &&                                                \
+    spin templates install --git https://github.com/fermyon/spin-js-sdk --update &&                                         \
+    spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update &&                                 \
     spin templates install --git https://github.com/radu-matei/spin-nextjs --update
