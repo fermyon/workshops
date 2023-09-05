@@ -90,13 +90,12 @@ Before we run our application locally, we must first download a LLM. The followi
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
 and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
 you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
-model should be placed in the `.spin/llms` directory:
+model should be placed in the `.spin/ai-models` directory:
 
 ```sh
-cd .spin
-mkdir llms
+mkdir -p .spin/ai-models
 wget https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML/resolve/main/llama-2-13b-chat.ggmlv3.q3_K_L.bin
-mv llama-2-13b-chat.ggmlv3.q3_K_L.bin llama2-chat
+mv llama-2-13b-chat.ggmlv3.q3_K_L.bin .spin/ai-models/llama2-chat
 ```
 
 Now, you can build and run your Magic AI Ball!
@@ -184,13 +183,12 @@ Before we run our application, we must first download a LLM. The following steps
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
 and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
 you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
-model should be placed in the `.spin/llms` directory:
+model should be placed in the `.spin/ai-models` directory:
 
 ```sh
-cd .spin
-mkdir llms
+mkdir -p .spin/ai-models
 wget https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML/resolve/main/llama-2-13b-chat.ggmlv3.q3_K_L.bin
-mv llama-2-13b-chat.ggmlv3.q3_K_L.bin llama2-chat
+mv llama-2-13b-chat.ggmlv3.q3_K_L.bin .spin/ai-models/llama2-chat
 ```
 
 Now, you can build and run your Magic AI Ball!
