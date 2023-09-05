@@ -1,6 +1,6 @@
 # Building a Magic 8 Ball JSON API with Spin
 
-For the rest of the workshop we will build a Magic 8 Ball Spin application. With each exercise, we'll add more features to our Magic 8 Ball app. 
+For the rest of the workshop we will build a Magic 8 Ball Spin application. With each exercise, we'll add more features to our Magic 8 Ball app.
 
 A [Magic 8 Ball](https://en.wikipedia.org/wiki/Magic_8_Ball) is a plastic ball that contains a 20-sided die with responses.
 You vocalize your question, spin the ball, and turn the ball to see an answer revealed.
@@ -174,4 +174,4 @@ In this section you learned how to:
 ### Navigation
 
 - Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
-- Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)
+- Otherwise, proceed to [03 - Using Fermyon Serverless AI](03-spin-ai.md)

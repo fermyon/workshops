@@ -52,5 +52,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
-- Otherwise, proceed to [04 - Persisting Magic 8 Ball Responses](04-spin-kv.md)
+- Go back to [03 - Building a Magic AIght Ball JSON API with Spin](03-spin-ai.md) if you still have questions on previous section
+- Otherwise, proceed to [05 - Persisting Magic 8 Ball Responses](05-spin-kv.md)

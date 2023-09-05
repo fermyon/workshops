@@ -27,5 +27,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [04 - Persisting Magic 8 Ball Responses](04-spin-kv.md) if you still have questions on previous section
-- Otherwise, proceed to [06 - Storing data in an external database](06-external-db.md)
+- Go back to [05 - Persisting Magic 8 Ball Responses](05-spin-kv.md) if you still have questions on previous section
+- Otherwise, proceed to [07 - Storing data in an external database](07-external-db.md)
