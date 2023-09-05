@@ -70,11 +70,26 @@ fn answer<'a>(question: &'a str) -> Result<String> {
 > Note: The `llm::infer_with_options` function can be substituted to also pass in configuration to
 > the LLM such as the maximum tokens that should be used in the request.
 
-Before we run our application, we must first download a LLM. The following steps show how to
+## Deploy to Cloud
+Let's deploy our Serverless AI application to Fermyon Cloud with the following command: 
+
+```bash
+spin cloud deploy
+```
+
+Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
+
+```sh
+$ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
+{"answer": "Signs point to yes!"}  
+```
+
+## (Optional) Run locally 
+
+Before we run our application locally, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
 and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
-you can install a smaller LLM model and configure Spin to use it with a runtime config file. Or, you
-can skip this step and test your app by deploying it to Fermyon Cloud and using the model there. The
+you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
 model should be placed in the `.spin/llms` directory:
 
 ```sh
@@ -149,11 +164,26 @@ function answer(question: string): string {
 > Note: The `Llm.InferWithOptions` function can be used to also passing in configuration to the LLM
 > such as the maximum tokens that should be used in the request.
 
+## Deploy to Cloud
+Let's deploy our Serverless AI application to Fermyon Cloud with the following command: 
+
+```bash
+spin cloud deploy
+```
+
+Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
+
+```sh
+$ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
+{"answer": "Signs point to yes!"}  
+```
+
+## Run Locally
+
 Before we run our application, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
 and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
-you can install a smaller LLM model and configure Spin to use it with a runtime config file. Or, you
-can skip this step and test your app by deploying it to Fermyon Cloud and using the model there. The
+you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
 model should be placed in the `.spin/llms` directory:
 
 ```sh
@@ -194,4 +224,4 @@ In this section you learned how to:
 
 - Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on
   previous section
-- Otherwise, proceed to [03 - Magic 8 Ball Frontend](03-frontend.md)
+- Otherwise, proceed to [08 - Deploying a Spin Application on Kubernete](08-kubernetes.md)
