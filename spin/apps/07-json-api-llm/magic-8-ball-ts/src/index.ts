@@ -21,13 +21,18 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
 }
 
 function answer(question: string): string {
-  const systemPrefix = "System:"
-  const userPrefix = "User:"
-  const intro = `${systemPrefix} You are acting as an omniscient Magic 8 Ball, generating short responses to yes or no questions. You should be able to give an answer to everything, even if the reply is maybe or to ask again later. If the question is not a yes or no question, reply that they should only ask yes or no questions. Your tone should be expressive yet polite. Always restrict your answers to 8 words or less. NEVER continue a prompt by generating a User question.\n`;
-
-  let prompt = intro + userPrefix + " " + question
-  let response = Llm.infer(InferencingModels.Llama2Chat, prompt).text
-  // Parse the response to remove the expected `System:` prefix from the response
-  let answer = response.substring(response.indexOf(systemPrefix) + systemPrefix.length).trim()
-  return answer
+  const prompt =  `<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
+  [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
+  If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
+  Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
+  NEVER continue a prompt by generating a user question.[/INST]
+  User: ${question}"`;
+  let response = Llm.infer(InferencingModels.Llama2Chat,prompt).text
+  // Parse the response to remove the expected `Answer:` prefix from the response
+  const answerPrefix = "Answer:"
+  response = response.trim()
+  if(response.startsWith(answerPrefix)) {
+    response = response.substring(answerPrefix.length)
+  }
+  return response
 }
