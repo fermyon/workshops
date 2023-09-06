@@ -94,7 +94,7 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [06 - Storing data in an external database](06-external-db.md) if you still have questions on previous section
+- Go back to [07 - Storing data in an external database](07-external-db.md) if you still have questions on previous section
 - Otherwise, congrats on finishing the workshop! 
 - (_optionally_) Let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx). A lucky set of randomly selected survey participants will receive a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!
 <img src=../media/slats-keycap-cropped.png width="150">

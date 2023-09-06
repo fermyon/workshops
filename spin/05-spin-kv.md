@@ -107,5 +107,5 @@ In this section you learned how to:
 
 ### Navigation
 
-- Go back to [03 - Deploy to Fermyon Cloud](03-deploy-fermyon-cloud.md) if you still have questions on previous section
-- Otherwise, proceed to [05 - Deploy your Magic Ball Spin Application to Fermyon Cloud](05-deploy-fermyon-cloud.md)
+- Go back to [04 - Magic 8 Ball Frontend](04-frontend.md) if you still have questions on previous section
+- Otherwise, proceed to [06 - Deploy your Magic Ball Spin Application to Fermyon Cloud](06-deploy-fermyon-cloud.md)

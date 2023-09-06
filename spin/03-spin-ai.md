@@ -1,5 +1,4 @@
-
-# Extending Magic AI Ball JSON API with Spin with Fermyon Serverless AI
+# Creating a Magic AIght Ball JSON API with Spin with Fermyon Serverless AI
 
 Instead of being limited by a set of 20 predefined responses, we can use AI inferencing to generate a unique response that is catered to our questions.
 
@@ -10,14 +9,13 @@ Cloud, which hosts its own LLM for handling inferencing.
 This section will walk through how to modify your JSON API to use responses from an LLM instead of a
 hard coded list.
 
-As with the previous steps, you can choose to build the app in either Rust, Javascript/Typescript, or Go. 
+As with the previous steps, you can choose to build the app in either Rust, Javascript/Typescript, or Go.
 
 > Note that Fermyon Cloud support is currently in private beta. To apply for access to the private beta, please fill out [this survey](https://fibsu0jcu2g.typeform.com/serverless-ai?utm_source=xxxxx&utm_medium=xxxxx&utm_campaign=xxxxx#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
 
 To get started with Fermyon Serverless AI, follow [these instructions](https://developer.fermyon.com/spin/serverless-ai-tutorial) to make sure you have installed the correct version of Spin and the necessary SDKs. If you'd like to learn more about the API, visit the [API guide here](https://developer.fermyon.com/spin/serverless-ai-api-guide).
 
 ## a. Building your Magic AI Ball application with Rust
-
 
 We need to modify our `magic-8-ball` component to:
 
@@ -42,6 +40,7 @@ fn handle_magic_8_ball(req: Request) -> Result<Response> {
 
 Next, let's update the `answer` function to use the LLM instead of pulling a random response from a
 list. First, get the `llm` module from the Spin Rust SDK:
+
 ```rs
 use spin_sdk::llm;
 ```
@@ -91,7 +90,7 @@ $ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
 {"answer": "Signs point to yes!"}  
 ```
 
-## (Optional) Run locally 
+## (Optional) Run locally
 
 Before we run our application locally, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
@@ -117,6 +116,7 @@ Let's ask a question
 $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
 {"answer": "Signs point to yes!"}  
 ```
+
 > Note: the LLM model can be slow when hosted on your machine. For quicker responses, you can
 > [deploy your application to Fermyon
 > Cloud](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud) with `spin
@@ -125,7 +125,6 @@ $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
 
 > Note: you can find the complete applications used in this workshop in the [`apps`
 > directory](./apps/).
-
 
 ## b. Building your Magic 8 Ball application with TypeScript
 
@@ -155,15 +154,20 @@ should give along with the user provided question.
 
 ```ts
 function answer(question: string): string {
-  const systemPrefix = "System:"
-  const userPrefix = "User:"
-  const intro =  `${systemPrefix} You are acting as an omniscient Magic 8 Ball, generating short responses to yes or no questions. You should be able to give an answer to everything, even if the reply is maybe or to ask again later. If the question is not a yes or no question, reply that they should only ask yes or no questions. Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. NEVER continue a prompt by generating a User question.\n`;
-
-  let prompt = intro + userPrefix + " " + question
-  let response = Llm.infer(prompt).text
-  // Parse the response to remove the expected `System:` prefix from the response
-  let answer = response.substring(response.indexOf(systemPrefix) + systemPrefix.length).trim()
-  return answer
+  const prompt =  `<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
+  [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
+  If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
+  Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
+  NEVER continue a prompt by generating a user question.[/INST]
+  User: ${question}"`;
+  let response = Llm.infer(InferencingModels.Llama2Chat,prompt).text
+  // Parse the response to remove the expected `Answer:` prefix from the response
+  const answerPrefix = "Answer:"
+  response = response.trim()
+  if(response.startsWith(answerPrefix)) {
+    response = response.substring(answerPrefix.length)
+  }
+  return response
 }
 ```
 
@@ -227,6 +231,5 @@ In this section you learned how to:
 
 ## Navigation
 
-- Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on
-  previous section
-- Otherwise, proceed to [08 - Deploying a Spin Application on Kubernete](08-kubernetes.md)
+- Go back to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md) if you still have questions on previous section
+- Otherwise, proceed to [04 - Magic 8 Ball Frontend](04-frontend.md)

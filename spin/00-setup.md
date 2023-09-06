@@ -1,7 +1,6 @@
 # Setup
 
 There are a few ways to set up the development environment in order to follow this workshop:
-
 - [configuring your local environment](#configuring-your-local-environment)
 - [using a local dev container](#using-a-local-dev-container-with-vs-code)
 - [using GitHub Codespaces](#using-github-codespaces)
@@ -21,8 +20,8 @@ For example, to install Spin from Linux, macOS, or WSL2, run the following comma
 > Note that for this workshop, we will be downloading a canary version of Spin required for [Step 07 Fermyon Serverless AI](./07-fermyon-ai.md).
 
 ```bash
-$ curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary
-$ sudo mv spin /usr/local/bin/
+curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary
+sudo mv spin /usr/local/bin/
 ```
 
 Alternatively, you can [manually install from a GitHub release](https://github.com/fermyon/spin/releases), or you can [build Spin from source](https://developer.fermyon.com/spin/contributing-spin).
@@ -45,8 +44,10 @@ $ spin templates install --git https://github.com/fermyon/spin-js-sdk --update
 $ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
 $ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
 
-# Install the JavaScript plugin for Spin.
-spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json
+# Install the canary JavaScript plugin for Spin.
+$ spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json
+# Install the canary cloud plugin for Spin
+$ spin plugins install -u https://github.com/fermyon/cloud-plugin/releases/download/canary/cloud.json
 ```
 
 Depending on the programming languages you want to use, you will need to configure their toolchains. For example:
@@ -69,7 +70,6 @@ After [following the VS Code documentation](https://code.visualstudio.com/docs/d
 You can complete this workshop using only your browser using [GitHub Codespaces](https://github.com/features/codespaces). To achieve this, navigate to the GitHub repository for this workshop, https://github.com/fermyon/workshops, then click on the "Clone, open, or download button", then select "Codespaces", click "Create codespace on main`, then follow the instructions:
 
 ![Open the repository using GitHub Codespaces](../media/gh-codespace.png)
-
 
 ### Troubleshooting
 

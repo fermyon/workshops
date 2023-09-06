@@ -14,3 +14,4 @@ allowed_http_hosts = []
 route = "/magic-8"
 [component.build]
 command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]

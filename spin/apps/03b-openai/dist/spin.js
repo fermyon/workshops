@@ -240,23 +240,39 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var encoder = new TextEncoder();
 var decoder = new TextDecoder("utf-8");
 var handleRequest = function (request) {
+    return __awaiter(this, void 0, void 0, function () {
+        var question;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    question = decoder.decode(request.body);
+                    if (question.length == 0) {
+                        return [2 /*return*/, {
+                                status: 400,
+                                body: encoder.encode("No question asked").buffer
+                            }];
+                    }
+                    return [4 /*yield*/, answer(question)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+};
+function answer(question) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var question, openai_key, apiUrl, requestData, options, response, decoded, _b, _c, parsed, answerJson;
+        var openaiKey, apiUrl, requestData, options, response, decoded, _b, _c, parsed, response_1, answerPrefix, answerJson;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
-                    question = decoder.decode(request.body);
-                    console.log("<------->");
-                    console.log("Question Received: " + question);
-                    openai_key = Config.get("openai_key");
+                    openaiKey = Config.get("openai_key");
                     apiUrl = 'https://api.openai.com/v1/chat/completions';
                     requestData = JSON.stringify({
                         "model": "gpt-3.5-turbo",
                         "messages": [
                             {
                                 "role": "system",
-                                "content": "Always restrict your answers to 5 words or less."
+                                "content": "<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>\n        [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.\n        If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.\n        Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. \n        NEVER continue a prompt by generating a user question.[/INST]"
                             },
                             {
                                 "role": "user",
@@ -278,7 +294,7 @@ var handleRequest = function (request) {
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json',
-                            'Authorization': "Bearer ".concat(openai_key) // Replace with your actual API token
+                            'Authorization': "Bearer ".concat(openaiKey)
                         },
                         body: requestData
                     };
@@ -290,9 +306,21 @@ var handleRequest = function (request) {
                 case 2:
                     decoded = _c.apply(_b, [(_d.sent()) || new Uint8Array()]);
                     parsed = JSON.parse(decoded);
-                    if ((_a = parsed === null || parsed === void 0 ? void 0 : parsed.choices[0]) === null || _a === void 0 ? void 0 : _a.message) {
-                        console.log("Generated Answer: " + JSON.stringify(parsed.choices[0].message.content));
-                        answerJson = "{\"answer\": \"".concat(parsed.choices[0].message.content, "\"}");
+                    if ((parsed === null || parsed === void 0 ? void 0 : parsed.error) != undefined) {
+                        console.log(parsed === null || parsed === void 0 ? void 0 : parsed.error);
+                        return [2 /*return*/, {
+                                status: 500,
+                                body: encoder.encode(parsed === null || parsed === void 0 ? void 0 : parsed.error.message).buffer
+                            }];
+                    }
+                    else if (parsed.choices != undefined && ((_a = parsed === null || parsed === void 0 ? void 0 : parsed.choices[0]) === null || _a === void 0 ? void 0 : _a.message)) {
+                        response_1 = parsed.choices[0].message.content;
+                        response_1 = JSON.stringify(response_1).trim();
+                        answerPrefix = "Answer:";
+                        if (response_1.startsWith(answerPrefix)) {
+                            response_1 = response_1.substring(answerPrefix.length);
+                        }
+                        answerJson = "{\"answer\": \"".concat(response_1, "\"}");
                         return [2 /*return*/, {
                                 status: 200,
                                 headers: { "Content-Type": "application/json" },
@@ -306,7 +334,7 @@ var handleRequest = function (request) {
             }
         });
     });
-};
+}
 
 })();
 
