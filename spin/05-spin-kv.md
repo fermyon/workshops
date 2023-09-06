@@ -15,7 +15,7 @@ We will need to:
 
 ## 1: Giving our component access to a KV store
 
-Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file. Here's how it would look in **Rust**
+Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file. Here's how it would look in **Rust** component
 
 ```toml
 [[component]]
@@ -29,7 +29,7 @@ route = "/magic-8"
 command = "cargo build --target wasm32-wasi --release"
 ```
 
-Here's how `spin.toml` would look like in **Typescript**
+Here's how `spin.toml` would look like in the **TypeScript** component 
 
 ```typescript
 [[component]]
@@ -74,9 +74,10 @@ fn get_or_set_answer(question: &str) -> Result<String> {
     }
 }
 ```
-Here's the code in **Typescript**
 
-```typescript
+Here's the code in **TypeScript**
+
+```ts
 function getOrSetAnswer(question: string): string {
   let store = Kv.openDefault();
   let response = "";

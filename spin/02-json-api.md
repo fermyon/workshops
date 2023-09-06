@@ -14,7 +14,7 @@ Let's build a simple JSON API using a Spin application to mimic the Magic 8 Ball
 
 The response should be randomly selected.
 
-As with the previous step, you can choose to build the app in either Rust or Javascript/Typescript
+As with the previous step, you can choose to build the app in either Rust or JavaScript/TypeScript
 
 ## a. Building your Magic 8 Ball application with Rust
 

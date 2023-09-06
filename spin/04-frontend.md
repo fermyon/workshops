@@ -15,7 +15,7 @@ Let's take a look at the `fileserver` component that has now been added to the a
 
 ```toml
 [[component]]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.1/spin_static_fs.wasm", digest = "sha256:650376c33a0756b1a52xxx" }
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.3/spin_static_fs.wasm", digest = "sha256:38bf971900228222f7f6b2ccee5051f399adca58d71692cdfdea98997965fd0d" }
 id = "fileserver"
 files = [ { source = "assets", destination = "/" } ]
 [component.trigger]

@@ -12,7 +12,7 @@ spec:
       labels:
         app: magic-8-ball
     spec:
-      runtimeClassName: wasmtime-spin
+      runtimeClassName: wasmtime-spin-v1
       containers:
         - name: magic-8-ball
           image: ghcr.io/kate-goldenring/magic-8-ball:0.1.0
