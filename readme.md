@@ -13,4 +13,5 @@ Welcome to the home for all Fermyon workshops!
 - [6. Deploying to Fermyon Cloud](./spin/06-deploy-fermyon-cloud.md)
 - [7. Enhaving JSON API with Fermyon Serverless AI](./spin/07-fermyon-ai.md)
 - [8. Running your Spin application with Kubernetes](./spin/08-kubernetes.md)
+- [9. Persisting relational data from Spin apps to SQLite database](./spin/09-spin-sqlite.md)
 - (_optionally_) - Let us know what you think about this workshop using this short [form](https://form.typeform.com/to/RK08OLSy).
