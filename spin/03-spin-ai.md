@@ -9,7 +9,7 @@ Cloud, which hosts its own LLM for handling inferencing.
 This section will walk through how to modify your JSON API to use responses from an LLM instead of a
 hard coded list.
 
-As with the previous steps, you can choose to build the app in either Rust, Javascript/Typescript, or Go.
+As with the previous steps, you can choose to build the app in either Rust, JavaScript/TypeScript, or Go.
 
 > Note that Fermyon Cloud support is currently in private beta. To apply for access to the private beta, please fill out [this survey](https://fibsu0jcu2g.typeform.com/serverless-ai?utm_source=xxxxx&utm_medium=xxxxx&utm_campaign=xxxxx#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
 
@@ -39,14 +39,20 @@ fn handle_magic_8_ball(req: Request) -> Result<Response> {
 ```
 
 Next, let's update the `answer` function to use the LLM instead of pulling a random response from a
-list. First, get the `llm` module from the Spin Rust SDK:
+list. First, we need to make sure we are using the canary Spin SDK, which has support for the `llm` crate. Update the dependency tag in your `Cargo.toml`:
+
+```toml
+spin-sdk = { git = "https://github.com/fermyon/spin", tag = "canary" }
+```
+
+Now, back in your application (`lib.r`), you can get the `llm` module from the Spin Rust SDK:
 
 ```rs
 use spin_sdk::llm;
 ```
 
-Now, in `answer` use the `llm::infer` function, specifying which model you have configured Spin to
-use and a prompt. We will use the default `Llama2Chat` model, which we will download later. The
+Update the `answer` function use the `llm::infer` function, specifying which model you have configured Spin to
+use and a prompt. We will use the default `Llama2Chat` model, which you can download later or use in Fermyon Cloud. The
 prompt should tell the system what type of responses it should give along with the user provided
 question. Your `answer` function should look similar to the following:
 
@@ -72,59 +78,13 @@ fn answer(question: &str) -> Result<String> {
 }
 ```
 
-
 > Note: The `llm::infer_with_options` function can be substituted to also pass in configuration to
 > the LLM such as the maximum tokens that should be used in the request.
 
-## Deploy to Cloud
-Let's deploy our Serverless AI application to Fermyon Cloud with the following command: 
-
-```bash
-spin cloud deploy
-```
-
-Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
-
+Now, build your application and see the [deploy to Fermyon Cloud section](#deploy-to-cloud) to test it out.
 ```sh
-$ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
-{"answer": "Signs point to yes!"}  
+spin build
 ```
-
-## (Optional) Run locally
-
-Before we run our application locally, we must first download a LLM. The following steps show how to
-download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
-and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
-you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
-model should be placed in the `.spin/ai-models` directory:
-
-```sh
-mkdir -p .spin/ai-models
-wget https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML/resolve/main/llama-2-13b-chat.ggmlv3.q3_K_L.bin
-mv llama-2-13b-chat.ggmlv3.q3_K_L.bin .spin/ai-models/llama2-chat
-```
-
-Now, you can build and run your Magic AI Ball!
-
-```sh
-$ spin build --up
-```
-
-Let's ask a question
-
-```sh
-$ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
-{"answer": "Signs point to yes!"}  
-```
-
-> Note: the LLM model can be slow when hosted on your machine. For quicker responses, you can
-> [deploy your application to Fermyon
-> Cloud](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud) with `spin
-> deploy`.
-
-
-> Note: you can find the complete applications used in this workshop in the [`apps`
-> directory](./apps/).
 
 ## b. Building your Magic 8 Ball application with TypeScript
 
@@ -174,8 +134,26 @@ function answer(question: string): string {
 > Note: The `Llm.InferWithOptions` function can be used to also passing in configuration to the LLM
 > such as the maximum tokens that should be used in the request.
 
+Now, build your application.
+
+```sh
+npm install
+spin build
+```
+
+## Configure access to an AI model
+
+By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following ai_models configuration inside its `[[component]]` section:
+
+```toml
+[[component]]
+id = "magic-8-ball"
+ai_models = ["llama2-chat"]
+```
+
 ## Deploy to Cloud
-Let's deploy our Serverless AI application to Fermyon Cloud with the following command: 
+
+Let's deploy our Serverless AI application to Fermyon Cloud with the following command:
 
 ```bash
 spin cloud deploy
@@ -188,9 +166,9 @@ $ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
 {"answer": "Signs point to yes!"}  
 ```
 
-## Run Locally
+## (Optional) Run Locally
 
-Before we run our application, we must first download a LLM. The following steps show how to
+Before we run our application locally, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
 and a consistent local to Cloud experience; however, the model is quite large (6GB). Alternatively,
 you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
@@ -205,7 +183,7 @@ mv llama-2-13b-chat.ggmlv3.q3_K_L.bin .spin/ai-models/llama2-chat
 Now, you can build and run your Magic AI Ball!
 
 ```sh
-$ spin build --up
+spin build --up
 ```
 
 Let's ask a question
@@ -214,6 +192,7 @@ Let's ask a question
 $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
 {"answer": "Signs point to yes!"}  
 ```
+
 > Note: the LLM model can be slow when hosted on your machine. For quicker responses, you can
 > [deploy your application to Fermyon
 > Cloud](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud) with `spin

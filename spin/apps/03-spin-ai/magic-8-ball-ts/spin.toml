@@ -1,5 +1,5 @@
 spin_manifest_version = "1"
-authors = ["Kate Goldenring <kate.goldenring@fermyon.com>"]
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
 description = "A Magic 8 Ball"
 name = "magic-8-ball"
 trigger = { type = "http", base = "/" }
