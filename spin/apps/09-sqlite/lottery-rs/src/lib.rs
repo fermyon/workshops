@@ -38,9 +38,9 @@ pub fn get_winner(_req: Request, _params: Params) -> Result<Response> {
         LIMIT 1",
         &[],
     )?;
-    let rows: Vec<_> = result.rows().collect();
-    let winner = rows
-        .first()
+    let winner = result
+        .rows()
+        .next()
         .unwrap()
         .get::<&str>("name")
         .unwrap()
@@ -56,6 +56,7 @@ fn wildcard(_req: Request, _params: Params) -> Result<Response> {
         .status(http::StatusCode::OK)
         .body(Some(
             "Please use /enter endpoint to join lottery and /winner endpoint to draw a winner"
-                .to_string().into(),
+                .to_string()
+                .into(),
         ))?)
 }
