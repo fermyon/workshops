@@ -1,18 +1,16 @@
 spin_manifest_version = "1"
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+description = "Hello World Rust Application"
 name = "hello-rust"
-# This is an HTTP application.
 trigger = { type = "http", base = "/" }
 version = "0.1.0"
 
 [[component]]
 id = "hello-rust"
-# The Wasm module to execute for this component.
 source = "target/wasm32-wasi/release/hello_rust.wasm"
-# This component is not allowed to make any outbound HTTP requests.
 allowed_http_hosts = []
 [component.trigger]
-# This component will get invoked for all requests to `/...`.
 route = "/..."
 [component.build]
-# The command to execute when running `spin build`.
 command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]

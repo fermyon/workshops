@@ -1,9 +1,9 @@
 # Setup
 
 There are a few ways to set up the development environment in order to follow this workshop:
-- [configuring your local environment](#configuring-your-local-environment)
-- [using a local dev container](#using-a-local-dev-container-with-vs-code)
-- [using GitHub Codespaces](#using-github-codespaces)
+- [A: configuring your local environment](#configuring-your-local-environment)
+- [B: using a local dev container](#using-a-local-dev-container-with-vs-code)
+- [C: using GitHub Codespaces](#using-github-codespaces)
 
 If working on your machine (i.e. not using GitHub Codespaces), first clone the repository locally:
 
@@ -11,11 +11,11 @@ If working on your machine (i.e. not using GitHub Codespaces), first clone the r
 $ git clone https://github.com/fermyon/workshops && cd workshops
 ```
 
-### Configuring your local environment
+### Option A: Configuring your local environment
 
 First, you have to configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install).
 
-For example, to install Spin from Linux, macOS, or WSL2, run the following commands:
+For example, to install Spin and language plugins and templates from Linux, macOS, or WSL2, you can use the install script:
 
 > Note that for this workshop, we will be downloading a canary version of Spin required for [Step 07 Fermyon Serverless AI](./07-fermyon-ai.md).
 
@@ -29,25 +29,28 @@ Alternatively, you can [manually install from a GitHub release](https://github.c
 At this point, you should be able to run Spin commands:
 
 ```bash
-$ spin --version
-spin 1.0.0
+spin --version
 ```
 
-Now you can configure the templates and plugins we will use as part of this workshop:
+If you installed Spin using the install script, it also installs the plugins and templates needed for this workshop. If you used another method to install Spin, install the templates and plugins necessary for the workshop like so:
 
 ```bash
 # Install the official Spin templates.
 $ spin templates install --git https://github.com/fermyon/spin --update
 $ spin templates install --git https://github.com/fermyon/spin-js-sdk --update
 
-# Install a few templates we will use to build applications.
-$ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
-$ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
-
 # Install the canary JavaScript plugin for Spin.
 $ spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json
 # Install the canary cloud plugin for Spin
 $ spin plugins install -u https://github.com/fermyon/cloud-plugin/releases/download/canary/cloud.json
+```
+
+You may also find the following templates helpful for extending beyond the workshop.
+
+```sh
+# Install a few templates we will use to build applications.
+$ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
+$ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
 ```
 
 Depending on the programming languages you want to use, you will need to configure their toolchains. For example:
@@ -57,7 +60,7 @@ Depending on the programming languages you want to use, you will need to configu
 - [Go](https://go.dev/doc/install) and [TinyGo](https://tinygo.org/getting-started/install)
 - [.NET](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
-### Using a local dev container with VS Code
+### Option B: Using a local dev container with VS Code
 
 This repository contains the necessary files to open the project and develop inside a container, using [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
@@ -65,7 +68,7 @@ After [following the VS Code documentation](https://code.visualstudio.com/docs/d
 
 ![Open the workshops repository using a VS Code Dev Container](../media/dev-container.png)
 
-### Using GitHub Codespaces
+### Option C: Using GitHub Codespaces
 
 You can complete this workshop using only your browser using [GitHub Codespaces](https://github.com/features/codespaces). To achieve this, navigate to the GitHub repository for this workshop, https://github.com/fermyon/workshops, then click on the "Clone, open, or download button", then select "Codespaces", click "Create codespace on main`, then follow the instructions:
 

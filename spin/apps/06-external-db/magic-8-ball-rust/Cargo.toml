@@ -1,6 +1,6 @@
 [package]
 name = "magic-8-ball"
-authors = ["Kate Goldenring <kate.goldenring@fermyon.com>"]
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
 description = ""
 version = "0.1.0"
 edition = "2021"

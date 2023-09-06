@@ -58,7 +58,8 @@ fn answer<'a>() -> &'a str {
     answers[idx]
 }
 ```
-This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. This code snippet uses the `rand` crate. We need to add this dependancy to our `Cargo.toml` file. Your `Cargo.toml` file should look like this:
+
+This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. This code snippet uses the `rand` crate. We need to add this dependency to our `Cargo.toml` file. Your `Cargo.toml` file should look like this:
 
 ```toml
 [package]
@@ -78,22 +79,18 @@ anyhow = "1"
 bytes = "1"
 # General-purpose crate with common HTTP types.
 http = "0.2"
+# Library to get random response
 rand = "0.8.5"
 # The Spin SDK.
-spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.2.1" }
-# Crate that generates Rust Wasm bindings from a WebAssembly interface.
-wit-bindgen-rust = { git = "https://github.com/bytecodealliance/wit-bindgen", rev = "cb871cfa1ee460b51eb1d144b175b9aab9c50aba" }
+spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.4.2" }
 
 [workspace]
 ```
 
-That's it. We can now build the spin app using 
+That's it. We can now build and run the Spin app:
 
 ```bash
-$ spin build
-Executing the build command for component magic-8-ball: cargo build --target wasm32-wasi --release
-...
-Successfully ran the build command for the Spin components.
+spin build --up
 ```
 
 Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
@@ -147,13 +144,10 @@ function answer(): string {
 
 This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. 
 
-Install any dependancies with `npm install` and then build the Spin app using 
+Install any dependencies with `npm install` and then build and run the Spin app.
 
 ```bash
-$ spin build
-Executing the build command for component magic-8-ball: npm run build
-...
-Successfully ran the build command for the Spin components.
+spin build --up
 ```
 
 Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:

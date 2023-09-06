@@ -4,7 +4,7 @@ use spin_sdk::{
     http_component,
 };
 
-/// The entrypoint to our Spin component.
+/// A simple Spin HTTP component.
 #[http_component]
 fn handle_hello_rust(req: Request) -> Result<Response> {
     println!("{:?}", req.headers());

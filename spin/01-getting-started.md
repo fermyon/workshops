@@ -3,8 +3,7 @@
 This document assumes you have followed [the setup guide](./00-setup.md) and have an environment configured with the Spin CLI and other language-specific tools (such as `node`, `cargo`, or `tinygo`).
 
 ```bash
-$ spin --version
-spin 1.4.0
+spin --version
 ```
 
 [Spin](https://github.com/fermyon/spin) is an open source framework for building, distributing, and running serverless applications and microservices with WebAssembly (or Wasm).
@@ -78,10 +77,7 @@ command = "cargo build --target wasm32-wasi --release"
 You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
 
 ```bash
-$ spin build
-Executing the build command for component hello-rust: cargo build --target wasm32-wasi --release
-...
-Successfully ran the build command for the Spin components.
+spin build
 ```
 
 > Note: if you are having issues building your application, refer to the [troubleshooting guide from the setup document](./00-setup.md#troubleshooting).
@@ -215,12 +211,12 @@ Let's change the message body to "Hello, WebAssembly!":
 
 
 ```typescript
-export async function handleRequest(request: HttpRequest): Promise<HttpResponse> {
-  return {
-    status: 200,
-    headers: { "foo": "bar" },
-    body: "Hello, WebAssembly!"
-  }
+export const handleRequest: HandleRequest = async function(request: HttpRequest): Promise<HttpResponse> {
+    return {
+      status: 200,
+        headers: { "foo": "bar" },
+      body: encoder.encode("Hello, WebAssembly!").buffer
+    }
 }
 ```
 

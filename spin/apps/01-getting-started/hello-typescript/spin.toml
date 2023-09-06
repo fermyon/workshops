@@ -1,17 +1,15 @@
 spin_manifest_version = "1"
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+description = ""
 name = "hello-typescript"
-# This is an HTTP application.
 trigger = { type = "http", base = "/" }
 version = "0.1.0"
 
 [[component]]
 id = "hello-typescript"
-# The Wasm module to execute for this component.
-source = "target/spin-http-js.wasm"
+source = "target/hello-typescript.wasm"
 exclude_files = ["**/node_modules"]
 [component.trigger]
-# This component will get invoked for all requests to `/...`.
 route = "/..."
 [component.build]
-# The command to execute when running `spin build`.
 command = "npm run build"
