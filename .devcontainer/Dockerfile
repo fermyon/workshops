@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     build-essential libssl-dev pkg-config\
     glibc-source                         \
     ca-certificates                      \
-    tree
+    tree                                 \
+    wget
 
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
@@ -29,10 +30,6 @@ RUN rustup target add wasm32-wasi
 RUN go install golang.org/x/tools/gopls@latest
 
 # Install Spin and required plugins
-RUN (curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary && mv spin /usr/local/bin/) &&    \
-spin plugins install -u https://github.com/fermyon/cloud-plugin/releases/download/canary/cloud.json -y &&                   \
-spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json -y &&                  \
-    spin templates install --git https://github.com/fermyon/spin --update &&                                                \
-    spin templates install --git https://github.com/fermyon/spin-js-sdk --update &&                                         \
+RUN (curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v v1.5.0 && mv spin /usr/local/bin/) &&    \
     spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update &&                                 \
     spin templates install --git https://github.com/radu-matei/spin-nextjs --update

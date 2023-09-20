@@ -177,7 +177,13 @@ command = "npm run build"
 
 > Note: you can [learn more about the Spin manifest file and components in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
 
-First install the dependencies for the template with `npm install`. You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
+First install the dependencies for the template with npm:
+
+```bash
+npm install
+```
+
+You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml`:
 
 ```bash
 spin build

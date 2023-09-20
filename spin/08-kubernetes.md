@@ -64,13 +64,17 @@ Install the plugin, scaffold the dockerfile, build the container, and push it to
 $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
 # Build your app locally
 $ spin build
+
 # Scaffold your Dockerfile, passing in the namespace of your registry
 $ spin k8s scaffold ghcr.io/my-registry  && spin k8s build
 # UPDATE resultant deploy.yaml to have 1 replica to use only one KV store
+
 # Push the container to your container registry
 $ spin k8s push ghcr.io/my-registry
+
 # After making sure it is a publicly accessible container or adding a regcred to your `deploy.yaml`
 $ spin k8s deploy
+
 # Watch the applications become ready
 $ kubectl get pods --watch
 ```
@@ -97,5 +101,6 @@ In this section you learned how to:
 
 - Go back to [07 - Storing data in an external database](07-external-db.md) if you still have questions on previous section
 - Otherwise, congrats on finishing the workshop! 
-- (_optionally_) Let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx). A lucky set of randomly selected survey participants will receive a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!
+- (_optionally_) Let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy).
+A lucky set of randomly selected survey participants will receive a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!
 <img src=../media/slats-keycap-cropped.png width="150">

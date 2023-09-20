@@ -144,11 +144,14 @@ function answer(): string {
 
 This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. 
 
-Install any dependencies with `npm install` and then build and run the Spin app.
+Install the dependencies and then build and run the Spin app.
 
 ```bash
+npm install
 spin build --up
 ```
+
+> Note: `npm install` is only needed when adding new dependencies to the javascript function.
 
 Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
 

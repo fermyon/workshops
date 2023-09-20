@@ -131,19 +131,19 @@ fn wildcard(_req: Request, _params: Params) -> Result<Response> {
 ```
 
 Now build the application and configure the database.
-```sh
+```bash
 spin build --up --sqlite="@migration.sql"
 ```
 
 Enter the lottery:
 
-```sh
+```bash
 curl -d "Enrico Fermi" -X POST http://127.0.0.1:3000/enter
 ```
 
 Draw the winner:
 
-```sh
+```bash
 curl http://127.0.0.1:3000/winner
 ```
 
@@ -155,20 +155,21 @@ confirmation, you can deploy your local app to the cloud:
 
 > Note: Users are limited to one NoOps SQL DB in Fermyon Cloud
 
-```sh
+```bash
 spin deploy
 ```
 
 List you current databases and see that one has been made for you:
 
-```sh
+```bash
 $ spin cloud sqlite list
 Databases (1)
 charming-tangerine (default)
 ```
 
 Let's update the schema of this database:
-```sh
+
+```bash
 spin cloud sqlite execute charming-tangerine "@migration.sql"
 ```
 

@@ -82,7 +82,8 @@ fn answer(question: &str) -> Result<String> {
 > the LLM such as the maximum tokens that should be used in the request.
 
 Now, build your application and see the [deploy to Fermyon Cloud section](#deploy-to-cloud) to test it out.
-```sh
+
+```bash
 spin build
 ```
 
@@ -136,7 +137,7 @@ function answer(question: string): string {
 
 Now, build your application.
 
-```sh
+```bash
 npm install
 spin build
 ```
@@ -159,14 +160,19 @@ Let's deploy our Serverless AI application to Fermyon Cloud with the following c
 spin cloud deploy
 ```
 
+> Note: If this is the first time you interact with the cloud, you will be asked to [sign up using GitHub](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud).
+> For the AI Inferencing to work, you'll also need access to the [Private Beta feature in Cloud](https://developer.fermyon.com/cloud/serverless-ai).
+
 Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
 
-```sh
+```bash
 $ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
 {"answer": "Signs point to yes!"}  
 ```
 
 ## (Optional) Run Locally
+
+We can run the inferencing requests locally, but the model needed is a large download, and the inferencnig takes a long time to run. We should expect tens of seconds for each request.
 
 Before we run our application locally, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
@@ -174,30 +180,24 @@ and a consistent local to Cloud experience; however, the model is quite large (6
 you can install a smaller LLM model and configure Spin to use it with a runtime config file. The
 model should be placed in the `.spin/ai-models` directory:
 
-```sh
+```bash
 mkdir -p .spin/ai-models
 wget https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML/resolve/main/llama-2-13b-chat.ggmlv3.q3_K_L.bin
 mv llama-2-13b-chat.ggmlv3.q3_K_L.bin .spin/ai-models/llama2-chat
 ```
 
-Now, you can build and run your Magic AI Ball!
+Now, we can build and run your Magic AI Ball!
 
-```sh
+```bash
 spin build --up
 ```
 
 Let's ask a question
 
-```sh
+```bash
 $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
 {"answer": "Signs point to yes!"}  
 ```
-
-> Note: the LLM model can be slow when hosted on your machine. For quicker responses, you can
-> [deploy your application to Fermyon
-> Cloud](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud) with `spin
-> deploy`.
-
 
 > Note: you can find the complete applications used in this workshop in the [`apps`
 > directory](./apps/).
