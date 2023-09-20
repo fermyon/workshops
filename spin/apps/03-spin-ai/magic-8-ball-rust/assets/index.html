@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Spin Magic AI-ght Ball</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png" />
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+
+<body>
+    <h1>Ask the Magic AI-ght Ball a Question</h1>
+    <p>Powered by Fermyon Serverless AI</p>
+    <input type="text" id="question" placeholder="Ask Question">
+    <p>
+    <button id="btn">Spin the ball!</button>
+    </p>
+    <div id="magicEightBall">
+        <div id="circle"></div>
+        <div id="triangle"></div>
+        <img src="icon/magic-eight-ball.png"/>
+    </div>
+    <script>
+        const btn = document.getElementById("btn");
+        btn.addEventListener('click', function(){
+            var question = document.getElementById("question").value;
+            fetch('../magic-8', { method: 'POST', body: question }).then(response => response.json()).then(data => {
+                document.getElementById("triangle").style.display = 'inline-block';
+                document.getElementById("circle").style.display = 'inline-block';
+                document.getElementById("triangle").innerHTML = '<br><br>' + data.answer;
+            })
+        });
+    </script>
+</body>
+</html>
