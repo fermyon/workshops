@@ -1,7 +1,7 @@
 {
 	"name": "Fermyon Spin",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "ghcr.io/fermyon/workshops/dev-container:20230905-100317-g761efad",
+	"image": "ghcr.io/fermyon/workshops/dev-container:20230920-075415-ge7406ad",
 	// "build": {
 	// 	"dockerfile": "Dockerfile"
 	// },
