@@ -15,14 +15,14 @@ $ git clone https://github.com/fermyon/workshops && cd workshops
 
 First, you have to configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install).
 
-For example, to install Spin and language plugins and templates from Linux, macOS, or WSL2, you can use the install script:
-
-> Note that for this workshop, we will be downloading a canary version of Spin required for [Step 07 Fermyon Serverless AI](./07-fermyon-ai.md).
+For Linux (including WSL2) and macOS, you have the option to use HomeBrew
 
 ```bash
-curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v canary
-sudo mv spin /usr/local/bin/
+brew tap fermyon/tap
+brew install fermyon/tap/spin
 ```
+
+For Windows (not WSL2), see here: 
 
 Alternatively, you can [manually install from a GitHub release](https://github.com/fermyon/spin/releases), or you can [build Spin from source](https://developer.fermyon.com/spin/contributing-spin).
 
@@ -34,20 +34,9 @@ spin --version
 
 If you installed Spin using the install script, it also installs the plugins and templates needed for this workshop. If you used another method to install Spin, install the templates and plugins necessary for the workshop like so:
 
-```bash
-# Install the official Spin templates.
-$ spin templates install --git https://github.com/fermyon/spin --update
-$ spin templates install --git https://github.com/fermyon/spin-js-sdk --update
-
-# Install the canary JavaScript plugin for Spin.
-$ spin plugins install -u https://github.com/fermyon/spin-js-sdk/releases/download/canary/js2wasm.json
-# Install the canary cloud plugin for Spin
-$ spin plugins install -u https://github.com/fermyon/cloud-plugin/releases/download/canary/cloud.json
-```
-
 You may also find the following templates helpful for extending beyond the workshop.
 
-```sh
+```bash
 # Install a few templates we will use to build applications.
 $ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
 $ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
@@ -63,6 +52,8 @@ Depending on the programming languages you want to use, you will need to configu
 ### Option B: Using a local dev container with VS Code
 
 This repository contains the necessary files to open the project and develop inside a container, using [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
+
+> Note: Spin currently cannot run using QEMU. For macOS on Apple Silicon, you have to configure Docker Desktop to **Use Rosetta for x86/amd64 emulation on Apple Silicon**. You can enable this under **Settings** -> **Features in development** in Docker Desktop.
 
 After [following the VS Code documentation](https://code.visualstudio.com/docs/devcontainers/tutorial), you can open the directory in a container:
 
