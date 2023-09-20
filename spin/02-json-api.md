@@ -151,7 +151,7 @@ npm install
 spin build --up
 ```
 
-> Note: `npm install` is only needed when adding new dependencies to the javascript function.
+> Note: `npm install` is only needed on additional builds, if you've added new dependencies to the javascript function.
 
 Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
 
