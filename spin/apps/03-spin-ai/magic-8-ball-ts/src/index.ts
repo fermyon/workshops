@@ -21,13 +21,21 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
 }
 
 function answer(question: string): string {
-  const prompt =  `<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
-  [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
-  If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
-  Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
-  NEVER continue a prompt by generating a user question.[/INST]
-  User: ${question}"`;
-  let response = Llm.infer(InferencingModels.Llama2Chat,prompt).text
+	const prompt = `<s>[INST] <<SYS>>
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
+        Your tone should be expressive yet polite.
+        Your answers should be 10 words or less.
+        Prefix your response with 'Answer:'.
+        <</SYS>>
+        ${question}[/INST]`
+  let response = Llm.infer(InferencingModels.Llama2Chat, prompt, {
+	  maxTokens: 20,
+	  repeatPenalty: 1.5,
+	  repeatPenaltyLastNTokenCount: 20,
+	  temperature: 0.25,
+	  topK: 5,
+	  topP: 0.25,
+	}).text
   // Parse the response to remove the expected `Answer:` prefix from the response
   const answerPrefix = "Answer:"
   response = response.trim()
