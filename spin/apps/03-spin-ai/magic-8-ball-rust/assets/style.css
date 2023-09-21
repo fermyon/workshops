@@ -52,7 +52,6 @@ main {
 
 #triangle {
     display: none;
-    font-size: 14pt;
     width: 120px;
     height: 110px;
     margin-left: 85px;
@@ -64,4 +63,16 @@ main {
     background-repeat: no-repeat;
     background-position: left, right;
     position:absolute; 
+}
+
+#reply {
+    text-align: center;
+    color: black;
+    font-family: Sen, Europa, Avenir, system, -apple-system, ".SFNSText-Regular", "San Francisco", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+    font-size: 16px;
+    display: inline-block;
+    position: absolute;
+    margin-left: 85px;
+    margin-top: 100px;
+    width: 120px;
 }
