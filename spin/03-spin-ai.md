@@ -11,7 +11,7 @@ hard coded list.
 
 As with the previous steps, you can choose to build the app in either Rust, JavaScript/TypeScript, or Go.
 
-> Note that Fermyon Cloud support is currently in private beta. To apply for access to the private beta, please fill out [this survey](https://fibsu0jcu2g.typeform.com/serverless-ai?utm_source=xxxxx&utm_medium=xxxxx&utm_campaign=xxxxx#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
+> Note that Fermyon Cloud support is currently in private beta. To apply for access to the private beta, please fill out [this survey](https://fibsu0jcu2g.typeform.com/serverless-ai).
 
 To get started with Fermyon Serverless AI, follow [these instructions](https://developer.fermyon.com/spin/serverless-ai-tutorial) to make sure you have installed the correct version of Spin and the necessary SDKs. If you'd like to learn more about the API, visit the [API guide here](https://developer.fermyon.com/spin/serverless-ai-api-guide).
 
@@ -20,7 +20,7 @@ To get started with Fermyon Serverless AI, follow [these instructions](https://d
 We need to modify our `magic-8-ball` component to:
 
 1. Get a yes/no question from the body of the HTTP request
-2. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
+2. Use the `Llm.infer_with_options` function Spin `Llm` library to generate a response to the question
 
 First, update the request handler to get the question from the request body and return an error if
 the body is empty:
@@ -42,16 +42,16 @@ Next, let's update the `answer` function to use the LLM instead of pulling a ran
 list. First, we need to make sure we are using the canary Spin SDK, which has support for the `llm` crate. Update the dependency tag in your `Cargo.toml`:
 
 ```toml
-spin-sdk = { git = "https://github.com/fermyon/spin", tag = "canary" }
+spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.5.0" }
 ```
 
-Now, back in your application (`lib.r`), you can get the `llm` module from the Spin Rust SDK:
+Now, back in your application (`lib.rs`), you can get the `llm` module from the Spin Rust SDK:
 
 ```rs
 use spin_sdk::llm;
 ```
 
-Update the `answer` function use the `llm::infer` function, specifying which model you have configured Spin to
+Update the `answer` function use the `llm::infer_with_options` function, specifying which model you have configured Spin to
 use and a prompt. We will use the default `Llama2Chat` model, which you can download later or use in Fermyon Cloud. The
 prompt should tell the system what type of responses it should give along with the user provided
 question. Your `answer` function should look similar to the following:
@@ -59,17 +59,30 @@ question. Your `answer` function should look similar to the following:
 ```rs
 fn answer(question: &str) -> Result<String> {
     let prompt = format!(
-        r"<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
-        [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
-        If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
-        Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
-        NEVER continue a prompt by generating a user question.[/INST]
-        User: {question}"
+        r"<s>[INST] <<SYS>>
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
+        Your tone should be expressive yet polite.
+        Your answers should be 10 words or less.
+        Prefix your response with 'Answer:'.
+        <</SYS>>
+        {question}[/INST]"
     );
 
     // Set model to default Llama2 or the one configured in runtime-config.toml
     let model = llm::InferencingModel::Llama2Chat;
-    let answer = llm::infer(model, &prompt)?.text;
+    let answer = llm::infer_with_options(
+        model,
+        &prompt,
+        llm::InferencingParams {
+            max_tokens: 20,
+            repeat_penalty: 1.5,
+            repeat_penalty_last_n_token_count: 20,
+            temperature: 0.25,
+            top_k: 5,
+            top_p: 0.25,
+        },
+    )?
+    .text;
     let mut answer = answer.trim();
     while let Some(a) = answer.strip_prefix("Answer:") {
         answer = a.trim();
@@ -78,8 +91,7 @@ fn answer(question: &str) -> Result<String> {
 }
 ```
 
-> Note: The `llm::infer_with_options` function can be substituted to also pass in configuration to
-> the LLM such as the maximum tokens that should be used in the request.
+> Note: The `llm::infer` function can be used in the request if you want to use the default options.
 
 Now, build your application and see the [deploy to Fermyon Cloud section](#deploy-to-cloud) to test it out.
 
@@ -115,13 +127,21 @@ should give along with the user provided question.
 
 ```ts
 function answer(question: string): string {
-  const prompt =  `<<SYS>>You are acting as an omniscient Magic 8 Ball that answers users' yes or no questions.<</SYS>>
-  [INST]Answer the question that follows the 'User:' prompt with a short response. Prefix your response with 'Answer:'.
-  If the question is not a yes or no question, reply with 'I can only answer yes or no questions'.
-  Your tone should be expressive yet polite. Always restrict your answers to 10 words or less. 
-  NEVER continue a prompt by generating a user question.[/INST]
-  User: ${question}"`;
-  let response = Llm.infer(InferencingModels.Llama2Chat,prompt).text
+  const prompt =  `<s>[INST] <<SYS>>
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
+        Your tone should be expressive yet polite.
+        Your answers should be 10 words or less.
+        Prefix your response with 'Answer:'.
+        <</SYS>>
+        User: ${question}[/INST]"`;
+  let response = Llm.infer(InferencingModels.Llama2Chat, prompt, {
+	  maxTokens: 20,
+	  repeatPenalty: 1.5,
+	  repeatPenaltyLastNTokenCount: 20,
+	  temperature: 0.25,
+	  topK: 5,
+	  topP: 0.25,
+	}).text
   // Parse the response to remove the expected `Answer:` prefix from the response
   const answerPrefix = "Answer:"
   response = response.trim()
@@ -131,9 +151,6 @@ function answer(question: string): string {
   return response
 }
 ```
-
-> Note: The `Llm.InferWithOptions` function can be used to also passing in configuration to the LLM
-> such as the maximum tokens that should be used in the request.
 
 Now, build your application.
 
@@ -166,7 +183,7 @@ spin cloud deploy
 Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
 
 ```bash
-$ curl -d "Will I win the lottery?" http://magic-8-sktges.fermyon.app/magic-8
+$ curl -d "Will I win the lottery?" https://{url}/magic-8
 {"answer": "Signs point to yes!"}  
 ```
 

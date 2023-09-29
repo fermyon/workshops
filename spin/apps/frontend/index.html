@@ -8,24 +8,33 @@
 
 
 <body>
-    <h1>Ask the Magic 8 Ball a Question</h1>
-    <input type="text" id="question" placeholder="Ask Question">
-    <button id="btn">Spin</button>
+    <h1>Ask the Magic Eight Ball a Question</h1>
+    <p>Powered by Fermyon Serverless AI</p>
+    <input type="text" id="question" placeholder="Ask Question" onkeypress="infer(event)">
+    <p>
+    <button id="btn" onclick="infer(event)">Spin the ball!</button>
+    </p>
     <div id="magicEightBall">
         <div id="circle"></div>
         <div id="triangle"></div>
+	<div id="reply"></div>
         <img src="icon/magic-eight-ball.png"/>
     </div>
     <script>
-        const btn= document.getElementById("btn");
-        btn.addEventListener('click', function(){
-            var question = document.getElementById("question").value;
-            fetch('../magic-8', { method: 'POST', body: question }).then(response => response.json()).then(data => {
-                document.getElementById("triangle").style.display = 'inline-block';
-                document.getElementById("circle").style.display = 'inline-block';
-                document.getElementById("triangle").innerHTML = '<br><br>' + data.answer;
-            })
-        });
+
+	function infer(event) {
+		if (event.key == "Enter" || event.type == "click") {
+			var question = document.getElementById("question").value;
+			if (question == "") { return; }
+			document.getElementById("triangle").style.display = 'inline-block';
+			document.getElementById("circle").style.display = 'inline-block';
+			document.getElementById("reply").style.display = 'inline-block';
+			document.getElementById("reply").innerHTML = "Spinning...";
+			fetch('../magic-8', { method: 'POST', body: question }).then(response => response.json()).then(data => {
+				document.getElementById("reply").innerHTML = data.answer;
+			})
+		}
+	}
     </script>
 </body>
 </html>
