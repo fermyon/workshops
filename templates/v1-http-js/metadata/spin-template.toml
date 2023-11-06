@@ -1,6 +1,7 @@
 manifest_version = "1"
-id = "http-js"
+id = "v1-http-js"
 description = "HTTP request handler using Javascript"
+tags = ["http", "javascript", "v1"]
 
 [add_component]
 skip_files = ["spin.toml"]

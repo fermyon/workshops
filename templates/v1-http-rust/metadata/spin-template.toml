@@ -1,7 +1,7 @@
 manifest_version = "1"
-id = "http-rust"
+id = "v1-http-rust"
 description = "HTTP request handler using Rust"
-tags = ["http", "rust"]
+tags = ["http", "rust", "v1"]
 
 [add_component]
 skip_files = ["spin.toml"]
