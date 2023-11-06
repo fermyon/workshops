@@ -1,13 +1,17 @@
 # Setup
 
-## Overview of required software to compete the workshop
+## Overview of required software to complete the workshop
 
-TODO
-- Use a developer Container - here:
-- Spin
-- Container thingy (Docker Desktop, Rancher, others?)
-- K3d
-- ...
+TODO the below list...
+- Use a developer Container
+- Install locally:
+  - Spin
+  - Container thingy (Docker Desktop, Rancher, others?)
+    - Docker Desktop
+      - Enable Containerd - Save
+      - Enable Wasm - save!
+  - K3d
+  - ...
 
 ### Configuring your local environment for Spin
 

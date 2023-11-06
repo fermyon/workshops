@@ -1,9 +1,10 @@
-# Getting started with Spin
+# Getting started with Spin and WebAssembly
 
-- [Getting started with Spin](#getting-started-with-spin)
+- [Getting started with Spin and WebAssembly](#getting-started-with-spin-and-webassembly)
   - [1. Spin New - Create a Spin application and choose a template](#1-spin-new---create-a-spin-application-and-choose-a-template)
     - [A few words about choosing a programming language](#a-few-words-about-choosing-a-programming-language)
   - [2. Spin Build and Spin Up - Building and running the application](#2-spin-build-and-spin-up---building-and-running-the-application)
+  - [Deploy your Spin application](#deploy-your-spin-application)
   - [All Commands](#all-commands)
     - [Using TypeScript](#using-typescript)
     - [Using Rust](#using-rust)
@@ -14,7 +15,7 @@
 
 In this module, we'll explore how to building an application using [Spin](https://github.com/fermyon/spin), an open source developer tool for building and running serverless applications with WebAssembly.
 
-Spin uses Wasm because of its portability, sandboxed execution environment, and near-native speed. [More and more languages have support for WebAssembly](https://www.fermyon.com/wasm-languages/webassembly-language-support), so you should be able to use your favorite language to build your first serverless application with Wasm.
+Spin uses Wasm because of its portability, sandbox'ed execution environment, and near-native speed. [More and more languages have support for WebAssembly](https://www.fermyon.com/wasm-languages/webassembly-language-support), so you should be able to use your favorite language to build your first serverless application with Wasm.
 
 Depending on what language you are familiar with, you can choose to follow the rest of the guide in Rust, TypeScript, Go, or Python.
 
@@ -159,8 +160,17 @@ Hello, KubeCon!
 > **Note**
 > Spin also has a [`spin watch`](https://developer.fermyon.com/spin/v2/running-apps#monitoring-applications-for-changes) command to automatically rebuild the application on file changes.
 
-You can find the complete applications used in this workshop in the [`apps` directory](./apps/).
-TODO The above...
+## Deploy your Spin application
+
+Spin applications can run in many places. Anywhere you can run the Spin CLI, anywhere you can run a Docker container (see the next section), using [Wasmtime 14](https://wasmtime.dev/), [NGINX Unit](https://unit.nginx.org/), [wasmCloud](https://wasmcloud.com/), [Cosmonic](https://cosmonic.com/), [Fermyon Cloud](https://www.fermyon.com/cloud), and probably a fe other place we've forgot to mention here.
+
+We'll explore some of these options in later modules of the workshop.
+
+> **Note**
+> Depending on the deployment target, there might be additional steps required to package the application. Some targets also only support running a single components.
+
+As an optional step, you can try deploying the application to Fermyon Cloud, which provides a free plan for Spin application hosting.
+To deploy to Fermyon Cloud, simply using the [Fermyon Cloud plugin for Spin](https://github.com/fermyon/cloud-plugin), by running `spin cloud deploy`. This will take you through a guide to sign in and deploy the application.
 
 ## All Commands
 
