@@ -17,7 +17,7 @@ Before you begin, you need to have the following installed:
 Start a k3d cluster with the wasm shims already installed:
 
 ```bash
-k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.5.1 -p "8081:80@loadbalancer" --agents 2
+k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.2 -p "8081:80@loadbalancer" --agents 2
 ```
 
 Apply RuntimeClass for spin applications to use the Spin containerd Wasm shim:
