@@ -1,0 +1,9 @@
+[[component]]
+id = "{{project-name | kebab_case}}"
+source = "{{ output-path }}/app.wasm"
+[component.trigger]
+route = "{{http-path}}"
+[component.build]
+command = "spin py2wasm app -o app.wasm"
+workdir = "{{ output-path }}"
+watch = ["app.py", "Pipfile"]

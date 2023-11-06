@@ -1,0 +1,15 @@
+manifest_version = "1"
+id = "http-rust"
+description = "HTTP request handler using Rust"
+tags = ["http", "rust"]
+
+[add_component]
+skip_files = ["spin.toml"]
+skip_parameters = ["http-base"]
+[add_component.snippets]
+component = "component.txt"
+
+[parameters]
+project-description = { type = "string",  prompt = "Description", default = "" }
+http-base = { type = "string", prompt = "HTTP base", default = "/", pattern = "^/\\S*$" }
+http-path = { type = "string", prompt = "HTTP path", default = "/...", pattern = "^/\\S*$" }
