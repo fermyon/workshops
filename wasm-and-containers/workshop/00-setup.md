@@ -13,7 +13,13 @@ TODO
 
 First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install).
 
-> **Note** If you're not using one of the scripted installation methods (Homebrew or the install script). You need to install the following templates and plugins in addition to getting the Spin binary:
+Templates and plugins required for this workshop:
+- `spin templates install --git https://github.com/mikkelhegn/workshops --branch kubecon-na-2023 --update`
+- `spin plugins update`
+- `spin plugins install cloud`
+- `spin plugins install js2wasm`
+- `spin plugins install py2wasm`
+- `spin plugins install k8s`
 
 TODO - Update the above
 

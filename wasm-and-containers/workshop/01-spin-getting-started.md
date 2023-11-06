@@ -4,7 +4,7 @@
   - [1. Spin New - Create a Spin application and choose a template](#1-spin-new---create-a-spin-application-and-choose-a-template)
     - [A few words about choosing a programming language](#a-few-words-about-choosing-a-programming-language)
   - [2. Spin Build and Spin Up - Building and running the application](#2-spin-build-and-spin-up---building-and-running-the-application)
-  - [All commands](#all-commands)
+  - [All Commands](#all-commands)
     - [Using TypeScript](#using-typescript)
     - [Using Rust](#using-rust)
     - [Using Go](#using-go)
@@ -20,6 +20,10 @@ Depending on what language you are familiar with, you can choose to follow the r
 
 > **Note**
 > This document assumes you have followed [the setup steps](./00-setup.md) and have an environment configured with all the prerequisites.
+
+> **Note**
+> The section [All Command](#all-commands) contains all the commands and code needed to complete this module
+TODO The above in all modules
 
 ## 1. Spin New - Create a Spin application and choose a template
 
@@ -52,9 +56,9 @@ HTTP path: /...
 
 Once the application is created, all the files placed in a sub-directory with a name corresponding to the application name we provided.
 
-Depending on the programming language you choose for your template, the directory layout may differ, but in general, you should see a `spin.toml` file and a `src` folder in the new directory.
+Depending on the programming language you choose for your template, the directory layout may differ, but there is always a `spin.toml` file.
 
-`spin.toml` s the application's manifest file, and the `src` folder contains the source files for our first component.
+`spin.toml` s the application's manifest file.
 
 E.g. having used the `v1-http-ts` template:
 ```bash
@@ -62,9 +66,9 @@ $ cd my-application
 $ tree
 |-- README.md
 |-- package.json
-|-- spin.toml       <-- Spin Application Manifest
-|-- src             <-- Source files
-|    -- index.ts
+|-- spin.toml         <-- Spin Application Manifest
+|-- src
+|    -- index.ts      <-- Source file
 |-- tsconfig.json
 |-- webpack.config.js
 ```
@@ -73,6 +77,8 @@ Let's explore the `spin.toml` file. This is the Spin manifest file, which tells 
 
 ```toml
 spin_manifest_version = "1"
+authors = "Fermyon Engineering"
+description = ""
 name = "my-application"
 # This is an HTTP application.
 trigger = { type = "http", base = "/" }
@@ -81,7 +87,7 @@ version = "0.1.0"
 [[component]]
 id = "my-application"
 # The Wasm module to execute for this component.
-source = "target/wasm32-wasi/release/my-application.wasm"
+source = "target/my_application.wasm"
 # This components capability to create HTTP requests.
 allowed_http_hosts = []
 # Excluding files from being added to the WASM module being built
@@ -156,9 +162,9 @@ Hello, KubeCon!
 You can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 TODO The above...
 
-## All commands
+## All Commands
 
-TODO Meant as a quick reference for all the required commands to make this module work end-to-end
+The below sections contains all the commands and the code needed to complete this section
 
 ### Using TypeScript
 
@@ -177,11 +183,10 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "text/plain" },
-    body: "Hello from TS-SDK"
+    body: "Hello, Kubecon!"
   }
 }
 ```
-TODO - Update code
 
 ### Using Rust
 
@@ -193,9 +198,22 @@ $ spin build --up
 
 ```rust
 // Content of src/lib.rs
+use anyhow::Result;
+use spin_sdk::{
+    http::{Request, Response},
+    http_component,
+};
 
+/// A simple Spin HTTP component.
+#[http_component]
+fn handle_my_application(req: Request) -> Result<Response> {
+    println!("{:?}", req.headers());
+    Ok(http::Response::builder()
+        .status(200)
+        .header("foo", "bar")
+        .body(Some("Hello, KubeCon!".into()))?)
+}
 ```
-TODO - Update code
 
 ### Using Go
 
@@ -206,10 +224,25 @@ $ spin build --up
 ```
 
 ```golang
-// Content of src/lib.rs
+// Content of main.go
+package main
 
+import (
+	"fmt"
+	"net/http"
+
+	spinhttp "github.com/fermyon/spin/sdk/go/http"
+)
+
+func init() {
+	spinhttp.Handle(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		fmt.Fprintln(w, "Hello KubeCon!")
+	})
+}
+
+func main() {}
 ```
-TODO - Update code
 
 ### Using Python
 
@@ -220,10 +253,15 @@ $ spin build --up
 ```
 
 ```python
-# Content of src/lib.rs
+# Content of app.py
+from spin_http import Response
 
+def handle_request(request):
+
+    return Response(200,
+                    {"content-type": "text/plain"},
+                    bytes(f"Hello KubeCon!", "utf-8"))
 ```
-TODO - Update code
 
 ### Learning Summary
 
