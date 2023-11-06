@@ -5,7 +5,7 @@
     - [A few words about choosing a programming language](#a-few-words-about-choosing-a-programming-language)
   - [2. Spin Build and Spin Up - Building and running the application](#2-spin-build-and-spin-up---building-and-running-the-application)
   - [Deploy your Spin application](#deploy-your-spin-application)
-  - [All Commands](#all-commands)
+  - [Quick Reference for this Section](#all-commands)
     - [Using TypeScript](#using-typescript)
     - [Using Rust](#using-rust)
     - [Using Go](#using-go)
@@ -162,7 +162,16 @@ Hello, KubeCon!
 
 ## Deploy your Spin application
 
-Spin applications can run in many places. Anywhere you can run the Spin CLI, anywhere you can run a Docker container (see the next section), using [Wasmtime 14](https://wasmtime.dev/), [NGINX Unit](https://unit.nginx.org/), [wasmCloud](https://wasmcloud.com/), [Cosmonic](https://cosmonic.com/), [Fermyon Cloud](https://www.fermyon.com/cloud), and probably a fe other place we've forgot to mention here.
+Spin applications can run in many places.  You can run them: 
+
+* anywhere you can run the Spin CLI
+* anywhere you can run a Docker container (see the next section)
+* using [Wasmtime 14](https://wasmtime.dev/)
+* [NGINX Unit](https://unit.nginx.org/)
+* [wasmCloud](https://wasmcloud.com/)
+* [Cosmonic](https://cosmonic.com/)
+* [Fermyon Cloud](https://www.fermyon.com/cloud)
+* and probably a few other place we've forgot to mention here
 
 We'll explore some of these options in later modules of the workshop.
 
@@ -170,16 +179,28 @@ We'll explore some of these options in later modules of the workshop.
 > Depending on the deployment target, there might be additional steps required to package the application. Some targets also only support running a single components.
 
 As an optional step, you can try deploying the application to Fermyon Cloud, which provides a free plan for Spin application hosting.
-To deploy to Fermyon Cloud, simply using the [Fermyon Cloud plugin for Spin](https://github.com/fermyon/cloud-plugin), by running `spin cloud deploy`. This will take you through a guide to sign in and deploy the application.
+To deploy to Fermyon Cloud, simply using the [Fermyon Cloud plugin for Spin](https://github.com/fermyon/cloud-plugin).
 
-## All Commands
+First, login to Fermyon Cloud with your GitHub ID:
 
-The below sections contains all the commands and the code needed to complete this section
+```bash
+$ spin cloud login
+```
+And follow the steps to authorize the device.  Then you can deploy your application:
+
+```bash
+$ spin cloud deploy
+```
+
+
+## Quick Reference for this Section
+
+The below sections contains all the commands and the code needed for each language to complete this section.
 
 ### Using TypeScript
 
 ```bash
-$ spin build -t v1-http-ts my-application --accept-defaults
+$ spin new -t v1-http-ts my-application --accept-defaults
 $ cd my-application
 $ npm install
 $ spin build --up
@@ -201,7 +222,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
 ### Using Rust
 
 ```bash
-$ spin build -t v1-http-rust my-application --accept-defaults
+$ spin new -t v1-http-rust my-application --accept-defaults
 $ cd my-application
 $ spin build --up
 ```
@@ -228,7 +249,7 @@ fn handle_my_application(req: Request) -> Result<Response> {
 ### Using Go
 
 ```bash
-$ spin build -t v1-http-go my-application --accept-defaults
+$ spin new -t v1-http-go my-application --accept-defaults
 $ cd my-application
 $ spin build --up
 ```
@@ -257,7 +278,7 @@ func main() {}
 ### Using Python
 
 ```bash
-$ spin build -t v1-http-py my-application --accept-defaults
+$ spin new -t v1-http-py my-application --accept-defaults
 $ cd my-application
 $ spin build --up
 ```
