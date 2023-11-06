@@ -9,7 +9,7 @@ Before you begin, you need to have the following installed:
 - [Docker](https://docs.docker.com/install/) version 4.13.1 (90346) or later with [containerd enabled](https://docs.docker.com/desktop/containerd/)
 - [k3d](https://k3d.io/v5.4.6/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
-- [Spin binary and templates](https://spin.fermyon.dev/quickstart/)
+- [Spin binary >=1.5.1 and templates](https://spin.fermyon.dev/quickstart/)
 - [Rust](https://www.rust-lang.org/tools/install)
 
 ## Start and configure a k3d cluster
@@ -40,8 +40,6 @@ The plugin requires that all modules are available locally and that files are wi
 
 Install the plugin, scaffold the Dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 
-> Note: if creating a Rust app, before deploying the app to Kubernetes, modify the `spin.toml` file to remove the following as the shim does not yet support `spin watch`: `watch = ["src/**/*.rs", "Cargo.toml"]`
-
 ```bash
 # Install the plugin
 $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
@@ -49,14 +47,14 @@ $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin
 $ spin build
 # Scaffold your Dockerfile, passing in the namespace of your registry
 $ spin k8s scaffold ghcr.io/my-registry  && spin k8s build
-# Import your image into the k3d cluster
-$ k3d image import -c wasm-cluster  ghcr.io/my-registry/hello-typescript:0.1.0
+# Import your image into the k3d cluster. The version should match the version on your Spin.toml
+$ k3d image import -c wasm-cluster  ghcr.io/my-registry/hello:0.1.0
 # After making sure it is a publicly accessible container or adding a regcred to your `deploy.yaml`
 $ spin k8s deploy
 # Watch the applications become ready
 $ kubectl get pods --watch
 # Query the application (modify the endpoint path to match your application name)
-$ curl -v http://0.0.0.0:8081/hello-typescript
+$ curl -v http://0.0.0.0:8081/hello
 ```
 
 > To learn more about each of the `k8s` plugin steps, see the [documentation on running Spin on Kubernetes](https://developer.fermyon.com/spin/kubernetes).
