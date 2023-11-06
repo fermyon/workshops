@@ -1,6 +1,6 @@
 manifest_version = "1"
 id = "v1-http-ts"
-description = "HTTP request handler using Typescript"
+description = "v1 Manifest - HTTP request handler using Typescript"
 tags = ["http", "typescript", "v1"]
 
 [add_component]

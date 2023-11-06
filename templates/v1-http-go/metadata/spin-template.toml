@@ -1,6 +1,6 @@
 manifest_version = "1"
 id = "v1-http-go"
-description = "HTTP request handler using (Tiny)Go"
+description = "v1 Manifest - HTTP request handler using (Tiny)Go"
 tags = ["http", "go", "v1"]
 
 [add_component]

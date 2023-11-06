@@ -1,6 +1,6 @@
 manifest_version = "1"
 id = "v1-http-rust"
-description = "HTTP request handler using Rust"
+description = "v1 Manifest - HTTP request handler using Rust"
 tags = ["http", "rust", "v1"]
 
 [add_component]

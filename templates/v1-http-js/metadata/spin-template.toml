@@ -1,6 +1,6 @@
 manifest_version = "1"
 id = "v1-http-js"
-description = "HTTP request handler using Javascript"
+description = "v1 Manifest - HTTP request handler using Javascript"
 tags = ["http", "javascript", "v1"]
 
 [add_component]
