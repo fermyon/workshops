@@ -2,6 +2,7 @@
 
 - [Run your first WebAssembly application in a container](#run-your-first-webassembly-application-in-a-container)
   - [1. Building a Container with the Application](#1-building-a-container-with-the-application)
+  - [Potentially using Docker Compose and Redis](#potentially-using-docker-compose-and-redis)
   - [What is Runwasi?](#what-is-runwasi)
   - [All Commands](#all-commands)
     - [Using TypeScript](#using-typescript)
@@ -71,6 +72,77 @@ Hello KubeCon!
 
 Finally, you can push this image to a remote registry using `docker push`
 
+## Potentially using Docker Compose and Redis
+
+```toml
+[key_value_store.default]
+type = "redis"
+url = "redis://redis"
+```
+
+```toml
+spin_manifest_version = "1"
+authors = ["Mikkel Mørk Hegnhøj <mikkel@fermyon.com>"]
+description = ""
+name = "my-application"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "my-application"
+source = "target/my-application.wasm"
+key_value_stores = ["default"]
+exclude_files = ["**/node_modules"]
+[component.trigger]
+route = "/..."
+[component.build]
+command = "npm run build"
+```
+
+```typescript
+import { Kv,HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+
+export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
+  const store = Kv.openDefault()
+  let currentCount
+  if (store.exists("count")) {
+  	currentCount = store.getJson("count")
+  } else {
+	currentCount = 0
+  }
+
+  store.setJson("count", ++currentCount)
+  store.setJson("Hello", "KubeCon")
+
+  let response = store.getJson("Hello")
+
+  return {
+    status: 200,
+    headers: { "foo": "bar" },
+    body: `${response} ${currentCount}`
+    //body: "Hello from TS-SDK"
+  }
+}
+```
+
+```yaml
+services:
+  web:
+    image: "ghcr.io/mikkelhegn/my-application:latest"
+    ports:
+      - "3000:80"
+    platform: "wasi/wasm"
+    runtime: "io.containerd.spin.v1"
+  redis:
+    image: "redis:alpine"
+```
+
+```bash
+$ spin build
+$ docker build
+$ compose up
+```
+
 ## What is Runwasi?
 
 TODO this section
@@ -107,7 +179,7 @@ ENTRYPOINT ["/spin.toml"]
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
 $ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
 Hello KubeCon!
 ```
