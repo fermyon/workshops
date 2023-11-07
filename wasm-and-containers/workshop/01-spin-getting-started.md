@@ -201,8 +201,6 @@ And follow the steps to authorize the device.  Then you can deploy your applicat
 $ spin cloud deploy
 ```
 
-TODO - Add Using KeyValue and FileServer. Use the Redis API, as this can work with containers...
-
 ## Quick Reference for this Section
 
 The below sections contains a quick reference, with all the commands and the code needed for each language to complete this section.

@@ -2,7 +2,6 @@
 
 - [Run your first WebAssembly application in a container](#run-your-first-webassembly-application-in-a-container)
   - [1. Building a Container with the Application](#1-building-a-container-with-the-application)
-  - [2. Using Docker Compose](#2-using-docker-compose)
   - [More information about Runwasi](#more-information-about-runwasi)
   - [Quick Reference for this Section](#quick-reference-for-this-section)
     - [Using TypeScript](#using-typescript)
@@ -80,10 +79,6 @@ Hello KubeCon!
 ```
 
 You can push this image to a remote registry using `docker push`, if you want to be able to use this in other places.
-
-## 2. Using Docker Compose
-
-TODO Section to run Redis and the Spin container together...
 
 ## More information about Runwasi
 
