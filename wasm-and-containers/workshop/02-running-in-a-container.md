@@ -72,7 +72,7 @@ Once you've enabled these features, we can run our container with the Spin appli
 
 ```bash
 # Remember to substitute ghcr.io/<github-id> with the registry and organization you used when building the image.
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my-application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my-application
 $ curl localhost:3000
 Hello KubeCon!
 ```
