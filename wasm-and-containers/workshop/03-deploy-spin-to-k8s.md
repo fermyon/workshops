@@ -108,6 +108,7 @@ spec:
       containers:
         - name: spin-hello
           image: my-application
+          imagePullPolicy: IfNotPresent
           command: ["/"]
           resources: # limit the resources to 128Mi of memory and 100m of CPU
             limits:
