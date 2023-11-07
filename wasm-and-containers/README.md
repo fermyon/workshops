@@ -14,5 +14,4 @@ This workshop was last updated for KubeCon North America 2023
 - [2. Run your first WebAssembly application in a container](./workshop/02-running-in-a-container.md)
 - [3. Deploy your Spin applications to Kubernetes](./workshop/03-deploy-spin-to-k8s.md)
 - [4. Deploy your Spin applications to Azure Kubernetes Service (AKS)](./workshop/04-azure-kubernetes-service.md)
-
-TODO - Survey link
+- [5. Optionally, tell us what you think in this short survey](https://fibsu0jcu2g.typeform.com/workshop)
