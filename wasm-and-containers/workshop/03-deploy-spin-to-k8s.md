@@ -43,22 +43,6 @@ Using the `ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.2` for the k
 
 We have provided three alternate ways for you to try running a WebAssembly container in a Kubernetes cluster, please pick any (or all) of the below for the reminder of this section.
 
-- [Deploy your Spin applications to Kubernetes](#deploy-your-spin-applications-to-kubernetes)
-  - [Pre-requisites](#pre-requisites)
-  - [1. Create and Configure the k3d cluster](#1-create-and-configure-the-k3d-cluster)
-  - [2a. Deploy you application to Kubernetes](#2a-deploy-you-application-to-kubernetes)
-  - [2b. Package your Spin app using the k8s plugin](#2b-package-your-spin-app-using-the-k8s-plugin)
-  - [2c. Hello World Runwasi](#2c-hello-world-runwasi)
-    - [Deploy the workloads](#deploy-the-workloads)
-  - [3. Cleanup](#3-cleanup)
-  - [Quick Reference for this Section](#quick-reference-for-this-section)
-    - [2a. Deploy you application to Kubernetes](#2a-deploy-you-application-to-kubernetes-1)
-    - [2b. Package your Spin app using the k8s plugin](#2b-package-your-spin-app-using-the-k8s-plugin-1)
-    - [2c. Hello World Runwasi](#2c-hello-world-runwasi-1)
-  - [Learning Summary](#learning-summary)
-  - [Navigation](#navigation)
-
-
 ## 2a. Deploy you application to Kubernetes
 
 WebAssembly containers are identified using a `RuntimeClass`. The following RuntimeClass definition tells containerd whish shim to use for the RuntimeClass `wasmtime-spin`. First create a file called `spin-runtime.yaml`:
@@ -85,7 +69,13 @@ $ kubectl apply -f spin-runtime.yaml
 
 Next, you'll need a definition for the deployment, a service , and ingress configuration for the application. The cluster is configured to use Traefik for ingress.
 
-Start by creating a file called `spin-app.yaml`
+Before doing that, we'll import our image to the k3d cluster, so we don't need to hand over credentials to a private registry.
+
+```bash
+k3d image import -c wasm-cluster my-application
+```
+
+Then on to the actual deployment. Start by creating a file called `spin-app.yaml`
 
 ```bash
 $ touch spin-app.yaml
@@ -96,7 +86,7 @@ Before adding the below content to the file, make sure to change the image to po
 > **Note**
 >If you've chosen not to push your image to a remote registry, you can import it to the cluster with the following command, prior to applying the deployment specification.
 > ```bash
-> k3d image import -c wasm-cluster  my-appliation:latest
+> k3d image import -c wasm-cluster my-appliation:latest
 > ```
 
 ```yaml
@@ -117,7 +107,7 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: spin-hello
-          image: ghcr.io/deislabs/containerd-wasm-shims/examples/spin-rust-hello:v0.9.2
+          image: my-application
           command: ["/"]
           resources: # limit the resources to 128Mi of memory and 100m of CPU
             limits:
@@ -143,16 +133,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wasm-ingress
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    spec.ingressClassName: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
 spec:
   rules:
     - http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: Exact
             backend:
               service:
                 name: wasm-spin
@@ -165,7 +151,7 @@ Now apply the above definition using, check the pod status, and see if the appli
 ```bash
 $ kubectl apply -f spin-app.yaml
 $ kubectl get pods  --watch
-$ curl localhost:80
+$ curl localhost:8081
 Hello, KubeCon!
 ```
 
@@ -279,7 +265,7 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: spin-hello
-          image: ghcr.io/deislabs/containerd-wasm-shims/examples/spin-rust-hello:v0.9.2
+          image: my-application
           command: ["/"]
           resources: # limit the resources to 128Mi of memory and 100m of CPU
             limits:
@@ -305,16 +291,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wasm-ingress
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    spec.ingressClassName: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
 spec:
   rules:
     - http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: Exact
             backend:
               service:
                 name: wasm-spin
@@ -325,7 +307,7 @@ spec:
 ```bash
 $ kubectl apply -f spin-app.yaml
 $ kubectl get pods  --watch
-$ curl localhost:80
+$ curl localhost:8081
 Hello, KubeCon!
 ```
 

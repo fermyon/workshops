@@ -52,10 +52,12 @@ To build the container image, you can tag it using the fully-qualified tag for l
 
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
-$ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
+$ docker buildx build --platform wasi/wasm --provenance=false -t ghcr.io/<github-id>/my-application .
 ```
 
 Note the platform used when building the container `wasi/wasm`. This platform tag is used by the runtime to identify this as a WebAssembly container.
+
+We need to disable `--provenance=false` for the image to work in later sections of this workshop.
 
 To run this particular container, we need a container runtime which supports running WebAssembly and Spin applications. [Docker Desktop](https://docs.docker.com/desktop/wasm/) provides this through [containerd](https://containerd.io/) and [runwasi](https://github.com/containerd/runwasi), using the [Spin shim from Deislabs](https://github.com/deislabs/containerd-wasm-shims).
 
