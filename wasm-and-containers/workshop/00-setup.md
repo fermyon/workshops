@@ -37,7 +37,6 @@ Depending on the programming languages you want to use, you will need to configu
 ### Using a DevContainer
 
 You will be able to use a developer container for some parts of the workshop. One is provided here in this repository, which has everything you need to complete the first sections.
-TODO: Update DevContainer
 
 ## Troubleshooting
 
@@ -61,4 +60,4 @@ In this section you learned how to:
 
 - Proceed to [1. Getting started with Spin and WebAssembly](01-spin-getting-started.md)
 
-TODO Survey link - in all docs
+TODO - Survey link
