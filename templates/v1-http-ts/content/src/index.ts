@@ -4,6 +4,6 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "text/plain" },
-    body: "Hello from TS-SDK"
+    body: "Hello, Fermyon"
   }
 }
