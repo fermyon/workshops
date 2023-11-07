@@ -141,7 +141,7 @@ ENTRYPOINT ["/spin.toml"]
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
 $ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
 Hello KubeCon!
 ```
@@ -168,7 +168,7 @@ ENTRYPOINT ["/spin.toml"]
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
 $ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
 Hello KubeCon!
 ```
@@ -195,7 +195,7 @@ ENTRYPOINT ["/spin.toml"]
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
 $ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
 Hello KubeCon!
 ```
