@@ -2,9 +2,9 @@
 
 - [Run your first WebAssembly application in a container](#run-your-first-webassembly-application-in-a-container)
   - [1. Building a Container with the Application](#1-building-a-container-with-the-application)
-  - [Potentially using Docker Compose and Redis](#potentially-using-docker-compose-and-redis)
-  - [What is Runwasi?](#what-is-runwasi)
-  - [All Commands](#all-commands)
+  - [2. Using Docker Compose](#2-using-docker-compose)
+  - [More information about Runwasi](#more-information-about-runwasi)
+  - [Quick Reference for this Section](#quick-reference-for-this-section)
     - [Using TypeScript](#using-typescript)
     - [Using Rust](#using-rust)
     - [Using Go](#using-go)
@@ -12,31 +12,35 @@
   - [Learning Summary](#learning-summary)
     - [Navigation](#navigation)
 
-Now that we've built a simple WebAssembly application, using Spin. Let's explore how we get the application in to a container, to be able to deploy it to any container based runtime.
+In the previous section we create a Spin application, ran it locally, and deployed it to Fermyon Cloud. All these steps were possible without using containers.
+
+In this section we'll explore how we get the application in to a container, to be able to run it in a container-based runtime, in this case containerd. This is the first step in getting your WebAssembly application to run in Kubernetes.
 
 > **Note**
-> This document assumes you have followed [the setup steps](./00-setup.md) and have an environment configured with all the prerequisites.
+> The section [Quick Reference for this Section](#quick-reference-for-this-section), at the end of this page, contains all the commands and code needed to complete this module, for a quick reference.
+
+This section requires you to use Docker Desktop.
 
 > **Note**
-> The section [All Command](#all-commands) contains all the commands and code needed to complete this module
+> You can use ay way of running containers using containerd, with a custom configuration and extra shims. You can read more about how this works [here](https://github.com/deislabs/containerd-wasm-shims).
 
 ## 1. Building a Container with the Application
 
-The first step is to build the container image for the application, by creating a `Dockerfile`. As WebAssembly applications are fully self-contained, and don't need to bring any dependencies, the container image will start from `scratch`, with an empty file-system. This is in contrast to many containers, you're used to see, as they typically have an operating system, and other dependencies, which they rely on, as the base.
+The first step is to build the container image for the application, by creating a `Dockerfile`. As WebAssembly applications are fully self-contained, and don't need to bring any dependencies, the container image will start from `scratch`, with an empty file-system. This is in contrast to many containers, you're used to see, as they typically have an operating system, and other dependencies which they rely on, as the base.
 
 ```bash
-# Make sure you're in the root folder of the application. Same folder as spin.toml
+# Make sure you're in the root folder of the application. The same folder as spin.toml
 $ cd my-application
-# Create the Dockerfile
+# Create a Dockerfile
 $ touch Dockerfile
 ```
 
-Past the below into the newly created Dockerfile
+Paste the below into the newly created Dockerfile
 
 ```dockerfile
 FROM scratch as temp
 COPY spin.toml /spin.toml
-# Make sure to change the following line, depending on where the compiles wasm is located. This will vary based on the programming language you use. Check the spin.toml file, which have a reference to the file.
+# Make sure to change the following line, depending on where the compiles wasm is located. This will vary based on the programming language you use. Check the spin.toml file, which has a reference to the file.
 COPY target/my-application.wasm target/my-application.wasm
 
 FROM scratch
@@ -51,9 +55,12 @@ To build the container image, you can tag it using the fully-qualified tag for l
 $ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
 ```
 
+Note the platform used when building the container `wasi/wasm`. This platform tag is used by the runtime to identify this as a WebAssembly container.
+
 To run this particular container, we need a container runtime which supports running WebAssembly and Spin applications. [Docker Desktop](https://docs.docker.com/desktop/wasm/) provides this through [containerd](https://containerd.io/) and [runwasi](https://github.com/containerd/runwasi), using the [Spin shim from Deislabs](https://github.com/deislabs/containerd-wasm-shims).
 
-To enable this in Docker Desktop, you'll have to enable two experimental features. In Docker Desktop 4.25.0, you'll need to enable them one by one:
+In Docker Desktop, you'll have to enable two experimental features, to get support for Wasm.
+In Docker Desktop 4.25.0, you'll need to enable them one by one:
   1. Open the Docker Desktop Dashboard
   2. Choose "Features in development"
   3. Check "Use containerd for pulling and storing images"
@@ -65,97 +72,28 @@ Once you've enabled these features, we can run our container with the Spin appli
 
 ```bash
 # Remember to substitute ghcr.io/<github-id> with the registry and organization you used when building the image.
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my-application
 $ curl localhost:3000
 Hello KubeCon!
 ```
 
-Finally, you can push this image to a remote registry using `docker push`
+You can push this image to a remote registry using `docker push`, if you want to be able to use this in other places.
 
-## Potentially using Docker Compose and Redis
+## 2. Using Docker Compose
 
-```toml
-[key_value_store.default]
-type = "redis"
-url = "redis://redis"
-```
+TODO Section to run Redis and the Spin container together...
 
-```toml
-spin_manifest_version = "1"
-authors = ["Mikkel Mørk Hegnhøj <mikkel@fermyon.com>"]
-description = ""
-name = "my-application"
-trigger = { type = "http", base = "/" }
-version = "0.1.0"
-
-[[component]]
-id = "my-application"
-source = "target/my-application.wasm"
-key_value_stores = ["default"]
-exclude_files = ["**/node_modules"]
-[component.trigger]
-route = "/..."
-[component.build]
-command = "npm run build"
-```
-
-```typescript
-import { Kv,HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
-
-export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
-  const store = Kv.openDefault()
-  let currentCount
-  if (store.exists("count")) {
-  	currentCount = store.getJson("count")
-  } else {
-	currentCount = 0
-  }
-
-  store.setJson("count", ++currentCount)
-  store.setJson("Hello", "KubeCon")
-
-  let response = store.getJson("Hello")
-
-  return {
-    status: 200,
-    headers: { "foo": "bar" },
-    body: `${response} ${currentCount}`
-    //body: "Hello from TS-SDK"
-  }
-}
-```
-
-```yaml
-services:
-  web:
-    image: "ghcr.io/mikkelhegn/my-application:latest"
-    ports:
-      - "3000:80"
-    platform: "wasi/wasm"
-    runtime: "io.containerd.spin.v1"
-  redis:
-    image: "redis:alpine"
-```
-
-```bash
-$ spin build
-$ docker build
-$ compose up
-```
-
-## What is Runwasi?
-
-TODO this section
+## More information about Runwasi
 
 Kubernetes uses [containerd](https://containerd.io/) as its container runtime. Containerd pulls OCI images from registries and delegates the task of execution of containers to a lower level runtime known as a shim.
 
 [Runwasi](https://github.com/containerd/runwasi) operates as a containerd shim and allows you to run WebAssembly System Interface (WASI) applications on Kubernetes. It is governed by the CNCF containerd project, and is a great way to get started with WASI and WebAssembly on Kubernetes.
 
-In this workshop, we will use [k3d](https://k3d.io/) to create a local Kubernetes cluster with the spin shim installed and configured. The spin shim uses runwasi as a library to facility the execution of spin applications on Kubernetes.
+In the following sections, we will use [k3d](https://k3d.io/) to create a local Kubernetes cluster with the spin shim installed and configured. The spin shim uses runwasi as a library to facility the execution of spin applications on Kubernetes.
 
-## All Commands
+## Quick Reference for this Section
 
-The below sections contains all the commands and the code needed to complete this section
+The below sections contains a quick reference, with all the commands and the code needed for each language to complete this section.
 
 ### Using TypeScript
 
@@ -274,7 +212,5 @@ In this section you learned how to:
 - Build and run a Docker Container with a Spin application
 
 ### Navigation
-TODO
-- Go back to [1. Getting started with Spin](01-spin-getting-started.md) if you still have questions on previous section
-- Otherwise, proceed to [3. Deploying Spin applications to Kubernetes](03-deploy-spin-to-k8s.md)
-- (_optionally_) If finished, let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
+
+- Proceed to [3. Deploy your Spin applications to Kubernetes](03-deploy-spin-to-k8s.md)

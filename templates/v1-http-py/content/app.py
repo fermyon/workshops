@@ -4,4 +4,4 @@ def handle_request(request):
 
     return Response(200,
                     {"content-type": "text/plain"},
-                    bytes(f"Hello from the Python SDK", "utf-8"))
+                    bytes(f"Hello, Fermyon", "utf-8"))
