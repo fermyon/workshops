@@ -60,4 +60,4 @@ In this section you learned how to:
 
 - Proceed to [1. Getting started with Spin and WebAssembly](01-spin-getting-started.md)
 
-TODO - Survey link
+Survey: https://fibsu0jcu2g.typeform.com/workshop
