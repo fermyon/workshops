@@ -302,6 +302,10 @@ def handle_request(request):
                     bytes(f"Hello KubeCon!", "utf-8"))
 ```
 
+## Do more with Spin
+
+If you want to see more examples of what you can build with Spin, head over to the [Spin Up Hub](https://developer.fermyon.com/hub)
+
 ## Learning Summary
 
 In this section you learned how to:
