@@ -360,6 +360,5 @@ In this section you learned how to:
 ## Navigation
 
 - Proceed to [4. Deploy your Spin applications to Azure Kubernetes Service (AKS)](04-azure-kubernetes-service.md)
-- 
-TODO Next step
-- (_optionally_) If finished, let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
+
+TODO - Survey link

@@ -214,3 +214,5 @@ In this section you learned how to:
 ### Navigation
 
 - Proceed to [3. Deploy your Spin applications to Kubernetes](03-deploy-spin-to-k8s.md)
+
+TODO - Survey link

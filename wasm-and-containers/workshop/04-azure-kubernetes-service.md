@@ -63,11 +63,54 @@ scheduling:
 
 In the subsequent command, you can see the `wasmtime-spin-v1` runtime class maps to the `spin` containerd handler, which is registered on nodes in the cluster.
 
-Now let's deploy a slight Wasm microservice into our AKS cluster.
+Now let's deploy a Spin Wasm microservice into our AKS cluster.
+
+Save the following to a file called `spin.yaml`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasm-spin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wasm-spin
+  template:
+    metadata:
+      labels:
+        app: wasm-spin
+    spec:
+      runtimeClassName: wasmtime-spin-v1
+      containers:
+        - name: hello-spin
+          image: ghcr.io/deislabs/containerd-wasm-shims/examples/spin-rust-hello:v0.5.1
+          command: ["/"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wasm-spin
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: wasm-spin
+```
 
 ```bash
-# apply a service and a deployment containing a published slight application
-$ kubectl apply -f ../apps/05/spin.yaml
+# apply a service and a deployment containing a published spin application
+$ kubectl apply -f ./spin.yaml
 ```
 
 Now, let's see our pods running and curl our running service.
@@ -139,8 +182,53 @@ metadata:
 scheduling:
   nodeSelector:
     kubernetes.azure.com/wasmtime-spin-v1: "true"
+```
 
-$ kubectl apply -f ../apps/05/spin.yaml
+```yaml
+# spin.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasm-spin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wasm-spin
+  template:
+    metadata:
+      labels:
+        app: wasm-spin
+    spec:
+      runtimeClassName: wasmtime-spin-v1
+      containers:
+        - name: hello-spin
+          image: ghcr.io/deislabs/containerd-wasm-shims/examples/spin-rust-hello:v0.5.1
+          command: ["/"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wasm-spin
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: wasm-spin
+```
+
+```bash
+$ kubectl apply -f ./spin.yaml
 
 $ kubectl get pods -o wide
 NAME                                                   READY   STATUS        RESTARTS   AGE    IP            NODE                               NOMINATED NODE   READINESS GATES
@@ -170,6 +258,5 @@ In this section you learned how to:
 ## Navigation
 
 There is no more, it's over, it's the end. Thank you for spending time with us...
- 
-TODO Survey!!!
-- (_optionally_) If finished, let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).
+
+TODO - Survey link
