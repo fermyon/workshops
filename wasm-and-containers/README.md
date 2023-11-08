@@ -1,4 +1,4 @@
-# WebAssembly and Kubernetes
+# WebAssembly and Containers
 
 This workshops contains:
   - A 101 introduction to Spin and containers.
