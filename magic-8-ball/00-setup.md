@@ -8,7 +8,7 @@ There are a few ways to set up the development environment in order to follow th
 If working on your machine (i.e. not using GitHub Codespaces), first clone the repository locally:
 
 ```bash
-$ git clone https://github.com/fermyon/workshops && cd workshops
+$ git clone https://github.com/fermyon/workshops && cd workshops/magic-8-ball
 ```
 
 ### Option A: Configuring your local environment
