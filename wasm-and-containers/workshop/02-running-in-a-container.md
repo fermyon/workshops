@@ -21,7 +21,7 @@ In this section we'll explore how we get the application in to a container, to b
 This section requires you to use Docker Desktop.
 
 > **Note**
-> You can use ay way of running containers using containerd, with a custom configuration and extra shims. You can read more about how this works [here](https://github.com/deislabs/containerd-wasm-shims).
+> You can use any way of running containers using containerd, with a custom configuration and extra shims. You can read more about how this works [here](https://github.com/deislabs/containerd-wasm-shims).
 
 ## 1. Building a Container with the Application
 
@@ -61,21 +61,22 @@ We need to disable `--provenance=false` for the image to work in later sections 
 To run this particular container, we need a container runtime which supports running WebAssembly and Spin applications. [Docker Desktop](https://docs.docker.com/desktop/wasm/) provides this through [containerd](https://containerd.io/) and [runwasi](https://github.com/containerd/runwasi), using the [Spin shim from Deislabs](https://github.com/deislabs/containerd-wasm-shims).
 
 In Docker Desktop, you'll have to enable two experimental features, to get support for Wasm.
-In Docker Desktop 4.25.0, you'll need to enable them one by one:
+In Docker Desktop 4.27.2, you'll need to enable them one by one:
   1. Open the Docker Desktop Dashboard
-  2. Choose "Features in development"
-  3. Check "Use containerd for pulling and storing images"
+  2. Go to settings
+  3. In the general tab, select "Use containerd for pulling and storing images"
   4. Click "Apply & restart"
-  5. Check "Enable Wasm"
-  6. Click "Apply & restart" - You should now see a small progress bar saying "Installing"
+  5. Choose "Features in development"
+  6. Check "Enable Wasm"
+  7. Click "Apply & restart" - You should now see a small progress bar saying "Installing"
 
 Once you've enabled these features, we can run our container with the Spin application:
 
 ```bash
 # Remember to substitute ghcr.io/<github-id> with the registry and organization you used when building the image.
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my-application
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v2 -p 3000:80 ghcr.io/<github-id>/my-application
 $ curl localhost:3000
-Hello KubeCon!
+Hello, Friend!
 ```
 
 You can push this image to a remote registry using `docker push`, if you want to be able to use this in other places.
@@ -116,7 +117,7 @@ ENTRYPOINT ["/spin.toml"]
 $ docker buildx build --platform wasi/wasm --provenance=false -t ghcr.io/<github-id>/my-application .
 $ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
-Hello KubeCon!
+Hello, Friend!
 ```
 
 ### Using Rust
@@ -140,15 +141,10 @@ ENTRYPOINT ["/spin.toml"]
 
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
-<<<<<<< Updated upstream
-$ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
-=======
 $ docker buildx build --platform wasi/wasm --provenance=false -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
->>>>>>> Stashed changes
+$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v2 -p 80:3000 ghcr.io/<github-id>/my_application
 $ curl localhost:3000
-Hello KubeCon!
+Hello, Friend!
 ```
 
 ### Using Go
@@ -172,15 +168,10 @@ ENTRYPOINT ["/spin.toml"]
 
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
-<<<<<<< Updated upstream
-$ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
-=======
 $ docker buildx build --platform wasi/wasm --provenance=false -t ghcr.io/<github-id>/my-application .
 $ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
->>>>>>> Stashed changes
 $ curl localhost:3000
-Hello KubeCon!
+Hello, Friend!
 ```
 
 ### Using Python
@@ -204,15 +195,10 @@ ENTRYPOINT ["/spin.toml"]
 
 ```bash
 # Substitute ghcr.io/<github-id> with any registry and organization you would like to use, or simply use a local name.
-<<<<<<< Updated upstream
-$ docker buildx build --platform wasi/wasm -t ghcr.io/<github-id>/my-application .
-$ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 3000:80 ghcr.io/<github-id>/my_application
-=======
 $ docker buildx build --platform wasi/wasm --provenance=false -t ghcr.io/<github-id>/my-application .
 $ docker run -d --platform=wasi/wasm --runtime=io.containerd.spin.v1 -p 80:3000 ghcr.io/<github-id>/my_application
->>>>>>> Stashed changes
 $ curl localhost:3000
-Hello KubeCon!
+Hello, Friend!
 ```
 
 ## Learning Summary

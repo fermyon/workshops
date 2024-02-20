@@ -11,6 +11,7 @@
     - [Using Rust](#using-rust)
     - [Using Go](#using-go)
     - [Using Python](#using-python)
+  - [Do more with Spin](#do-more-with-spin)
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
@@ -90,6 +91,7 @@ source = "target/my-application.wasm"
 exclude_files = ["**/node_modules"]
 [component.my-application.build]
 command = "npm run build"
+watch = ["src/**/*.ts", "package.json"]
 ```
 
 > **Note**
@@ -249,7 +251,7 @@ fn handle_my_application(req: Request) -> Result<Response> {
     Ok(http::Response::builder()
         .status(200)
         .header("foo", "bar")
-        .body(Some("Hello, KubeCon!".into()))?)
+        .body(Some("Hello, Friend!".into()))?)
 }
 ```
 
@@ -275,7 +277,7 @@ import (
 func init() {
 	spinhttp.Handle(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprintln(w, "Hello KubeCon!")
+		fmt.Fprintln(w, "Hello, Friend!")
 	})
 }
 
@@ -298,7 +300,7 @@ def handle_request(request):
 
     return Response(200,
                     {"content-type": "text/plain"},
-                    bytes(f"Hello KubeCon!", "utf-8"))
+                    bytes(f"Hello, Friend!", "utf-8"))
 ```
 
 ## Do more with Spin
