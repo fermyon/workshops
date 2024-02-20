@@ -30,16 +30,25 @@ In addition to the requirements from the previous sections, you'll need the foll
 - [k3d](https://k3d.io/v5.4.6/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 
+Install this Spin plugin for Kubernetes:
+
+- [Spin k8s plugin](https://github.com/chrismatteson/spin-plugin-k8s)
+
+```
+$ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
+```
 
 ## 1. Create and Configure the k3d cluster
+
+> See [The Spin Kubernetes docs](https://developer.fermyon.com/spin/v2/kubernetes) for more information on configuring various Kubernetes flavors.
 
 The first step is to create a k3d cluster with the wasm shims installed:
 
 ```bash
-k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.2 -p "8081:80@loadbalancer" --agents 2
+k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.10.0 -p "8081:80@loadbalancer" --agents 2 --registry-create mycluster-registry:12345
 ```
 
-Using the `ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.2` for the k3d cluster, will give us a Kubernetes cluster with the shims installed and configured.
+Using the `ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.10.0` for the k3d cluster, will give us a Kubernetes cluster with the shims installed and configured.
 
 We have provided three alternate ways for you to try running a WebAssembly container in a Kubernetes cluster, please pick any (or all) of the below for the reminder of this section.
 
@@ -69,19 +78,36 @@ $ kubectl apply -f spin-runtime.yaml
 
 Next, you'll need a definition for the deployment, a service , and ingress configuration for the application. The cluster is configured to use Traefik for ingress.
 
-Before doing that, we'll import our image to the k3d cluster, so we don't need to hand over credentials to a private registry.
+```
+$ spin k8s scaffold default
 
-```bash
-k3d image import -c wasm-cluster my-application
+Dockerfile Created
+deploy.yaml created
 ```
 
-Then on to the actual deployment. Start by creating a file called `spin-app.yaml`
+Now we have all the files we need to create an OCI image containing our app. (Note that this image is not a Docker container, but a WebAssembly app.)
 
-```bash
-$ touch spin-app.yaml
+The `spin registry push` command will push your image to DockerHub or another registry (depending on the path you give it). The following pushes to `my-application` to my own DockerHub account.
+
+```
+$ spin registry push technosophos/my-application:v0.1.0
 ```
 
-Before adding the below content to the file, make sure to change the image to point to the container image you built in the previous section. You can choose to leave it pointing to the sample below `ghcr.io/deislabs/containerd-wasm-shims/examples/spin-rust-hello:v0.9.2`, which is a publicly available Hello World app.
+> You make need to run `docker login` to log in to the registry you wish to work with.
+
+Once the image has been pushed, update `deploy.yaml` to point to the newly created image:
+
+```yaml
+    # Find and edit this part:
+    spec:
+      runtimeClassName: wasmtime-spin
+      containers:
+        - name: my-application
+          # This is all you need to change:
+          image: technosophos/my-application:v0.1.0
+          command: ["/"]
+          imagePullPolicy: IfNotPresent
+```
 
 > **Note**
 >If you've chosen not to push your image to a remote registry, you can import it to the cluster with the following command, prior to applying the deployment specification.
@@ -89,101 +115,57 @@ Before adding the below content to the file, make sure to change the image to po
 > k3d image import -c wasm-cluster my-appliation:latest
 > ```
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: wasm-spin
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: wasm-spin
-  template:
-    metadata:
-      labels:
-        app: wasm-spin
-    spec:
-      runtimeClassName: wasmtime-spin
-      containers:
-        - name: spin-hello
-          image: my-application
-          imagePullPolicy: IfNotPresent
-          command: ["/"]
-          resources: # limit the resources to 128Mi of memory and 100m of CPU
-            limits:
-              cpu: 100m
-              memory: 128Mi
-            requests:
-              cpu: 100m
-              memory: 128Mi
----
+Now apply the above definition using, check the pod status, and see if the application responds:
+
+```bash
+$ kubectl apply -f deploy.yaml
+deployment.apps/my-application created
+service/my-application created
+ingress.networking.k8s.io/my-application created
+$ kubectl get pods  --watch
+$ curl http://localhost/
+Hello, KubeCon!
+```
+
+### Help! I am getting network errors!
+
+If you cannot access the endpoint, try editing your service to use ClusterIP instead of LoadBalancer, then recreated your application.
+
+In `deploy.yaml`:
+```
 apiVersion: v1
 kind: Service
 metadata:
-  name: wasm-spin
+  name: my-application
 spec:
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
   selector:
-    app: wasm-spin
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: wasm-ingress
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: wasm-spin
-                port:
-                  number: 80
+    app: my-application
 ```
 
-Now apply the above definition using, check the pod status, and see if the application responds:
+Then delete and re-create:
+```
+$ kubectl delete -f deploy.yaml
+# Wait a minute or so
+$ kubectl apply -f deploy.yaml
 
-```bash
-$ kubectl apply -f spin-app.yaml
-$ kubectl get pods  --watch
-$ curl localhost:8081
-Hello, KubeCon!
 ```
 
-## 2b. Package your Spin app using the k8s plugin
-
-You can also choose to use an experimental [Spin k8s plugin](https://github.com/chrismatteson/spin-plugin-k8s) to package your Spin application inside a Container.
-
-The plugin requires that all modules are available locally and that files are within subdirectories of the working directory.
-
-Install the plugin, scaffold the Dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
-
-```bash
-# Install the plugin
-$ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
-# Build your app locally
-$ spin build
-# Scaffold your Dockerfile, passing in the namespace of your registry
-$ spin k8s scaffold ghcr.io/my-registry && spin k8s build
-# Import your image into the k3d cluster. The name and version should match the name and version in your Spin.toml
-$ k3d image import -c wasm-cluster  ghcr.io/my-registry/hello:0.1.0
-# Deploy the image
-$ spin k8s deploy
-# Watch the applications become ready
-$ kubectl get pods --watch
-# Query the application (modify the endpoint path to match your application name)
-$ curl -v http://0.0.0.0:8081/hello
+And then map a port forward:
+```
+$ kubectl port-forward svc/my-application 3000:80
+Forwarding from 127.0.0.1:3000 -> 80
+Forwarding from [::1]:3000 -> 80
+Handling connection for 3000
 ```
 
 > To learn more about each of the `k8s` plugin steps, see the [documentation on running Spin on Kubernetes](https://developer.fermyon.com/spin/kubernetes).
 
-## 2c. Hello World Runwasi
+## 2b. Hello World Runwasi
 
 This example uses a set of containers already provided by the [containerd-wasm-shim project](https://github.com/deislabs/containerd-wasm-shims), for you to quickly see WebAssembly containers running in k3d.
 
@@ -245,76 +227,6 @@ $ kubectl apply -f spin-runtime.yaml
 Deployment
 
 ```bash
-$ touch spin-app.yaml
-```
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: wasm-spin
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: wasm-spin
-  template:
-    metadata:
-      labels:
-        app: wasm-spin
-    spec:
-      runtimeClassName: wasmtime-spin
-      containers:
-        - name: spin-hello
-          image: my-application
-          command: ["/"]
-          resources: # limit the resources to 128Mi of memory and 100m of CPU
-            limits:
-              cpu: 100m
-              memory: 128Mi
-            requests:
-              cpu: 100m
-              memory: 128Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: wasm-spin
-spec:
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    app: wasm-spin
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: wasm-ingress
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: wasm-spin
-                port:
-                  number: 80
-```
-
-```bash
-$ kubectl apply -f spin-app.yaml
-$ kubectl get pods  --watch
-$ curl localhost:8081
-Hello, KubeCon!
-```
-
-### 2b. Package your Spin app using the k8s plugin
-
-```bash
 $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json
 $ spin build
 $ spin k8s scaffold ghcr.io/my-registry && spin k8s build
@@ -324,7 +236,7 @@ $ kubectl get pods --watch
 $ curl -v http://0.0.0.0:8081/hello
 ```
 
-### 2c. Hello World Runwasi
+### 2b. Hello World Runwasi
 
 ```bash
 $ kubectl apply -f https://github.com/deislabs/containerd-wasm-shims/raw/main/deployments/workloads/runtime.yaml
