@@ -45,7 +45,7 @@ $ spin plugin install -y -u https://raw.githubusercontent.com/chrismatteson/spin
 The first step is to create a k3d cluster with the wasm shims installed:
 
 ```bash
-k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.10.0 -p "8081:80@loadbalancer" --agents 2 --registry-create mycluster-registry:12345
+k3d cluster create wasm-cluster --image ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.11.1 -p "8081:80@loadbalancer" --agents 2 --registry-create mycluster-registry:12345
 ```
 
 Using the `ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.10.0` for the k3d cluster, will give us a Kubernetes cluster with the shims installed and configured.
