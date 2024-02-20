@@ -18,7 +18,6 @@ First, you have to install and configure [Spin](https://fermyon.com/spin) by fol
 Templates and plugins required:
 
 ```bash
-$ spin templates install --git https://github.com/mikkelhegn/workshops --branch kubecon-na-2023 --update
 $ spin plugins update
 $ spin plugins install cloud
 $ spin plugins install js2wasm
