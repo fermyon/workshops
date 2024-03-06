@@ -9,15 +9,13 @@ Cloud, which hosts its own LLM for handling inferencing.
 This section will walk through how to modify your JSON API to use responses from an LLM instead of a
 hard coded list.
 
-As with the previous steps, you can choose to build the app in either Rust, JavaScript/TypeScript, or Go.
+As with the previous steps, you can choose to build the app in either Rust or JavaScript/TypeScript.
 
-> Note that Fermyon Cloud support is currently in private beta. To apply for access to the private beta, please fill out [this survey](https://fibsu0jcu2g.typeform.com/serverless-ai).
-
-To get started with Fermyon Serverless AI, follow [these instructions](https://developer.fermyon.com/spin/serverless-ai-tutorial) to make sure you have installed the correct version of Spin and the necessary SDKs. If you'd like to learn more about the API, visit the [API guide here](https://developer.fermyon.com/spin/serverless-ai-api-guide).
+If you'd like to learn more about the API, visit the [API guide here](https://developer.fermyon.com/spin/serverless-ai-api-guide).
 
 ## a. Building your Magic AI Ball application with Rust
 
-We need to modify our `magic-8-ball` component to:
+We need to modify our `magic-eight-ball` component to:
 
 1. Get a yes/no question from the body of the HTTP request
 2. Use the `Llm.infer_with_options` function Spin `Llm` library to generate a response to the question
@@ -26,32 +24,33 @@ First, update the request handler to get the question from the request body and 
 the body is empty:
 
 ```rs
-fn handle_magic_8_ball(req: Request) -> Result<Response> {
-    let body = req.body().as_deref().unwrap_or_default();
+#[http_component]
+fn handle_magic_eight_ball(req: Request) -> anyhow::Result<impl IntoResponse> {
+    let body = req.body();
     let question = std::str::from_utf8(&body)?;
     if question.is_empty() {
-        return Ok(http::Response::builder()
+        return Ok(Response::builder()
+            .status(200)
+            .header("Content-Type", "application/json")
+            .body("No question provided")
+            .build());
+    }
+    let answer_json = format!(r#"{{"answer": "{}"}}"#, answer(question.to_string())?);
+    Ok(Response::builder()
         .status(200)
         .header("Content-Type", "application/json")
-        .body(Some("No question provided".into()))?);
-    }
-    ...
+        .body(answer_json)
+        .build())
+}
 ```
 
-Next, let's update the `answer` function to use the LLM instead of pulling a random response from a
-list. First, we need to make sure we are using the canary Spin SDK, which has support for the `llm` crate. Update the dependency tag in your `Cargo.toml`:
-
-```toml
-spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.5.0" }
-```
-
-Now, back in your application (`lib.rs`), you can get the `llm` module from the Spin Rust SDK:
+Next, let's update the `answer` function to use the LLM instead of pulling a random response from a list. In your application (`lib.rs`), you can get the `llm` module from the Spin Rust SDK:
 
 ```rs
 use spin_sdk::llm;
 ```
 
-Update the `answer` function use the `llm::infer_with_options` function, specifying which model you have configured Spin to
+Update the `answer` function to use the `llm::infer_with_options` function, specifying which model you have configured Spin to
 use and a prompt. We will use the default `Llama2Chat` model, which you can download later or use in Fermyon Cloud. The
 prompt should tell the system what type of responses it should give along with the user provided
 question. Your `answer` function should look similar to the following:
@@ -101,7 +100,7 @@ spin build
 
 ## b. Building your Magic 8 Ball application with TypeScript
 
-We need to modify our `magic-8-ball` component to:
+We need to modify our `magic-eight-ball` component to:
 
 1. Reference a local LLM model
 1. Get a yes/no question from the body of the HTTP request
@@ -177,7 +176,6 @@ spin cloud deploy
 ```
 
 > Note: If this is the first time you interact with the cloud, you will be asked to [sign up using GitHub](https://developer.fermyon.com/cloud/quickstart#log-in-to-the-fermyon-cloud).
-> For the AI Inferencing to work, you'll also need access to the [Private Beta feature in Cloud](https://developer.fermyon.com/cloud/serverless-ai).
 
 Let's ask a question (make sure to use your Spin application's domain name, discoverable on [Fermyon Cloud UI](https://cloud.fermyon.com))
 
@@ -188,7 +186,7 @@ $ curl -d "Will I win the lottery?" https://{url}/magic-8
 
 ## (Optional) Run Locally
 
-We can run the inferencing requests locally, but the model needed is a large download, and the inferencnig takes a long time to run. We should expect tens of seconds for each request.
+We can run the inferencing requests locally, but the model needed is a large download, and the inferencing takes a long time to run. We should expect tens of seconds for each request.
 
 Before we run our application locally, we must first download a LLM. The following steps show how to
 download Llama 2, the model used in Fermyon Cloud. This has the benefit of being a stronger model
