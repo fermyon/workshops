@@ -4,7 +4,7 @@
   - Includes using Serverless AI, and deploying to Kubernetes.
 
 **Last Updated**
-This workshop was last updated for Open Source Summit Bilbao 2023
+This workshop was last updated for SCALE 21x 2024
 
 ## Workshop Modules
 

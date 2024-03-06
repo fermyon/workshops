@@ -2,34 +2,53 @@
 # it avoids downloading any platform-specific binaries, and installs the required
 # tools either through Debian's package manager, or through installation scripts
 # that download the appropriate binaries.
+FROM mcr.microsoft.com/devcontainers/base:jammy
 
-# If the examples in this repository require it, update this Dockerfile to install
-# more language toolchains (such as .NET or TinyGo).
-
-FROM --platform=linux/amd64 ubuntu:22.04
+# provided by docker
+ARG TARGETARCH
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
 
 RUN apt-get update && apt-get install -y \
-    bash                                 \
-    git                                  \
-    curl                                 \
     nodejs                               \
     npm                                  \
-    golang-go                            \
-    build-essential libssl-dev pkg-config\
-    glibc-source                         \
-    ca-certificates                      \
-    tree                                 \
-    wget
+    python3-pip
+
+# Install Go
+ARG GO_VERSION="1.22.1"
+RUN wget -O go.tar.gz "https://go.dev/dl/go${GO_VERSION}.linux-${TARGETARCH}.tar.gz" && \
+    tar -C /usr/local -xzf go.tar.gz && \
+    rm go.tar.gz
+ENV PATH="$PATH:/usr/local/go/bin"
+
+# Install TinyGo
+ARG TINYGO_VERSION="0.31.1"
+RUN wget "https://github.com/tinygo-org/tinygo/releases/download/v${TINYGO_VERSION}/tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb" && \
+    dpkg -i "tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb"
+
+# Install Spin
+ARG SPIN_VERSION="v2.3.0"
+RUN mkdir -p /opt/spin && \
+    cd /opt/spin && \
+    curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v $SPIN_VERSION && \
+    ln -s /opt/spin/spin /usr/local/bin/spin
+
+# Set the current user before spin install for plugins/templates
+USER $USERNAME
 
 # Install Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
-RUN rustup target add wasm32-wasi
+ENV PATH="$PATH:/home/$USERNAME/.cargo/bin"
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- \
+    -y --target wasm32-wasi
 
-# Install the gopls Go Language Server, see https://github.com/golang/tools/tree/master/gopls
-RUN go install golang.org/x/tools/gopls@latest
-
-# Install Spin and required plugins
-RUN (curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v v1.5.0 && mv spin /usr/local/bin/) &&    \
-    spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update &&                                 \
-    spin templates install --git https://github.com/radu-matei/spin-nextjs --update
+# Install Spin Plugins & Templates
+RUN spin plugins update && \
+    spin plugins install check-for-update -y && \
+    spin plugins install cloud -y && \
+    spin plugins install js2wasm -y && \
+    spin plugins install py2wasm -y && \
+    spin templates install --upgrade --git https://github.com/fermyon/spin && \
+    spin templates install --upgrade --git https://github.com/fermyon/spin-js-sdk && \
+    spin templates install --upgrade --git https://github.com/fermyon/spin-python-sdk && \
+    spin templates install --upgrade --git https://github.com/fermyon/spin-kv-explorer
