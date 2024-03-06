@@ -1,25 +1,26 @@
 use anyhow::Result;
-use spin_sdk::{
-    http::{Request, Response},
-    http_component, llm,
-};
+use spin_sdk::http::{IntoResponse, Request, Response};
+use spin_sdk::http_component;
+use spin_sdk::llm;
 
 /// A HTTP component that returns Magic 8 Ball responses
 #[http_component]
-fn handle_magic_8_ball(req: Request) -> Result<Response> {
-    let body = req.body().as_deref().unwrap_or_default();
+fn handle_magic_eight_ball(req: Request) -> anyhow::Result<impl IntoResponse> {
+    let body = req.body();
     let question = std::str::from_utf8(&body)?;
     if question.is_empty() {
-        return Ok(http::Response::builder()
+        return Ok(Response::builder()
             .status(200)
             .header("Content-Type", "application/json")
-            .body(Some("No question provided".into()))?);
+            .body("No question provided")
+            .build());
     }
     let answer_json = format!(r#"{{"answer": "{}"}}"#, answer(question.to_string())?);
-    Ok(http::Response::builder()
+    Ok(Response::builder()
         .status(200)
         .header("Content-Type", "application/json")
-        .body(Some(answer_json.into()))?)
+        .body(answer_json)
+        .build())
 }
 
 fn answer(mut question: String) -> Result<String> {
