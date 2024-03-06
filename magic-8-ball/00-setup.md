@@ -38,9 +38,8 @@ If you installed Spin using the install script, it also installs the plugins and
 You may also find the following templates helpful for extending beyond the workshop.
 
 ```bash
-# Install a few templates we will use to build applications.
-$ spin templates install --git https://github.com/radu-matei/spin-kv-explorer --update
-$ spin templates install --git https://github.com/radu-matei/spin-nextjs --update
+spin templates install --git https://github.com/fermyon/spin-kv-explorer --update
+spin templates install --git https://github.com/radu-matei/spin-nextjs --update
 ```
 
 Depending on the programming languages you want to use, you will need to configure their toolchains. For example:
@@ -48,7 +47,6 @@ Depending on the programming languages you want to use, you will need to configu
 - [Rust](https://www.rust-lang.org/learn/get-started) (including the Wasm/WASI target: `rustup target install wasm32-wasi`)
 - [Node.js and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Go](https://go.dev/doc/install) and [TinyGo](https://tinygo.org/getting-started/install)
-- [.NET](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
 ## Option B: Using a local dev container with VS Code
 
