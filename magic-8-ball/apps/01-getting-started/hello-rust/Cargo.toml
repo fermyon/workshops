@@ -11,11 +11,7 @@ crate-type = [ "cdylib" ]
 [dependencies]
 # Useful crate to handle errors.
 anyhow = "1"
-# Crate to simplify working with bytes.
-bytes = "1"
-# General-purpose crate with common HTTP types.
-http = "0.2"
 # The Spin SDK.
-spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.4.2" }
+spin-sdk = "2.2.0"
 
 [workspace]
