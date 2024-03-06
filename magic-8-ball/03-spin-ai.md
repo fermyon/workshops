@@ -107,18 +107,17 @@ We need to modify our `magic-8-ball` component to:
 1. Get a yes/no question from the body of the HTTP request
 1. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
 
-
 First, update the request handler to get the question from the request body and return an error if
 the body is empty:
 
 ```ts
-  const question = decoder.decode(request.body)
-  if (question.length == 0) {
-    return {
-      status: 400,
-      body: encoder.encode("No question asked").buffer
-    }
-  }
+const question = decoder.decode(request.body);
+if (question.length == 0) {
+  return {
+    status: 400,
+    body: encoder.encode("No question asked").buffer,
+  };
+}
 ```
 
 Next, update the `answer` function to use the LLM instead of pulling a random response from a list.
@@ -127,7 +126,7 @@ should give along with the user provided question.
 
 ```ts
 function answer(question: string): string {
-  const prompt =  `<s>[INST] <<SYS>>
+  const prompt = `<s>[INST] <<SYS>>
         You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
         Your tone should be expressive yet polite.
         Your answers should be 10 words or less.
@@ -135,20 +134,20 @@ function answer(question: string): string {
         <</SYS>>
         User: ${question}[/INST]"`;
   let response = Llm.infer(InferencingModels.Llama2Chat, prompt, {
-	  maxTokens: 20,
-	  repeatPenalty: 1.5,
-	  repeatPenaltyLastNTokenCount: 20,
-	  temperature: 0.25,
-	  topK: 5,
-	  topP: 0.25,
-	}).text
+    maxTokens: 20,
+    repeatPenalty: 1.5,
+    repeatPenaltyLastNTokenCount: 20,
+    temperature: 0.25,
+    topK: 5,
+    topP: 0.25,
+  }).text;
   // Parse the response to remove the expected `Answer:` prefix from the response
-  const answerPrefix = "Answer:"
-  response = response.trim()
-  if(response.startsWith(answerPrefix)) {
-    response = response.substring(answerPrefix.length)
+  const answerPrefix = "Answer:";
+  response = response.trim();
+  if (response.startsWith(answerPrefix)) {
+    response = response.substring(answerPrefix.length);
   }
-  return response
+  return response;
 }
 ```
 
@@ -184,7 +183,7 @@ Let's ask a question (make sure to use your Spin application's domain name, disc
 
 ```bash
 $ curl -d "Will I win the lottery?" https://{url}/magic-8
-{"answer": "Signs point to yes!"}  
+{"answer": "Signs point to yes!"}
 ```
 
 ## (Optional) Run Locally
@@ -213,7 +212,7 @@ Let's ask a question
 
 ```bash
 $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
-{"answer": "Signs point to yes!"}  
+{"answer": "Signs point to yes!"}
 ```
 
 > Note: you can find the complete applications used in this workshop in the [`apps`

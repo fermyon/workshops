@@ -31,7 +31,7 @@ $ spin templates list
 
 You are now ready to create your first Spin applications. Depending on what language you are familiar with, you can choose to follow the rest of the guide in Rust or JavaScript/TypeScript.
 
-### a. Building your first Spin application with Rust
+## a. Building your first Spin application with Rust
 
 Rust has excellent [support for WebAssembly](https://www.rust-lang.org/what/wasm), and Spin has an SDK for Rust that simplifies building Spin applications in Rust.
 
@@ -133,7 +133,7 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
-### b. Building your first Spin application with JavaScript or TypeScript
+## b. Building your first Spin application with JavaScript or TypeScript
 
 JavaScript is one of the most popular programming languages. Spin has an [experimental SDK and toolchain](https://github.com/fermyon/spin-js-sdk) for JavaScript and TypeScript which is based on [QuickJS](https://bellard.org/quickjs/), a small embeddable JavaScript runtime.
 
@@ -245,7 +245,7 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
-### Learning Summary
+## Learning Summary
 
 In this section you learned how to:
 
@@ -255,7 +255,7 @@ In this section you learned how to:
 - [x] Run your application locally with `spin up`
 - [x] Modify an HTTP trigger's route and entrypoint
 
-### Navigation
+## Navigation
 
 - Go back to [00 - Setup](00-setup.md) if you still have questions on previous section
 - Otherwise, proceed to [02 - Building a Magic 8 Ball JSON API with Spin](02-json-api.md)
