@@ -18,42 +18,39 @@ As with the previous step, you can choose to build the app in either Rust or Jav
 
 ## a. Building your Magic 8 Ball application with Rust
 
-We will create another Spin application in Rust based on the HTTP template. Let's name the application and our first component `magic-8-ball` and listen for requests at the path `/magic-8`.
+We will create another Spin application in Rust based on the HTTP template. Let's name the application and our first component `magic-eight-ball` and listen for requests at the path `/magic-8`.
 
 ```bash
-$ spin new http-rust magic-8-ball 
+$ spin new magic-eight-ball -t http-rust
 Description: A Magic 8 Ball App
-HTTP base: /
 HTTP path: /magic-8
-$ cd magic-8-ball
+$ cd magic-eight-ball
 ```
 
 We will now write a HTTP component in our `lib.rs` file that returns a Magic 8 Ball responses. Your `lib.rs` file should look like this:
 
 ```rust
-use anyhow::Result;
-use spin_sdk::{
-    http::{Request, Response},
-    http_component,
-};
+use spin_sdk::http::{IntoResponse, Request, Response};
+use spin_sdk::http_component;
 
-/// A HTTP component that returns Magic 8 Ball responses
+/// A simple Spin HTTP component.
 #[http_component]
-fn handle_magic_8_ball(_req: Request) -> Result<Response> {
+fn handle_magic_eight_ball(_req: Request) -> anyhow::Result<impl IntoResponse> {
     let answer_json = format!("{{\"answer\": \"{}\"}}", answer());
-    Ok(http::Response::builder()
+    Ok(Response::builder()
         .status(200)
-        .header("Content-Type", "application/json")
-        .body(Some(answer_json.into()))?)
+        .header("content-type", "application/json")
+        .body(answer_json)
+        .build())
 }
 
 fn answer<'a>() -> &'a str {
-    let answers = vec![
+    let answers = [
         "Ask again later.",
         "Absolutely!",
         "Unlikely",
-        "Simply put, no"
-      ];
+        "Simply put, no",
+    ];
     let idx = (answers.len() as f32 * rand::random::<f32>()) as usize;
     answers[idx]
 }
@@ -63,9 +60,9 @@ This code snippet defines a function that can be used to handle HTTP requests fo
 
 ```toml
 [package]
-name = "magic-8-ball"
+name = "magic-eight-ball"
 authors = ["Joe <Joe@example.com>"]
-description = ""
+description = "A Magic 8 Ball App"
 version = "0.1.0"
 edition = "2021"
 
@@ -75,14 +72,10 @@ crate-type = [ "cdylib" ]
 [dependencies]
 # Useful crate to handle errors.
 anyhow = "1"
-# Crate to simplify working with bytes.
-bytes = "1"
-# General-purpose crate with common HTTP types.
-http = "0.2"
 # Library to get random response
 rand = "0.8.5"
 # The Spin SDK.
-spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.4.2" }
+spin-sdk = "2.2.0"
 
 [workspace]
 ```
@@ -93,56 +86,57 @@ That's it. We can now build and run the Spin app:
 spin build --up
 ```
 
-Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
+Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
 
 ```bash
-$ curl http://127.0.0.1:3000/magic-8
-{"answer": "Absolutely!"}%  
+$ curl localhost:3000/magic-8
+{"answer": "Absolutely!"}%
 ```
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
 ## b. Building your Magic 8 Ball application with TypeScript
 
-We will create another Spin application in TypeScript based on the HTTP template. Let's name the application and our first component `magic-8-ball` and listen for requests at the path `/magic-8`.
+We will create another Spin application in TypeScript based on the HTTP template. Let's name the application and our first component `magic-eight-ball` and listen for requests at the path `/magic-8`.
 
 ```bash
-$ spin new http-ts magic-8-ball 
+$ spin new magic-eight-ball -t http-ts
 Description: A Magic 8 Ball App
-HTTP base: /
 HTTP path: /magic-8
-$ cd magic-8-ball
+$ cd magic-eight-ball
 ```
 
 We will now write a HTTP component in our `index.ts` file that returns a Magic 8 Ball responses. Your `index.ts` file should look like this:
 
 ```typescript
-import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk";
 
-const encoder = new TextEncoder()
+const encoder = new TextEncoder();
 
-export const handleRequest: HandleRequest = async function(request: HttpRequest): Promise<HttpResponse> {
-    let answerJson = `{\"answer\": \"${answer()}\"}`;
-    return {
-      status: 200,
-        headers: { "Content-Type": "application/json" },
-      body: answerJson
-    }
-}
+export const handleRequest: HandleRequest = async function (
+  request: HttpRequest
+): Promise<HttpResponse> {
+  let answerJson = `{\"answer\": \"${answer()}\"}`;
+  return {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+    body: answerJson,
+  };
+};
 
 function answer(): string {
   let answers = [
-    'Ask again later.',
-    'Absolutely!',
-    'Unlikely',
-    'Simply put, no'
+    "Ask again later.",
+    "Absolutely!",
+    "Unlikely",
+    "Simply put, no",
   ];
   let idx = Math.floor(Math.random() * answers.length);
   return answers[idx];
 }
 ```
 
-This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string. 
+This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string.
 
 Install the dependencies and then build and run the Spin app.
 
@@ -153,11 +147,11 @@ spin build --up
 
 > Note: `npm install` is only needed on additional builds, if you've added new dependencies to the javascript function.
 
-Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as  `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
+Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
 
 ```bash
-$ curl http://127.0.0.1:3000/magic-8
-{"answer": "Absolutely!"}%  
+$ curl localhost:3000/magic-8
+{"answer": "Absolutely!"}%
 ```
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).

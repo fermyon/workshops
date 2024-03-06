@@ -1,0 +1,18 @@
+spin_manifest_version = 2
+
+[application]
+name = "magic-eight-ball"
+version = "0.1.0"
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+description = "A Magic 8 Ball App"
+
+[[trigger.http]]
+route = "/magic-8"
+component = "magic-eight-ball"
+
+[component.magic-eight-ball]
+source = "target/wasm32-wasi/release/magic_eight_ball.wasm"
+allowed_outbound_hosts = []
+[component.magic-eight-ball.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]

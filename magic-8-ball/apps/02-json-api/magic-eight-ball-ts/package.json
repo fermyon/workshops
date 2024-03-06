@@ -1,10 +1,10 @@
 {
-  "name": "magic-8-ball",
+  "name": "magic-eight-ball",
   "version": "1.0.0",
   "description": "A Magic 8 Ball App",
   "main": "index.js",
   "scripts": {
-    "build": "npx webpack --mode=production && mkdir -p target && spin js2wasm -o target/magic-8-ball.wasm dist/spin.js",
+    "build": "npx webpack --mode=production && mkdir -p target && spin js2wasm -o target/magic-eight-ball.wasm dist/spin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,6 +17,6 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@fermyon/spin-sdk": "0.6.0-rc.0"
+    "@fermyon/spin-sdk": "0.6.0"
   }
 }
