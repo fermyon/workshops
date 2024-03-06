@@ -12,20 +12,20 @@ Available Routes:
   fileserver: https://magic-8-ball-xyz.fermyon.app (wildcard)
 ```
 
-In case you have not logged into your Fermyon account, you can run `spin login` and follow the steps. More details on [deploying to the Fermyon Cloud can be found here](https://developer.fermyon.com/cloud/deploy) 
+In case you have not logged into your Fermyon account, you can run `spin login` and follow the steps. More details on [deploying to the Fermyon Cloud can be found here](https://developer.fermyon.com/cloud/deploy)
 
-#### Custom Domains
+## Custom Domains
 
-Fermyon Cloud also provides a way for you to use your own domain names to provide your users with human-friendly access to your Spin applications. If you do not own a domain, you can purchase one through a domain registrar such as Namecheap and GoDaddy and then point your Spin application to the new custom domain. [This tutorial](https://developer.fermyon.com/cloud/custom-domains-tutorial ) runs you through the steps to apply a custom domain to your Spin application running on Fermyon Cloud.  
+Fermyon Cloud also provides a way for you to use your own domain names to provide your users with human-friendly access to your Spin applications. If you do not own a domain, you can purchase one through a domain registrar such as Namecheap and GoDaddy and then point your Spin application to the new custom domain. [This tutorial](https://developer.fermyon.com/cloud/custom-domains-tutorial) runs you through the steps to apply a custom domain to your Spin application running on Fermyon Cloud.
 
-### Learning Summary
+## Learning Summary
 
 In this section you learned how to:
 
 - [x] Deploy a Spin app to Fermyon Cloud using `spin cloud deploy`
-- [x] Learnt about custom domains on Fermyon Cloud 
+- [x] Learnt about custom domains on Fermyon Cloud
 
-### Navigation
+## Navigation
 
 - Go back to [05 - Persisting Magic 8 Ball Responses](05-spin-kv.md) if you still have questions on previous section
 - Otherwise, proceed to [07 - Storing data in an external database](07-external-db.md)

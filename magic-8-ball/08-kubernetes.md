@@ -55,7 +55,7 @@ files = [ { source = "frontend/", destination = "/" } ]
 route = "/..."
 ```
 
-Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). Since each application gets its own key value store, but there is a load balancer balancing requests, we only want one deployment replica. **Be sure to modify the `deploy.yaml` to set `replicas` to `1`.
+Install the plugin, scaffold the dockerfile, build the container, and push it to your container registry. The following example uses the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). Since each application gets its own key value store, but there is a load balancer balancing requests, we only want one deployment replica. \*\*Be sure to modify the `deploy.yaml` to set `replicas` to `1`.
 
 > Note: To skip building your own container and instead use an existing public one, first copy a pre-scaffolded `deploy.yaml` from the completed apps directory like so: `cp apps/07-kubernetes/magic-8-ball-rust/deploy.yaml .` Then, proceed with the `spin k8s deploy` step.
 
@@ -91,16 +91,17 @@ Bring down your `k3d` cluster:
 k3d cluster delete wasm-cluster
 ```
 
-### Learning Summary
+## Learning Summary
 
 In this section you learned how to:
-- [x] Use the containerd Wasm shim to package a Spin app within a Docker container
-- [x] Deploy a containerized Spin app to a Kubernetes cluster 
 
-### Navigation
+- [x] Use the containerd Wasm shim to package a Spin app within a Docker container
+- [x] Deploy a containerized Spin app to a Kubernetes cluster
+
+## Navigation
 
 - Go back to [07 - Storing data in an external database](07-external-db.md) if you still have questions on previous section
-- Otherwise, congrats on finishing the workshop! 
+- Otherwise, congrats on finishing the workshop!
 - (_optionally_) Let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy).
-A lucky set of randomly selected survey participants will receive a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!
-<img src=../media/slats-keycap-cropped.png width="150">
+  A lucky set of randomly selected survey participants will receive a [Slats The Cat](https://www.fermyon.com/blog/finicky-whiskers-part-1-intro) keycap!
+  <img src=../media/slats-keycap-cropped.png width="150">

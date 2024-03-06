@@ -156,13 +156,13 @@ $ curl localhost:3000/magic-8
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
-### Learning Summary
+## Learning Summary
 
 In this section you learned how to:
 
 - [x] Host a JSON API with a Spin app which uses an HTTP trigger
 
-### Navigation
+## Navigation
 
 - Go back to [01 - Getting started with Spin](01-getting-started.md) if you still have questions on previous section
 - Otherwise, proceed to [03 - Using Fermyon Serverless AI](03-spin-ai.md)

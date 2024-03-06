@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS contestants (
 ## a. Building your a lottery Spin application with Rust
 
 We will create a Spin application in Rust based on the HTTP template. Let's name the application and
-our first component `lottery`. We will listen for requests at multiple paths, so we  can keep the
+our first component `lottery`. We will listen for requests at multiple paths, so we can keep the
 default root base and path of the component URL.
 
 ```bash
@@ -131,6 +131,7 @@ fn wildcard(_req: Request, _params: Params) -> Result<Response> {
 ```
 
 Now build the application and configure the database.
+
 ```bash
 spin build --up --sqlite="@migration.sql"
 ```
@@ -175,14 +176,14 @@ spin cloud sqlite execute charming-tangerine "@migration.sql"
 
 Now, anyone can join your lottery!
 
-### Learning Summary
+## Learning Summary
 
 In this section you learned how to:
 
 - [x] Persist relational data using Spin's default SQLite store using the Spin SQLite API
 
-### Navigation
+## Navigation
 
 - Go back to [08- Running Spin on Kubernetes](08-kubernetes.md) if you still have questions on previous section
-- Otherwise, congrats on finishing the workshop! 
+- Otherwise, congrats on finishing the workshop!
 - (_optionally_) Let us know what you thought of the Spin and the workshop with this [short Typeform survey](https://fibsu0jcu2g.typeform.com/to/RK08OLSy#hubspot_utk=xxxxx&hubspot_page_name=xxxxx&hubspot_page_url=xxxxx).

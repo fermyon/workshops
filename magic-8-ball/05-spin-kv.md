@@ -9,9 +9,9 @@ We will need to:
 1. Change the component to expect a body with a text question (`"Should I get a new haircut?"`).
 1. Enable a default key/value store for our component
 1. Check if that question has already been asked by looking it up in the key/value store.
-    - a: If previously asked, return the previous answer.*
-    - b: If not previously asked, generate an answer, store the answer in the KV store, and return it.
-    > `*` if the previous answer was "Ask again later", follow step b.
+   - a: If previously asked, return the previous answer.\*
+   - b: If not previously asked, generate an answer, store the answer in the KV store, and return it.
+     > `*` if the previous answer was "Ask again later", follow step b.
 
 ## 1: Giving our component access to a KV store
 
@@ -29,26 +29,24 @@ route = "/magic-8"
 command = "cargo build --target wasm32-wasi --release"
 ```
 
-Here's how `spin.toml` would look like in the **TypeScript** component 
+Here's how `spin.toml` would look like in the **TypeScript** component
 
 ```typescript
-[[component]]
-id = "magic-8-ball"
-source = "target/magic-8-ball.wasm"
-exclude_files = ["**/node_modules"]
-key_value_stores = ["default"]
-[component.trigger]
-route = "/magic-8"
-[component.build]
-command = "npm run build"
+[[component]];
+id = "magic-8-ball";
+source = "target/magic-8-ball.wasm";
+exclude_files = ["**/node_modules"];
+key_value_stores = ["default"][component.trigger];
+route = "/magic-8"[component.build];
+command = "npm run build";
 ```
 
 ## 2: Storing questions and answers in our key/value store
 
-The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete`  and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. Here's the code snippet in **Rust** to do this
+The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete` and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. Here's the code snippet in **Rust** to do this
 
 ```rust
-// Checks key/value store to see if the question has already been answered. 
+// Checks key/value store to see if the question has already been answered.
 // If not answered, generates an answer, sets it in the KV store and returns it.
 fn get_or_set_answer(question: &str) -> Result<String> {
     // Open the default key/value store
@@ -95,7 +93,7 @@ function getOrSetAnswer(question: string): string {
 }
 ```
 
-In both code snippets, the answer is retrieved from the key value store, or if the key does not exist, it stores both the question and reponse. There is also a separate check if the Magic 8 Ball's response to a stored question was previously "Ask me again later", in which case the 
+In both code snippets, the answer is retrieved from the key value store, or if the key does not exist, it stores both the question and response. There is also a separate check if the Magic 8 Ball's response to a stored question was previously "Ask me again later", in which case the
 new response is stored along with the question. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
 
 The [key value store tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) is a helpful resource for a deep-dive into data persistence.
