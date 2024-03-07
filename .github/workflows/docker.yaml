@@ -72,10 +72,11 @@ jobs:
       # Uses the cached prebuilt image and adds
       # devcontainer features and metadata before pushing
       - name: Add devcontainer extras and push
-        uses: devcontainers/ci@0.3
+        uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ghcr.io/${{ github.repository }}
           imageName: ghcr.io/${{ github.repository }}
           imageTag: ${{ join(steps.meta.outputs.tags) }}
           skipContainerUserIdUpdate: true
           platform: linux/amd64,linux/arm64
+          # https://github.com/devcontainers/ci/releases/tag/v0.3
