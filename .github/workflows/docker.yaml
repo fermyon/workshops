@@ -2,37 +2,75 @@ name: docker
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
+    tags: ["v*.*.*"]
+    paths:
+      - .devcontainer/Dockerfile
+      - .github/workflows/docker.yaml
+  pull_request:
+    branches: ["main"]
     paths:
       - .devcontainer/Dockerfile
       - .github/workflows/docker.yaml
   workflow_dispatch:
+
 jobs:
   docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup version info
-        run: echo "VERSION=$(date +%Y%m%d-%H%M%S)-g$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3.3.0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build
-        uses: docker/build-push-action@v4
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5.5.1
         with:
-          push: true
-          context: ./.devcontainer
-          platforms: linux/amd64, linux/arm64
           tags: |
-            ghcr.io/fermyon/workshops/dev-container:${{ env.VERSION }}
+            type=semver,pattern={{version}}
+            type=ref,event=pr
+            type=sha,enable={{is_default_branch}},prefix={{date 'YYYYMMDD-HHmmss'}}-,suffix=,format=short
 
+      # Uses the cached prebuilt image and adds
+      # devcontainer features and metadata before pushing
+      - name: Add devcontainer extras and push
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}
+          imageName: ghcr.io/${{ github.repository }}
+          imageTag: ${{ join(steps.meta.outputs.tags) }}
+          skipContainerUserIdUpdate: true
+          platform: linux/amd64,linux/arm64
+          runCmd: spin --version
+
+      # Sign the resulting Docker image digest except on PRs.
+      - name: Sign the published Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
