@@ -65,6 +65,7 @@ jobs:
           imageTag: ${{ join(steps.meta.outputs.tags) }}
           skipContainerUserIdUpdate: true
           platform: linux/amd64,linux/arm64
+          runCmd: spin --version
 
       # Sign the resulting Docker image digest except on PRs.
       - name: Sign the published Docker image
