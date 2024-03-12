@@ -28,7 +28,7 @@ RUN wget "https://github.com/tinygo-org/tinygo/releases/download/v${TINYGO_VERSI
     dpkg -i "tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb"
 
 # Install Spin
-ARG SPIN_VERSION="v2.3.0"
+ARG SPIN_VERSION="v2.3.1"
 RUN mkdir -p /opt/spin && \
     cd /opt/spin && \
     curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash -s -- -v $SPIN_VERSION && \

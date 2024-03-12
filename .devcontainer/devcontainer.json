@@ -5,32 +5,16 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	// Most features are built into the Dockerfile for startup time reduction. For more information, see
 	"features": {},
 	"customizations": {
 		"vscode": {
 			"extensions": []
 		},
-		// Use 'mounts' to make the cargo cache persistent in a Docker Volume.
-		// "mounts": [
-		// 	{
-		// 		"source": "devcontainer-cargo-cache-${devcontainerId}",
-		// 		"target": "/usr/local/cargo",
-		// 		"type": "volume"
-		// 	}
-		// ]
-		// Use 'forwardPorts' to make a list of ports inside the container available locally.
 		"forwardPorts": [
-			3000,
-			3001,
-			3002,
-			3003
+			3000
 		],
-		// Use 'postCreateCommand' to run commands after the container is created.
-		// "postCreateCommand": "rustc --version",
 		// Configure tool-specific properties.
 		// "customizations": {},
-		// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 		"remoteUser": "vscode"
 	}
 }
