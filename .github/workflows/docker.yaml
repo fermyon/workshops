@@ -25,11 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
-      - name: Install cosign
-        uses: sigstore/cosign-installer@v3.3.0
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -43,8 +38,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5.5.1
@@ -54,9 +47,8 @@ jobs:
             type=ref,event=pr
             type=sha,enable={{is_default_branch}},prefix={{date 'YYYYMMDD-HHmmss'}}-,suffix=,format=short
 
-      # Uses the cached prebuilt image and adds
-      # devcontainer features and metadata before pushing
-      - name: Add devcontainer extras and push
+      # this action will take features and extensions into account
+      - name: Build and Push devcontainer
         uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ghcr.io/${{ github.repository }}
@@ -65,16 +57,3 @@ jobs:
           skipContainerUserIdUpdate: true
           platform: linux/amd64,linux/arm64
           runCmd: spin --version
-          push: always
-
-      # Sign the resulting Docker image digest except on PRs.
-      - name: Sign the published Docker image
-        env:
-          IMAGE: ghcr.io/${{ github.repository }}
-          TAGS: ${{ steps.meta.outputs.tags }}
-        run: |
-          for tag in "${TAGS[@]}"; do
-            IMAGE_TAG="ghcr.io/${IMAGE}:${tag}"
-            DIGEST=$(docker image ls "$IMAGE_TAG" --digests --format='{{.Digest}}')
-            cosign sign --yes "${IMAGE_TAG}@${DIGEST}"
-          done
