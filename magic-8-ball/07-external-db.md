@@ -1,6 +1,6 @@
 # Storing key/value data in an external database
 
-Instead of using Spin's built in key/value store, you could use an external key/value store such as Redis. This section is intended as a learning exercise for the user. The complete code can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/06-external-db)
+Instead of using Spin's built in key/value store, you could use an external key/value store such as Redis. This section is intended as a learning exercise for the user. The complete code can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/07-external-db)
 
 ## Rust
 
@@ -19,4 +19,4 @@ In this section you learned how to:
 ## Navigation
 
 - Go back to [06 - Deploying to Fermyon Cloud](06-deploy-fermyon-cloud.md) if you still have questions on previous section
-- Otherwise, proceed to [08 - Deploying a Spin Application on Kubernetes](08-kubernetes.md)
+- Otherwise, proceed to [08 - TODO(Justin) replace with name](08-kubernetes.md)

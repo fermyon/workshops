@@ -2,8 +2,8 @@ import {
   HandleRequest,
   HttpRequest,
   HttpResponse,
-  Kv,
   Llm,
+  Redis,
   InferencingModels,
 } from "@fermyon/spin-sdk";
 
@@ -30,17 +30,11 @@ export const handleRequest: HandleRequest = async function (
 };
 
 function getOrSetAnswer(question: string): string {
-  let store = Kv.openDefault();
-  let response = "";
-  if (store.exists(question)) {
-    response = decoder.decode(store.get(question));
-    if (response == "Ask again later.") {
-      response = answer(question);
-      store.set(question, response);
-    }
-  } else {
+  let address = process.env["REDIS_ADDRESS"] as string;
+  let response = decoder.decode(Redis.get(address, question));
+  if (response.length == 0 || response == "Ask again later.") {
     response = answer(question);
-    store.set(question, response);
+    Redis.set(address, question, encoder.encode(response).buffer);
   }
   return response;
 }

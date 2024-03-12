@@ -1,15 +1,15 @@
 # Deploy your Magic Ball Spin Application to Fermyon Cloud
 
-Now, deploy your app to the Fermyon Cloud and your friends & family can get their questions answered with the Magic 8 Ball! Deploying to the Fermyon Cloud is just one simple step
+Now, deploy your app to the Fermyon Cloud again and your friends & family can get their questions answered with the Magic 8 Ball! Deploying to the Fermyon Cloud is just one simple step
 
 ```bash
-$ spin deploy
-Uploading magic-8-ball version 0.1.0+r968cd716...
+$ spin cloud deploy
+Uploading magic-eight-ball version 0.1.0 to Fermyon Cloud...
 Deploying...
-Waiting for application to become ready...... ready
+Waiting for application to become ready............. ready
 Available Routes:
-  magic-8-ball: https://magic-8-ball-xyz.fermyon.app/magic-8
-  fileserver: https://magic-8-ball-xyz.fermyon.app (wildcard)
+  magic-eight-ball: https://magic-eight-ball-xyz.fermyon.app/magic-8
+  fileserver: https://magic-eight-ball-xyz.fermyon.app (wildcard)
 ```
 
 In case you have not logged into your Fermyon account, you can run `spin login` and follow the steps. More details on [deploying to the Fermyon Cloud can be found here](https://developer.fermyon.com/cloud/deploy)
