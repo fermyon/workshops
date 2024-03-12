@@ -1,0 +1,78 @@
+html {
+    background-color: #ECE5EE;
+}
+
+body {
+    text-align: center;
+    font-family: Sen, Europa, Avenir, system, -apple-system, ".SFNSText-Regular", "San Francisco", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+    color: #0D203F;
+}
+
+canvas {
+    margin: 0 auto;
+}
+
+button {
+    padding: 0.4rem;
+    border-radius: 0.667em;
+    outline: none;
+    margin: 1rem;
+}
+
+main {
+    max-width: 610px;
+    margin: auto;
+    }
+
+#question {
+    width: 400px; 
+    font-size: 16px;
+    font-family: Sen, Europa, Avenir, system, -apple-system, ".SFNSText-Regular", "San Francisco", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+}
+
+#btn, #magicEightBall {
+    text-align: center;
+    color: black;
+    margin: 5px;
+    font-family: Sen, Europa, Avenir, system, -apple-system, ".SFNSText-Regular", "San Francisco", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+    font-size: 16px;
+}
+
+#circle {
+    background-color: #F9F7EE;
+    color: black;
+    position: absolute;
+    margin-left: 70px;
+    margin-top: 70px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: none;
+}
+
+#triangle {
+    display: none;
+    width: 120px;
+    height: 110px;
+    margin-left: 85px;
+    margin-top: 70px;
+    background-image:
+     linear-gradient(to bottom right, transparent 50%, #D3C3D9 0),
+     linear-gradient(to top right, #D3C3D9 50%, transparent 0);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    background-position: left, right;
+    position:absolute; 
+}
+
+#reply {
+    text-align: center;
+    color: black;
+    font-family: Sen, Europa, Avenir, system, -apple-system, ".SFNSText-Regular", "San Francisco", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+    font-size: 16px;
+    display: inline-block;
+    position: absolute;
+    margin-left: 85px;
+    margin-top: 100px;
+    width: 120px;
+}
