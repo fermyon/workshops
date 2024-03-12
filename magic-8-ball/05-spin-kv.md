@@ -18,27 +18,27 @@ We will need to:
 Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file. Here's how it would look in **Rust** component
 
 ```toml
-[[component]]
-id = "magic-8-ball"
-source = "target/wasm32-wasi/release/magic_8_ball.wasm"
-allowed_http_hosts = []
+[component.magic-eight-ball]
+source = "target/wasm32-wasi/release/magic_eight_ball.wasm"
+allowed_outbound_hosts = []
+ai_models = ["llama2-chat"]
 key_value_stores = ["default"]
-[component.trigger]
-route = "/magic-8"
-[component.build]
+[component.magic-eight-ball.build]
 command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
 ```
 
 Here's how `spin.toml` would look like in the **TypeScript** component
 
-```typescript
-[[component]];
-id = "magic-8-ball";
-source = "target/magic-8-ball.wasm";
-exclude_files = ["**/node_modules"];
-key_value_stores = ["default"][component.trigger];
-route = "/magic-8"[component.build];
-command = "npm run build";
+```toml
+[component.magic-eight-ball]
+source = "target/magic-eight-ball.wasm"
+exclude_files = ["**/node_modules"]
+ai_models = ["llama2-chat"]
+key_value_stores = ["default"]
+[component.magic-eight-ball.build]
+command = "npm run build"
+watch = ["src/**/*.ts", "package.json"]
 ```
 
 ## 2: Storing questions and answers in our key/value store
@@ -48,24 +48,24 @@ The Spin SDK surfaces the Spin key value store interface to your language with o
 ```rust
 // Checks key/value store to see if the question has already been answered.
 // If not answered, generates an answer, sets it in the KV store and returns it.
-fn get_or_set_answer(question: &str) -> Result<String> {
+fn get_or_set_answer(question: String) -> Result<String> {
     // Open the default key/value store
     let store = Store::open_default()?;
 
-    match store.get(question) {
-        Ok(value) => {
+    match store.get(&question) {
+        Ok(Some(value)) => {
             let ans = std::str::from_utf8(&value)?.to_owned();
             if ans == "Ask again later." {
-                let answer = answer();
-                store.set(question, answer)?;
+                let answer = answer(question.to_string())?;
+                store.set(&question, answer.as_bytes())?;
                 Ok(answer.to_owned())
             } else {
                 Ok(ans)
             }
         }
-        Err(Error::NoSuchKey) => {
-            let answer = answer();
-            store.set(question, answer)?;
+        Ok(None) => {
+            let answer = answer(question.to_string())?;
+            store.set(&question, answer.as_bytes())?;
             Ok(answer.to_owned())
         }
         Err(error) => Err(error.into()),
@@ -82,11 +82,11 @@ function getOrSetAnswer(question: string): string {
   if (store.exists(question)) {
     response = decoder.decode(store.get(question));
     if (response == "Ask again later.") {
-      response = answer();
+      response = answer(question);
       store.set(question, response);
     }
   } else {
-    response = answer();
+    response = answer(question);
     store.set(question, response);
   }
   return response;
@@ -97,6 +97,14 @@ In both code snippets, the answer is retrieved from the key value store, or if t
 new response is stored along with the question. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
 
 The [key value store tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) is a helpful resource for a deep-dive into data persistence.
+
+Now, we are ready to build and run our application again. Run this command and click on the URL to see the Magic 8 Ball frontend.
+
+```bash
+spin build --up
+```
+
+Notice how if you ask the same question twice, the second time is much quicker because the answer is cached.
 
 ### Learning Summary
 
