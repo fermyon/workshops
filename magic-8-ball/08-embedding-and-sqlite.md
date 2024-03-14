@@ -1,182 +1,135 @@
-TODO(Justin): Rework this whole doc to show how to use sqlite and embeddings
+# Bonus Exercise: Use SQLite Database in Fermyon Cloud to perform basic Retrieval Augmented Generation
 
-# Spin the Wheel for a Chance to Win: SQLite Storage from Spin Apps
+A typical use case for LLM generation is to be able to provide the model with facts from the outside world that haven't been trained into the model. This is called Retrieval Augmented Generation (a.k.a RAG) and is the method by which services like OpenAI are able to answer questions about current events. However we only want to provide facts in the prompt that are relevant to the question being asked. 
 
-Thank you for participating in the workshop! As a thanks, we'd like to present one lucky winner with
-a real Magic 8 ball. But first, let's build a Spin app that will help us choose the winner.
+For example, if we were to ask the question "Will it rain today?" the answer would be completely random in our current iteration. If we could provide the LLM prompt with additional facts like "Weather forecast: 80% precipitation" then it could provide more accurate answers. But how do we find these relevant facts? 
 
-Our app will take in contestant names and store them in a SQL database. Then, at any point, a winner
-can be drawn, causing Spin to choose a random person from the database. To help make all this
-happen, Spin provides an [interface](https://developer.fermyon.com/spin/sqlite-api-guide) for
-persisting data to a local SQLite database.
+The answer is by using embeddings. A separate model `all-MiniLM-L6-v2` can take a piece of text like "Weather forecase: 80% precipitation" and generate a vector with 384 dimensions represented by an array of float32. We can also take our question of "Will it rain today?" and generate an embedding vector and calculate the cosine similarity of the two vectors in order to rank facts by the most relevant.
 
-## Creating a database schema
+Included in the Spin SDK is a `generateEmbeddings` function that uses the `all-MiniLM-L6-v2` model to generate embedding vectors. Fermyon Cloud offers a SQLite database (backed by Turso) that includes a vector similarity search function. Using these two pieces of the Spin SDK, let's see if we can provide the LLM prompt with some relevant facts.
 
-Let's first define our database schema in a migration file. Our database is very simple. It contains
-one table called `contestants` with rows of names. We will be able to apply this migration to either
-a local or deployed Spin up via a `spin up --sqlite` or `spin cloud sqlite execute`. Add the
-following to a `migration.sql` file.
+If developing locally, we will need a SQLite database that has the `sqlite-vss` extension enabled. When running Spin locally, the provided SQLite database doesn't have the ability to add SQLite extensions. We can however tell Spin to use a remote database like [Turso](https://turso.tech/). See the appendix below to setup using Turso.
+
+Create the SQLite database in Fermyon Cloud
+
+```shell
+spin cloud sqlite create magic8
+```
+
+Let's create a table to hold the contexts we want to add to the LLM prompt. Note that the `sqlite-vss` extension expects the embedding to be stored either as JSON text or a native blob.
 
 ```sql
-CREATE TABLE IF NOT EXISTS contestants (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS contexts(
+    'id' TEXT PRIMARY KEY,
+    'text' TEXT,
+    'embedding' BLOB
 );
 ```
 
-## a. Building your a lottery Spin application with Rust
+Save the above statement into a file called `migration.sql`. Now let's execute the statement on our SQLite database:
 
-We will create a Spin application in Rust based on the HTTP template. Let's name the application and
-our first component `lottery`. We will listen for requests at multiple paths, so we can keep the
-default root base and path of the component URL.
-
-```bash
-$ spin new http-rust lottery
-Description: Spin the Wheel!
-HTTP base: /
-HTTP path: /
-$ cd lottery
+```shell
+spin cloud sqlite execute -d magic8 @migration.sql
 ```
 
-We can now start to fill in our HTTP component in our `lib.rs` file. First. let's add a user to the
-database when a name is posted to the endpoint `/enter`:
+Next we need to allow our Spin app to access the SQLite database and also allow it to use the `all-minilm-l6-v2` model. Update our `spin.toml` file with:
 
-```rs
-use anyhow::Result;
-use spin_sdk::{
-    http::{Request, Response, Router, Params},
-    http_component,
-    sqlite::{Connection, ValueParam},
-};
+```toml
+[component.magic-eight-ball]
+...
+ai_models = ["llama2-chat", "all-minilm-l6-v2"]
+sqlite_databases = ["default"]
+```
 
-#[http_component]
-fn handle_lottery(req: Request) -> Result<Response> {
-    let mut router = Router::new();
-    router.post("/enter", add_candidate);
-    router.handle(req)
-}
+Now that we have somewhere to save the context, let's see how we generate embeddings using Spin's SDK. In Typescript it looks like:
 
-pub fn add_candidate(req: Request, _params: Params) -> Result<Response> {
-    let body = req.body().as_deref().unwrap_or_default();
-    let name = std::str::from_utf8(body)?;
-    let connection = Connection::open_default()?;
-    let execute_params = [ValueParam::Text(name)];
-    connection.execute(
-        "INSERT INTO contestants (name) VALUES (?)",
-        execute_params.as_slice(),
-    )?;
-    Ok(http::Response::builder()
-        .status(200)
-        .header("foo", "bar")
-        .body(Some(format!("Entered {name}").into()))?)
+```typescript
+function addContext(text: string): ParagraphEmbedding[] {
+  const db = Sqlite.openDefault();
+
+  // generate an embedding vector for each paragraph
+  const paragraphs = text.split("\n").filter(s => s != null && s != "");
+  const embeddings = Llm.generateEmbeddings(EmbeddingModels.AllMiniLmL6V2, paragraphs).embeddings;
+
+  // store each paragraph with it's corresponding embedding
+  let results = [];
+  for (let i = 0; i < paragraphs.length; i++) {
+    const result: ParagraphEmbedding = {
+      id: uuidv4(),
+      text: paragraphs[i],
+      embedding: embeddings[i],
+    };
+
+    db.execute("INSERT INTO contexts (id, text, embedding) VALUES (?, ?, ?) ", [result.id, result.text, JSON.stringify(result.embedding)]);
+    results.push(result);
+  }
+
+  return results;
 }
 ```
 
-We are using the Spin Rust SDK's `http::Router` to more easily delegate requests to functions. Let's
-now draw a random winner from our database if the `/winner` endpoint receives a request. First, add
-another route to the router:
+See if you can wire up the above function into your Spin application (ask for help if you get stuck).
 
-```rs
-#[http_component]
-fn handle_lottery(req: Request) -> Result<Response> {
-    let mut router = Router::new();
-    router.post("/enter", add_candidate);
-    router.get("/winner", get_winner);
-    router.handle(req)
-}
+Now let's add some contexts.
+
+```shell
+curl -X POST http://localhost:3000/magic-8/contexts \
+--data-binary @- << EOF
+Weather forecast for today shows 80% chance of rain
+EOF
 ```
 
-Next, implement the `get_winner` function which will randomly select a candidate:
+Now we need to create a virtual table we can use as an index to find contexts. Save the into another SQL script called `reindex.sql`.
 
-```rs
-pub fn get_winner(_req: Request, _params: Params) -> Result<Response> {
-    let connection = Connection::open_default()?;
-    let result = connection.execute(
-        "SELECT name
-        FROM contestants
-        ORDER BY RANDOM()
-        LIMIT 1", &[]
-    )?;
-    let rows: Vec<_> = result.rows().collect();
-    let winner = rows.first().unwrap().get::<&str>("name").unwrap().to_owned();
-    Ok(http::Response::builder()
-        .status(200)
-        .header("foo", "bar")
-        .body(Some(winner.into()))?)
-}
+```
+DROP TABLE IF EXISTS vss_contexts;
+
+CREATE virtual TABLE vss_contexts USING vss0(embedding(384));
+
+INSERT INTO vss_contexts(rowid, embedding) SELECT rowid, embedding from contexts;
 ```
 
-Finally, for good measure, handle any other routes by replying with how to properly use the lottery:
+Let's update the database with our indexed virtual table.
 
-```rs
-#[http_component]
-fn handle_lottery(req: Request) -> Result<Response> {
-    let mut router = Router::new();
-    router.post("/enter", add_candidate);
-    router.get("/winner", get_winner);
-    router.any("/*", wildcard);
-    router.handle(req)
-}
+```shell
+spin cloud sqlite execute -d magic8 @migration.sql
 ```
 
-Simply inform the user of how to use each endpoint of the app:
+Next we need to generate an embedding for our question when it comes in and query the sqlite database to find relevant context. Here's a sample:
 
-```rs
-fn wildcard(_req: Request, _params: Params) -> Result<Response> {
-    Ok(http::Response::builder()
-        .status(http::StatusCode::OK)
-        .body(Some(
-            "Please use /enter endpoint to join lottery and /winner endpoint to draw a winner"
-                .to_string().into(),
-        ))?)
-}
+```typescript
+let embedding = Llm.generateEmbeddings(EmbeddingModels.AllMiniLmL6V2, [question]).embeddings[0]
+let values = db.execute("select rowid from vss_contexts where vss_search(embedding, ?) limit 6;", [JSON.stringify(embedding)])
 ```
 
-Now build the application and configure the database.
+## Appendix: Setup Turso
 
-```bash
-spin build --up --sqlite="@migration.sql"
+Go to [turso.tech](https://turso.tech/) and sign up for a free account. 
+
+Follow the [turso cli installation instructions](https://docs.turso.tech/cli/installation).
+
+Login using the Turso CLI
+
+```shell
+turso auth login
 ```
 
-Enter the lottery:
+Create a database with extensions enabled and generate a token for it
 
-```bash
-curl -d "Enrico Fermi" -X POST http://127.0.0.1:3000/enter
+```shell
+turso db create --enable-extensions
+# Get the hostname for the Turso database (don't include the scheme)
+turso db show <db-name>
+# Create access token
+turso db tokens create <db-name> --expiration none
 ```
 
-Draw the winner:
+Tell Spin to use the Turso DB when running locally.
 
-```bash
-curl http://127.0.0.1:3000/winner
+```shell
+cp runtime-config-template.toml runtime-config.toml
+# add the url and token from Turso to the file
 ```
-
-Fermyon Cloud also supports [NoOps SQL databases](https://developer.fermyon.com/cloud/noops-sql-db).
-You can persist relational data generated by your Spin application in between application
-invocations without worrying about database management. After [signing up for the private beta of
-the feature](https://developer.fermyon.com/cloud/noops-sql-db#accessing-private-beta) and getting a
-confirmation, you can deploy your local app to the cloud:
-
-> Note: Users are limited to one NoOps SQL DB in Fermyon Cloud
-
-```bash
-spin deploy
-```
-
-List you current databases and see that one has been made for you:
-
-```bash
-$ spin cloud sqlite list
-Databases (1)
-charming-tangerine (default)
-```
-
-Let's update the schema of this database:
-
-```bash
-spin cloud sqlite execute charming-tangerine "@migration.sql"
-```
-
-Now, anyone can join your lottery!
 
 ## Learning Summary
 
