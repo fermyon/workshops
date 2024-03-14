@@ -7,7 +7,7 @@ authors = ["Fermyon Engineering <engineering@fermyon.com>"]
 description = "A Magic 8 Ball App"
 
 [[trigger.http]]
-route = "/magic-8"
+route = "/magic-8/..."
 component = "magic-eight-ball"
 
 [component.magic-eight-ball]

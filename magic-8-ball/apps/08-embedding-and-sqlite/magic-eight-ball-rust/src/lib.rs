@@ -1,5 +1,5 @@
 use anyhow::Result;
-use spin_sdk::http::{IntoResponse, Request, Response};
+use spin_sdk::http::{IntoResponse, Params, Request, Response, Router};
 use spin_sdk::http_component;
 use spin_sdk::key_value::Store;
 use spin_sdk::llm;
@@ -7,6 +7,12 @@ use spin_sdk::llm;
 /// A HTTP component that returns Magic 8 Ball responses
 #[http_component]
 fn handle_magic_eight_ball(req: Request) -> anyhow::Result<impl IntoResponse> {
+    let mut router = Router::new();
+    router.post("/", handle_post_question);
+    Ok(router.handle(req))
+}
+
+fn handle_post_question(req: Request, _p: Params) -> Result<Response> {
     let body = req.body();
     let question = std::str::from_utf8(&body)?;
     if question.is_empty() {
