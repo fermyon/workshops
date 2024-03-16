@@ -106,7 +106,13 @@ We need to modify our `magic-eight-ball` component to:
 1. Get a yes/no question from the body of the HTTP request
 1. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
 
-First, update the request handler to get the question from the request body and return an error if
+First, create a `TextDecoder` at the top level:
+
+```ts
+const decoder = new TextDecoder();
+```
+
+Then, update the `handleRequest` function to get the question from the request body and return an error if
 the body is empty:
 
 ```ts
