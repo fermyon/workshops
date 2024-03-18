@@ -19,4 +19,4 @@ In this section you learned how to:
 ## Navigation
 
 - Go back to [06 - Deploying to Fermyon Cloud](06-deploy-fermyon-cloud.md) if you still have questions on previous section
-- Otherwise, proceed to [08 - TODO(Justin) replace with name](08-kubernetes.md)
+- Otherwise, proceed to [08 - TODO(Justin) replace with name](08-embedding-and-sqlite.md)

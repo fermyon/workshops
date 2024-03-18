@@ -1,0 +1,4 @@
+[llm_compute]
+type = "remote_http"
+url = "https://fermyon-cloud-gpu-x2498egu.fermyon.app"
+auth_token = "f161d460-413a-42dd-ab26-d2ea0fecd96f"
