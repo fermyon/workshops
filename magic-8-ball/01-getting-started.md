@@ -245,6 +245,140 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
+## c. Building your first Spin application with Python
+
+With Python being a very popular language, Spin provides support for building components with Python; using an experimental SDK. The development of the Python SDK is continually being worked on to improve user experience and also add new features.
+
+You can create a new Spin application in Python based on a template — in this case, based on the HTTP Python template for Spin. This will create all the required configuration and files for your application — in this case, a regular Python library project, with an additional configuration file, `spin.toml`:
+
+```bash
+$ spin new hello-python -t http-py --accept-defaults && cd hello-python
+$ tree
+.
+├── app.py
+├── spin.toml
+└── requirements.txt 
+```
+
+Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In our case we have a HTTP trigger at the route `/...` — a wildcard that matches any request sent to this application. The trigger sends requests to our component `hello-python`. In more complex applications, you can define multiple components that are triggered for requests on different routes.
+
+<!-- @nocpy -->
+
+```toml
+spin_manifest_version = 2
+
+[application]
+name = "hello_python"
+version = "0.1.0"
+authors = ["Your Name <your-name@example.com>"]
+description = "My first Python Spin application"
+
+[[trigger.http]]
+route = "/..."
+component = "hello-python"
+
+[component.hello-python]
+source = "app.wasm"
+[component.hello-python.build]
+command = "componentize-py -w spin-http componentize app -o app.wasm"
+watch = ["*.py", "requirements.txt"]
+```
+
+> Note: you can [learn more about the Spin manifest file and components in the Spin documentation](https://developer.fermyon.com/spin/writing-apps).
+
+
+You are now ready to build your application using `spin build`, which will invoke each component's `[component.build.command]` from `spin.toml` but before that as a standard practice for Python, create and activate a virtual env:
+
+
+If you are on a Mac/linux based operating system use the following commands:
+
+```bash
+$ python3 -m venv venv
+$ source venv/bin/activate
+```
+
+If you are using Windows, use the following commands:
+
+```bash
+C:\Work> python3 -m venv venv
+C:\Work> venv\Scripts\activate
+```
+
+Install `componentize-py` and `spin-sdk` packages
+
+<!-- @selectiveCpy -->
+
+```bash
+$ pip3 install -r requirements.txt
+```
+
+Then run:
+
+<!-- @selectiveCpy -->
+
+```bash
+$ spin build
+Executing the build command for component hello-python: "componentize-py -w spin-http componentize app -o app.wasm"
+Finished building all Spin components
+```
+
+
+Now that you have created the application and built the component, you can _spin up_
+the application:
+
+<!-- @selectiveCpy -->
+
+```bash
+$ spin up
+Serving http://127.0.0.1:3000
+Available Routes:
+  hello-python: http://127.0.0.1:3000 (wildcard)
+```
+The command will start Spin on port 3000. You can now access the application by navigating to [http://localhost:3000](http://localhost:3000) in your browser, or by using `curl`:
+
+<!-- @selectiveCpy -->
+
+```bash
+$ curl -i localhost:3000
+HTTP/1.1 200 OK
+content-type: text/plain
+content-length: 14
+date = "2023-11-04T00:00:01Z"
+
+Hello from Python
+```
+
+That response is coming from the handler function for this component — in the case of a Python component, defined in the index file from `src/app.py`. Our entire application consists of a single function, `handleRequest`, which takes the HTTP request as an argument and returns an HTTP response.
+
+Let's change the message body to "Hello, WebAssembly!":
+
+```
+from spin_sdk.http import IncomingHandler, Request, Response
+
+class IncomingHandler(IncomingHandler):
+    def handle_request(self, request: Request) -> Response:
+        return Response(
+            200,
+            {"content-type": "text/plain"},
+            bytes("Hello, WebAssembly", "utf-8")
+        )
+```
+
+We can now run `spin build` again, which will compile our component, and we can use the `--up` flag to automatically start the application, then send another request:
+
+```bash
+$ spin build --up
+$ curl -v localhost:3000
+< HTTP/1.1 200 OK
+< content-type: text/plain
+
+Hello, WebAssembly!
+```
+
+You are now ready to expand your application. You can follow the [guide for building Python components from the Spin documentation](https://developer.fermyon.com/spin/v2/python-components).
+
+> Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
+
 ## Learning Summary
 
 In this section you learned how to:

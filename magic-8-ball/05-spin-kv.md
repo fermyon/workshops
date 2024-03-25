@@ -40,6 +40,17 @@ key_value_stores = ["default"]
 command = "npm run build"
 watch = ["src/**/*.ts", "package.json"]
 ```
+Here's how `spin.toml` would look like in the **Python** component
+
+```toml
+[component.magic-eight-ball-python]
+source = "app.wasm"
+ai_models = ["llama2-chat"]
+key_value_stores = ["default"]
+[component.magic-eight-ball-python.build]
+command = "componentize-py -w spin-http componentize app -o app.wasm"
+watch = ["*.py", "requirements.txt"]
+```
 
 ## 2: Storing questions and answers in our key/value store
 
@@ -93,7 +104,21 @@ function getOrSetAnswer(question: string): string {
 }
 ```
 
-In both code snippets, the answer is retrieved from the key value store, or if the key does not exist, it stores both the question and response. There is also a separate check if the Magic 8 Ball's response to a stored question was previously "Ask me again later", in which case the
+Here's the code in **Python**
+
+```Python
+def getOrSetAnswer(question):
+    store = key_value.open_default()
+    response = ""
+    if store.exists(question):
+        response = (store.get(question)).decode('utf-8')
+    else:
+        response = answer(question)
+        store.set(question, response.encode('utf-8'))
+    return response
+```
+
+In all code snippets, the answer is retrieved from the key value store, or if the key does not exist, it stores both the question and response. You could also add a separate check if the Magic 8 Ball's response to a stored question was previously "Ask me again later", in which case the
 new response is stored along with the question. The full code for the KV store can be [found here](https://github.com/fermyon/workshops/tree/main/spin/apps/05-spin-kv)
 
 The [key value store tutorial](https://developer.fermyon.com/spin/kv-store-tutorial) is a helpful resource for a deep-dive into data persistence.

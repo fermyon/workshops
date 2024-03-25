@@ -173,6 +173,74 @@ id = "magic-8-ball"
 ai_models = ["llama2-chat"]
 ```
 
+## c. Building your Magic 8 Ball application with Python
+
+We need to modify our `magic-eight-ball` component to:
+
+1. Reference a local LLM model
+1. Get a yes/no question from the body of the HTTP request
+1. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
+
+
+First, update the `handle_request` function to get the question from the request body and return an error if
+the body is empty:
+
+```python
+class IncomingHandler(http.IncomingHandler):
+    def handle_request(self, request: Request) -> Response:
+        question = request.body.decode('utf-8')
+        if len(question) == 0:
+            return Response(
+                status= 400,
+                headers= { "Content-Type": "application/json" },
+                body= b"No question asked"
+            )
+```
+
+Next, update the `answer` function to use the LLM instead of pulling a random response from a list.
+Use the `Llm.infer` function, passing in a prompt to tell the system what type of responses it
+should give along with the user provided question. You can play along with the `InferencingParams` to see how responses from the LLM may differ. For reference, here are the parameters used in order: 
+`{
+    maxTokens: 20,
+    repeatPenalty: 1.5,
+    repeatPenaltyLastNTokenCount: 20,
+    temperature: 0.25,
+    topK: 5,
+    topP: 0.25,
+  }`
+
+```python
+def answer(question):
+    prompt = f"<s>[INST] <<SYS>>\n\
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.\n\
+        Your tone should be expressive yet polite.\n\
+        Your answers should be 10 words or less.\n\
+        <</SYS>>\n\
+        {question}[/INST]"
+    
+    opts = llm.InferencingParams(20, 1.5, 20, 0.25, 5, 0.25)
+    res = llm.infer_with_options("llama2-chat", prompt, options = opts).text
+    
+    print(f"{res}")
+    return res
+```
+
+Now, build your application.
+
+```bash
+$ spin build
+```
+
+## Configure access to an AI model
+
+By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following ai_models configuration inside its `[[component]]` section:
+
+```toml
+[[component]]
+id = "magic-8-ball"
+ai_models = ["llama2-chat"]
+```
+
 ## Deploy to Cloud
 
 Let's deploy our Serverless AI application to Fermyon Cloud with the following command:
@@ -221,6 +289,40 @@ $ curl -d "Will I win the lottery?" http://127.0.0.1:3000/magic-8
 
 > Note: you can find the complete applications used in this workshop in the [`apps`
 > directory](./apps/).
+
+## (Optional) Using the Cloud-GPU plugin to test locally
+ 
+To avoid having to cloud-deploy the app for every change or use a large model on your local machine, you can use the [Cloud-GPU plugin](https://github.com/fermyon/spin-cloud-gpu) to deploy locally, with the LLM running in the cloud. While the app is hosted locally (running on `localhost`), every inferencing request is sent to the LLM that is running in the cloud. Follow the steps to use the `cloud-gpu` plugin.
+ 
+First, install the plugin using the command:
+ 
+```bash
+$ spin plugins install -u https://github.com/fermyon/spin-cloud-gpu/releases/download/canary/cloud-gpu.json -y
+```
+ 
+Let’s initialize the plugin. This command essentially deploys the Spin app to a Cloud GPU proxy and generates a runtime-config:
+ 
+```bash
+$ spin cloud-gpu init
+
+[llm_compute]
+type = "remote_http"
+url = "https://fermyon-cloud-gpu-<AUTO_GENERATED_STRING>.fermyon.app"
+auth_token = "<AUTO_GENERATED_TOKEN>"
+```
+ 
+In the root of your Spin app directory, create a file named `runtime-config.toml` and paste the runtime-config generated in the previous step.
+ 
+Now you are ready to test the Serverless AI app locally, using a GPU that is running in the cloud. To deploy the app locally you can use `spin up` but with the following flag:
+ 
+```bash
+$ spin up --runtime-config-file <path/to/runtime-config.toml>
+
+Logging component stdio to  ".spin/logs/"
+Serving http://127.0.0.1:3000
+Available Routes:
+hello-world: http://127.0.0.1:3000 (wildcard)
+```
 
 ## Learning Summary
 
