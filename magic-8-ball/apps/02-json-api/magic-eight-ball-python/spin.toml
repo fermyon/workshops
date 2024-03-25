@@ -1,0 +1,17 @@
+spin_manifest_version = 2
+
+[application]
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+description = "A Magic 8 Ball App"
+name = "magic-eight-ball-python"
+version = "0.1.0"
+
+[[trigger.http]]
+route = "/..."
+component = "magic-eight-ball-python"
+
+[component.magic-eight-ball-python]
+source = "app.wasm"
+[component.magic-eight-ball-python.build]
+command = "componentize-py -w spin-http componentize app -o app.wasm"
+watch = ["*.py", "requirements.txt"]
