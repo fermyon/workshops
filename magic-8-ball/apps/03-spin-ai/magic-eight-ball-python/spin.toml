@@ -7,7 +7,7 @@ name = "magic-eight-ball-python"
 version = "0.1.0"
 
 [[trigger.http]]
-route = "/..."
+route = "/magic-8"
 component = "magic-eight-ball-python"
 
 [component.magic-eight-ball-python]
