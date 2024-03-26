@@ -179,7 +179,7 @@ We need to modify our `magic-eight-ball` component to:
 
 1. Reference a local LLM model
 1. Get a yes/no question from the body of the HTTP request
-1. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
+1. Use the `llm.infer` function Spin `llm` library to generate a response to the question
 
 
 First, update the `handle_request` function to get the question from the request body and return an error if
