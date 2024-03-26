@@ -3,3 +3,7 @@ node_modules/
 target/
 *.wasm
 examples/
+.venv/
+.direnv/
+.envrc
+flake.lock
