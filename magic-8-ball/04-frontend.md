@@ -3,7 +3,9 @@
 Let's make our Magic 8 Ball application more interactive by adding a frontend where you can submit your question to the omniscient 8 ball! To do this, we want to add a new component to our Spin application that can serve the frontend of our application.
 Fortunately, Spin has a [static file server component](https://github.com/fermyon/spin-fileserver) that can be added to any Spin application using `spin add`. Since this will be the base of our application, we must overwrite the default component trigger with the wildcard `/...` to match all routes.
 
-We also need to tell the fileserver which frontend files to serve. Choose the default `assets` when asked for the 'Directory containing the files to serve'. In your Spin app's directory create a folder named `assets`. For the purposes of this workshop, we've already prepared an HTML, CSS and JS [frontend](apps/frontend/) that you can reuse. Download these files into the `assets` folder.
+We also need to tell the fileserver which frontend files to serve. Choose the default `assets` when asked for the 'Directory containing the files to serve'. In your Spin app's directory create a folder named `assets`. 
+
+For the purposes of this workshop, we've already prepared an HTML, CSS and JS [frontend](apps/frontend/) that you can reuse. Download these files into the `assets` folder. 
 
 ```bash
 $ spin add fileserver -t static-fileserver

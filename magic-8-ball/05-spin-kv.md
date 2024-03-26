@@ -54,7 +54,9 @@ watch = ["*.py", "requirements.txt"]
 
 ## 2: Storing questions and answers in our key/value store
 
-The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete` and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. Here's the code snippet in **Rust** to do this
+The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete` and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. 
+
+Here's the code snippet in **Rust** to do this
 
 ```rust
 // Checks key/value store to see if the question has already been answered.
@@ -112,6 +114,9 @@ def getOrSetAnswer(question):
     response = ""
     if store.exists(question):
         response = (store.get(question)).decode('utf-8')
+        if response == "Ask again later.":
+            response = answer(question)
+            store.set(question, response)
     else:
         response = answer(question)
         store.set(question, response.encode('utf-8'))

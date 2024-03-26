@@ -25,6 +25,9 @@ def getOrSetAnswer(question):
     response = ""
     if store.exists(question):
         response = (store.get(question)).decode('utf-8')
+        if response == "Ask again later.":
+            response = answer(question)
+            store.set(question, response)
     else:
         response = answer(question)
         store.set(question, response.encode('utf-8'))

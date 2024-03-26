@@ -188,41 +188,41 @@ the body is empty:
 ```python
 class IncomingHandler(http.IncomingHandler):
     def handle_request(self, request: Request) -> Response:
-        question = request.body.decode('utf-8')
-        if len(question) == 0:
+        question=str(request.body, "utf-8")
+        if not question:
             return Response(
-                status= 400,
-                headers= { "Content-Type": "application/json" },
-                body= b"No question asked"
+                400,
+                {"content-type": "text/plain"},
+                bytes("No question provided", "utf-8")
             )
 ```
 
 Next, update the `answer` function to use the LLM instead of pulling a random response from a list.
 Use the `Llm.infer` function, passing in a prompt to tell the system what type of responses it
-should give along with the user provided question. You can play along with the `InferencingParams` to see how responses from the LLM may differ. For reference, here are the parameters used in order: 
-`{
-    maxTokens: 20,
-    repeatPenalty: 1.5,
-    repeatPenaltyLastNTokenCount: 20,
-    temperature: 0.25,
-    topK: 5,
-    topP: 0.25,
-  }`
+should give along with the user provided question. You can play along with the `InferencingParams` to see how responses from the LLM may differ. 
 
 ```python
-def answer(question):
-    prompt = f"<s>[INST] <<SYS>>\n\
-        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.\n\
-        Your tone should be expressive yet polite.\n\
-        Your answers should be 10 words or less.\n\
-        <</SYS>>\n\
-        {question}[/INST]"
-    
-    opts = llm.InferencingParams(20, 1.5, 20, 0.25, 5, 0.25)
-    res = llm.infer_with_options("llama2-chat", prompt, options = opts).text
-    
-    print(f"{res}")
-    return res
+def answer(question: str):
+    print("Question:", question)
+    prompt = dedent("""\
+        <s>[INST] <<SYS>>
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
+        Your tone should be expressive yet polite.
+        Your answers should be 10 words or less.
+        <</SYS>>
+        {}[/INST]
+    """).format(question)
+    opts = llm.InferencingParams(
+        max_tokens=20,
+        repeat_penalty=1.5,
+        repeat_penalty_last_n_token_count=20,
+        temperature=0.25,
+        top_k=5,
+        top_p=0.25,
+    )
+    answer = llm.infer_with_options("llama2-chat", prompt, opts).text.strip()
+    print("Answer:", answer)
+    return answer
 ```
 
 Now, build your application.
@@ -233,7 +233,7 @@ $ spin build
 
 ## Configure access to an AI model
 
-By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following ai_models configuration inside its `[[component]]` section:
+By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following `ai_models` configuration inside its `[[component]]` section:
 
 ```toml
 [[component]]
