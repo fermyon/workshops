@@ -106,9 +106,11 @@ function getOrSetAnswer(question: string): string {
 }
 ```
 
-Here's the code in **Python**
+Here's the code in **Python**.
 
 ```Python
+from spin_sdk import key_value
+
 def getOrSetAnswer(question):
     store = key_value.open_default()
     response = ""

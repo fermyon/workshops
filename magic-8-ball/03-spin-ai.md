@@ -182,7 +182,8 @@ We need to modify our `magic-eight-ball` component to:
 1. Use the `llm.infer` function Spin `llm` library to generate a response to the question
 
 
-First, update the `handle_request` function to get the question from the request body and return an error if
+First, import the `llm` library from the Spin SDK `from spin_sdk import llm` . 
+Then update the `handle_request` function to get the question from the request body and return an error if
 the body is empty:
 
 ```python
