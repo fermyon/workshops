@@ -156,6 +156,71 @@ $ curl localhost:3000/magic-8
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
 
+## c. Building your Magic 8 Ball application with Python
+
+We will create another Spin application in Python based on the HTTP template. Let's name the application and our first component `magic-eight-ball` and listen for requests at the path `/magic-8`.
+
+```bash
+$ spin new magic-eight-ball -t http-py
+Description: A Magic 8 Ball App
+HTTP path: /magic-8
+$ cd magic-eight-ball
+```
+
+We will now write a HTTP component in our `app.py` file that returns a Magic 8 Ball responses. Your `app.py` file should look like this:
+
+```python
+from spin_sdk.http import IncomingHandler, Request, Response
+from spin_sdk import http
+import json
+import random
+    
+class IncomingHandler(http.IncomingHandler):
+    def handle_request(self, request: Request) -> Response:
+        answer_json = json.dumps({"answer": answer()})
+        return Response(
+            200,
+            {"content-type": "application/json"},
+            bytes(answer_json, "utf-8")
+        )    
+    
+def answer():
+    answers = [
+        "Ask again later.",
+        "Absolutely!",
+        "Unlikely",
+        "Simply put, no",
+    ]
+    idx = random.randint(0, len(answers) - 1)
+    return answers[idx]
+```
+
+This code snippet defines a function that can be used to handle HTTP requests for the Magic 8 Ball. The function randomly selects one of the four possible answers and returns it as a JSON string.
+
+Don't forget to create and activate a virtual env and the install the dependancies: 
+
+```bash
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip3 install -r requirements.txt
+```
+
+Build and run the Spin app.
+
+```bash
+spin build --up
+```
+
+Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `HTTP path:` as `/magic-8` so the following `curl` command will bring your Magic 8 Ball app to life! The result should look similar to the following:
+
+```bash
+$ curl localhost:3000/magic-8
+{"answer": "Absolutely!"}%
+```
+
+> Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
+
+
 ## Learning Summary
 
 In this section you learned how to:

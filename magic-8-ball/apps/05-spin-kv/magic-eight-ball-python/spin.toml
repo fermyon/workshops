@@ -12,6 +12,17 @@ component = "magic-eight-ball-python"
 
 [component.magic-eight-ball-python]
 source = "app.wasm"
+ai_models = ["llama2-chat"]
+key_value_stores = ["default"]
 [component.magic-eight-ball-python.build]
 command = "componentize-py -w spin-http componentize app -o app.wasm"
 watch = ["*.py", "requirements.txt"]
+
+[[trigger.http]]
+route = "/..."
+component = "static-fileserver"
+
+[component.static-fileserver]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.2.1/spin_static_fs.wasm", digest = "sha256:5f05b15f0f7cd353d390bc5ebffec7fe25c6a6d7a05b9366c86dcb1a346e9f0f" }
+files = [{ source = "assets", destination = "/" }]
+

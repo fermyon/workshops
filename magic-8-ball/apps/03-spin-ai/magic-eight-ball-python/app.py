@@ -2,6 +2,7 @@ import json
 from textwrap import dedent
 from spin_sdk import http, llm
 from spin_sdk.http import Request, Response
+import json
 
 class IncomingHandler(http.IncomingHandler):
     def handle_request(self, request: Request) -> Response:

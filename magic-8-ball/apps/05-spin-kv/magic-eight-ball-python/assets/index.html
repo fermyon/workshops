@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Spin Magic Eight Ball</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png" />
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+
+<body>
+    <h1>Ask the Magic Eight Ball a Question</h1>
+    <p>Powered by Fermyon Serverless AI</p>
+    <input type="text" id="question" placeholder="Ask Question" onkeypress="infer(event)">
+    <p>
+    <button id="btn" onclick="infer(event)">Spin the ball!</button>
+    </p>
+    <div id="magicEightBall">
+        <div id="circle"></div>
+        <div id="triangle"></div>
+	<div id="reply"></div>
+        <img src="icon/magic-eight-ball.png"/>
+    </div>
+    <script>
+
+	function infer(event) {
+		if (event.key == "Enter" || event.type == "click") {
+			var question = document.getElementById("question").value;
+			if (question == "") { return; }
+			document.getElementById("triangle").style.display = 'inline-block';
+			document.getElementById("circle").style.display = 'inline-block';
+			document.getElementById("reply").style.display = 'inline-block';
+			document.getElementById("reply").innerHTML = "Spinning...";
+			fetch('../magic-8', { method: 'POST', body: question }).then(response => response.json()).then(data => {
+				document.getElementById("reply").innerHTML = data.answer;
+			})
+		}
+	}
+    </script>
+</body>
+</html>
