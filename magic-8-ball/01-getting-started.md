@@ -247,7 +247,7 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 ## c. Building your first Spin application with Python
 
-With Python being a very popular language, Spin provides support for building components with Python; using an experimental SDK. The development of the Python SDK is continually being worked on to improve user experience and also add new features.
+With Python being a very popular language, Spin provides support for building components with Python using an experimental SDK. The development of the Python SDK is continually being worked on to improve user experience and also add new features.
 
 You can create a new Spin application in Python based on a template — in this case, based on the HTTP Python template for Spin. This will create all the required configuration and files for your application — in this case, a regular Python library project, with an additional configuration file, `spin.toml`:
 
