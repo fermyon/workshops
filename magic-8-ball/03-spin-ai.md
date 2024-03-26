@@ -198,7 +198,7 @@ class IncomingHandler(http.IncomingHandler):
 ```
 
 Next, update the `answer` function to use the LLM instead of pulling a random response from a list.
-Use the `Llm.infer` function, passing in a prompt to tell the system what type of responses it
+Use the `llm.infer` function, passing in a prompt to tell the system what type of responses it
 should give along with the user provided question. You can play along with the `InferencingParams` to see how responses from the LLM may differ. 
 
 ```python
