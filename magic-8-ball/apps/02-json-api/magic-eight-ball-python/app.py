@@ -1,26 +1,17 @@
+from spin_sdk.http import IncomingHandler, Request, Response
+from spin_sdk import http
 import json
 import random
-from spin_sdk import http, llm
-from spin_sdk.http import Request, Response
-
+    
 class IncomingHandler(http.IncomingHandler):
     def handle_request(self, request: Request) -> Response:
-        question=str(request.body, "utf-8")
-        if not question:
-            return Response(
-                400,
-                {"content-type": "text/plain"},
-                bytes("No question provided", "utf-8")
-            )
-        answer_json = json.dumps({
-            "answer": answer(question)
-        })
+        answer_json = json.dumps({"answer": answer()})
         return Response(
             200,
             {"content-type": "application/json"},
             bytes(answer_json, "utf-8")
-        )
-
+        )    
+    
 def answer():
     answers = [
         "Ask again later.",
@@ -28,4 +19,5 @@ def answer():
         "Unlikely",
         "Simply put, no",
     ]
-    return random.choice(answers)
+    idx = random.randint(0, len(answers) - 1)
+    return answers[idx]
