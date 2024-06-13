@@ -36,6 +36,7 @@ When opening a store, we can provide the name of the store. This is because you 
 Now, let's check for a counter key, and either increment or set it, and then return the counter in the body.
 
 ```typescript
+import { HandleRequest, HttpRequest, HttpResponse, Kv } from "@fermyon/spin-sdk"
 // Let's add an interface
 interface Counter {
     count: number;
