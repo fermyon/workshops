@@ -63,6 +63,14 @@ export const handleRequest: HandleRequest = async function(request: HttpRequest)
 }
 ```
 
+Now we need to allow the Spin component to access the Key Value store. In the `spin.toml` file, add the name of the store to the stores which will be made available for the Spin component:
+
+```toml
+[component.mycomponent]
+source = "target/wasm32-wasi/release/mycomponent.wasm"
+key_value_stores = ["default"]
+```
+
 Build and test the Spin application:
 
 ```bash
