@@ -175,10 +175,9 @@ Spin applications can run in many places.  You can run them:
 * anywhere you can run the Spin CLI
 * anywhere you can run a Docker container using containerd (see the next section)
 * [Fermyon Cloud](https://www.fermyon.com/cloud)
-* [Wasmtime 14](https://wasmtime.dev/)
+* [Wasmtime](https://wasmtime.dev/)
 * [NGINX Unit](https://unit.nginx.org/)
 * [wasmCloud](https://wasmcloud.com/)
-* [Cosmonic](https://cosmonic.com/)
 
 * and probably a few other place we've forgot to mention here...
 
@@ -223,7 +222,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "text/plain" },
-    body: "Hello, Friend"
+    body: "Hello from TS-SDK"
   }
 }
 ```
@@ -238,20 +237,18 @@ $ spin build --up
 
 ```rust
 // Content of src/lib.rs
-use anyhow::Result;
-use spin_sdk::{
-    http::{Request, Response},
-    http_component,
-};
+use spin_sdk::http::{IntoResponse, Request, Response};
+use spin_sdk::http_component;
 
 /// A simple Spin HTTP component.
 #[http_component]
-fn handle_my_application(req: Request) -> Result<Response> {
-    println!("{:?}", req.headers());
-    Ok(http::Response::builder()
+fn handle_my_application(req: Request) -> anyhow::Result<impl IntoResponse> {
+    println!("Handling request to {:?}", req.header("spin-full-url"));
+    Ok(Response::builder()
         .status(200)
-        .header("foo", "bar")
-        .body(Some("Hello, Friend!".into()))?)
+        .header("content-type", "text/plain")
+        .body("Hello, Fermyon")
+        .build())
 }
 ```
 
@@ -271,13 +268,13 @@ import (
 	"fmt"
 	"net/http"
 
-	spinhttp "github.com/fermyon/spin/sdk/go/http"
+	spinhttp "github.com/fermyon/spin/sdk/go/v2/http"
 )
 
 func init() {
 	spinhttp.Handle(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprintln(w, "Hello, Friend!")
+		fmt.Fprintln(w, "Hello Fermyon!")
 	})
 }
 
@@ -294,13 +291,15 @@ $ spin build --up
 
 ```python
 # Content of app.py
-from spin_http import Response
+from spin_sdk.http import IncomingHandler, Request, Response
 
-def handle_request(request):
-
-    return Response(200,
-                    {"content-type": "text/plain"},
-                    bytes(f"Hello, Friend!", "utf-8"))
+class IncomingHandler(IncomingHandler):
+    def handle_request(self, request: Request) -> Response:
+        return Response(
+            200,
+            {"content-type": "text/plain"},
+            bytes("Hello from Python!", "utf-8")
+        )
 ```
 
 ## Do more with Spin
@@ -316,7 +315,7 @@ In this section you learned how to:
 - Run your application locally with `spin up`
 
 ## Navigation
-
+TODO
 - Go back to [0. Setup](00-setup.md) if you still have questions on previous section
 - Otherwise, proceed to [2. Run your first WebAssembly application in a container](02-running-in-a-container.md) if you still have questions on previous section.
 

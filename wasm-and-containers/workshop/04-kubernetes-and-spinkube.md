@@ -1,17 +1,19 @@
 # Deploy your Spin applications to Kubernetes
+TODO
+
+k3d, Talos...
 
 - [Deploy your Spin applications to Kubernetes](#deploy-your-spin-applications-to-kubernetes)
   - [Pre-requisites](#pre-requisites)
   - [1. Create and Configure the k3d cluster](#1-create-and-configure-the-k3d-cluster)
   - [2a. Deploy you application to Kubernetes](#2a-deploy-you-application-to-kubernetes)
-  - [2b. Package your Spin app using the k8s plugin](#2b-package-your-spin-app-using-the-k8s-plugin)
-  - [2c. Hello World Runwasi](#2c-hello-world-runwasi)
+    - [Help! I am getting network errors!](#help-i-am-getting-network-errors)
+  - [2b. Hello World Runwasi](#2b-hello-world-runwasi)
     - [Deploy the workloads](#deploy-the-workloads)
   - [3. Cleanup](#3-cleanup)
   - [Quick Reference for this Section](#quick-reference-for-this-section)
     - [2a. Deploy you application to Kubernetes](#2a-deploy-you-application-to-kubernetes-1)
-    - [2b. Package your Spin app using the k8s plugin](#2b-package-your-spin-app-using-the-k8s-plugin-1)
-    - [2c. Hello World Runwasi](#2c-hello-world-runwasi-1)
+    - [2b. Hello World Runwasi](#2b-hello-world-runwasi-1)
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
