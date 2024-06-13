@@ -28,7 +28,7 @@ First we need to open a store, then check if a counter exists, and finally eithe
 ```typescript
 import Kv from "@fermyon/spin-sdk"
 
-let store = Kv.open("default");
+const store = Kv.open("default");
 ```
 
 When opening a store, we can provide the name of the store. This is because you can use multiple stores within your application. If we use a store named `default` (or the method `Kv.openDefault()`), we will automatically get a local sqlite implementation in our development environment, and don't have to configure what the implementation of the store is. We'll get back to this later.
@@ -75,7 +75,7 @@ You should now see the counter increment on each request.
 > **Note**
 > When using the "default" store locally, Spin stores the value i a sqlite file in the `.spin` directory in the root of the app directory. If you need to reset the KV store, simply delete the `sqlite_key_value.db` file in that folder.
 
-That's it, we now have a Spin application wih the ability to sore state in a KeyValue store implementation.
+That's it, we now have a Spin application with the ability to persist state in a KeyValue store.
 
 ## Using Redis for KeyValue
 

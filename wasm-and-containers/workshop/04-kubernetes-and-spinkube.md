@@ -22,6 +22,7 @@ In addition to the requirements from the previous sections, you'll need the foll
 
 - [k3d](https://k3d.io/v5.4.6/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- [helm](https://helm.sh/docs/intro/quickstart/#install-helm)
 
 ## 1. Create and Configure the k3d cluster with SpinKube
 
