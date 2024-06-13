@@ -2,7 +2,6 @@
 
 - [Setup](#setup)
   - [Configuring your local environment for Spin](#configuring-your-local-environment-for-spin)
-    - [Using a DevContainer](#using-a-devcontainer)
   - [Troubleshooting](#troubleshooting)
     - [Q: I cannot build my Rust application with `spin build`.](#q-i-cannot-build-my-rust-application-with-spin-build)
     - [Q: I cannot build my JavaScript or TypeScript application with `spin build`.](#q-i-cannot-build-my-javascript-or-typescript-application-with-spin-build)
@@ -16,7 +15,7 @@ The first module will guide you through installing the prerequisites for complet
     First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install). This workshop assumes you're using Spin 2.5. You can check your version of Spin, by running `spin -V`.
 
 Templates and plugins required:
-TODO - DOTNET!!!
+
 ```bash
 $ spin plugins update
 $ spin plugins install cloud
@@ -32,10 +31,6 @@ Depending on the programming languages you want to use, you will need to configu
 - [Python](https://www.python.org/downloads/)
 - [Go](https://go.dev/doc/install)
   - Also requires [TinyGo](https://tinygo.org/getting-started/install)
-
-### Using a DevContainer
-TODO
-You will be able to use a developer container for some parts of the workshop. One is provided here in this repository, which has everything you need to complete the first sections.
 
 ## Troubleshooting
 
@@ -56,8 +51,7 @@ In this section you learned how to:
 - Install the latest Spin plugins
 
 ## Navigation
-TODO
 
-- Proceed to [1. Getting started with Spin and WebAssembly](01-spin-getting-started.md)
+- Proceed to [1. Getting started with Spin and WebAssembly](./01-spin-getting-started.md)
 
 Let us know what you think in this short [Survey](https://fibsu0jcu2g.typeform.com/workshop).

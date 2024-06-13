@@ -315,8 +315,8 @@ In this section you learned how to:
 - Run your application locally with `spin up`
 
 ## Navigation
-TODO
-- Go back to [0. Setup](00-setup.md) if you still have questions on previous section
-- Otherwise, proceed to [2. Run your first WebAssembly application in a container](02-running-in-a-container.md) if you still have questions on previous section.
+
+- Go back to [0. Setup](./00-setup.md) if you still have questions on previous section
+- Otherwise, proceed to [2. Using Key Value stores with Spin](./02-key-value-store.md) if you still have questions on previous section.
 
 Let us know what you think in this short [Survey](https://fibsu0jcu2g.typeform.com/workshop).

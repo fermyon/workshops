@@ -363,8 +363,8 @@ In this section you learned how to:
 - Use Runtime configuration to change the provider of the KeyValue store
 
 ## Navigation
-TODO
+
 - Go back to [1. Getting started with Spin and WebAssembly](./01-spin-getting-started.md) if you still have questions on previous section
-- Otherwise, proceed to [3. Using Redis for KeyValue](./03-using-redis-for-key-value.md).
+- Otherwise, proceed to [3. Set up your local development environment for Spin WebAssembly and containers](./03-local-dev-setup-containers-wasm.md).
 
 Let us know what you think in this short [Survey](https://fibsu0jcu2g.typeform.com/workshop).
