@@ -102,7 +102,7 @@ Let's add the NuGet packages to support running Redis and Spin with Aspire.
 ```bash
 $ cd Aspire/Aspire.AppHost/
 
-$ dotnet add package Aspire.StackExchange.Redis
+$ dotnet add package Aspire.Host.Redis
 
 $ dotnet add package Fermyon.Aspire.Spin
 ```

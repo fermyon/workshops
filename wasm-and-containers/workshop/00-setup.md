@@ -12,7 +12,7 @@ The first module will guide you through installing the prerequisites for complet
 
 ## Configuring your local environment for Spin
 
-    First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install). This workshop assumes you're using Spin 2.5. You can check your version of Spin, by running `spin -V`.
+First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install). This workshop assumes you're using Spin 2.5. You can check your version of Spin, by running `spin -V`.
 
 Templates and plugins required:
 
