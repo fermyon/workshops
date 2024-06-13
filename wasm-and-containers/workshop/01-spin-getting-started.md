@@ -314,7 +314,7 @@ In this section you learned how to:
 - Create a new Spin app using a template
 - Build your Spin application with `spin build`
 - Run your application locally with `spin up`
-- Deployed your Spin application to Fermyon Cloud with `spin deploy`
+- Deployed your Spin application to Fermyon Cloud with `spin cloud deploy`
 
 ## Navigation
 
