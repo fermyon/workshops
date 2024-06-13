@@ -12,12 +12,21 @@ The first module will guide you through installing the prerequisites for complet
 
 ## Configuring your local environment for Spin
 
-First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install). This workshop assumes you're using Spin 2.5. You can check your version of Spin, by running `spin -V`.
+First, you have to install and configure [Spin](https://fermyon.com/spin) by following the [instructions for your operating system from the Spin documentation](https://developer.fermyon.com/spin/install). This workshop assumes you're using Spin `2.5.1`. You can check your version of Spin, by running `spin -V`.
 
-Templates and plugins required:
+To complete the exercises of this workshop, you must have the following Spin plugins and templates installed:
+
+- `cloud`
+- `js2wasm`
+- `py2wasm`
+
+You can install them using the following commands:
 
 ```bash
+# Update Spin Plugin information
 $ spin plugins update
+
+# Install required Spin plugins
 $ spin plugins install cloud
 $ spin plugins install js2wasm
 $ spin plugins install py2wasm

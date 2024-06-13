@@ -15,7 +15,7 @@
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
-In this module, we'll explore how to building an application using [Spin](https://github.com/fermyon/spin), an open source developer tool for building and running serverless applications with WebAssembly.
+In this module, we'll explore how to build an application using [Spin](https://github.com/fermyon/spin), an open-source developer tool for building and running serverless applications with WebAssembly (Wasm).
 
 Spin uses Wasm because of its portability, sandboxed execution environment, and near-native speed. [More and more languages have support for WebAssembly](https://www.fermyon.com/wasm-languages/webassembly-language-support), so you should be able to use your favorite language to build your first serverless application with Wasm. In this workshop, we've provided sample code for Rust, TypeScript, Go, and Python.
 
@@ -27,9 +27,9 @@ Spin uses Wasm because of its portability, sandboxed execution environment, and 
 
 ## 1. Spin New - Create a Spin application and choose a template
 
-`spin new` is the command you'll use to initialize a new Spin application. A Spin application consists of multiple components, which will be triggered independently.
+`spin new` is the command you'll use to initialize a new Spin application. A Spin application can consist of multiple components, which are triggered independently.
 
-When you run `spin new`, you are provided with a list of available templates for a Spin component. Please pick any template, which starts with `http-` from the list.
+When you run `spin new`, you are provided with a list of available templates for a Spin component. Please pick any template, which starts with `http-` prefix from the list.
 
 > **Note**
 > We recommend Rust, Python, JS, or TS. If choosing any other template, it is not guaranteed that all modules of this workshop can be completed successfully. 
@@ -71,7 +71,7 @@ $ tree
 |-- webpack.config.js
 ```
 
-Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard that matches any request sent to this application. Spin applications can consists of many components, where you can define which components that are triggered for requests on different routes.
+Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard expression that matches any request sent to this application. Spin applications can consists of many components, where you can define which components that are triggered for requests on different routes.
 
 ```toml
 spin_manifest_version = 2
@@ -135,7 +135,7 @@ Available Routes:
   my-application: http://127.0.0.1:3000 (wildcard)
 ```
 
-The command will start Spin on port 3000 (use `--listen <ADDRESS>` to change the address and port - e.g., `--listen 0.0.0.0:3030`). You can now access the application by navigating to `localhost:3000` in your browser, or by using `curl`:
+The command will start Spin on port `3000` (use `--listen <ADDRESS>` to change the address and port - e.g., `--listen 0.0.0.0:3030`). You can now access the application by navigating to `localhost:3000` in your browser, or by using `curl`:
 
 ```bash
 curl localhost:3000/         
@@ -145,6 +145,7 @@ Hello from TS-SDK
 That response is coming from the handler function for this component. The application consists of a single function, which  (for TypeScript) takes the HTTP request (`HTTPRequest`) as an argument and returns a Promise with an HTTP response (`Promise<HttpResponse>`).
 
 Typescript example
+
 ```typescript
 import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
 
@@ -170,10 +171,10 @@ Hello, Friend
 
 ## Deploy your Spin application
 
-Spin applications can run in many places.  You can run them: 
+Spin applications can run in many places. You can run them: 
 
-* anywhere you can run the Spin CLI
-* anywhere you can run a Docker container using containerd (see the next section)
+* Anywhere you can run the Spin CLI
+* Anywhere you can run a Docker container using containerd (see the next section)
 * [Fermyon Cloud](https://www.fermyon.com/cloud)
 * [Wasmtime](https://wasmtime.dev/)
 * [NGINX Unit](https://unit.nginx.org/)
@@ -313,6 +314,7 @@ In this section you learned how to:
 - Create a new Spin app using a template
 - Build your Spin application with `spin build`
 - Run your application locally with `spin up`
+- Deployed your Spin application to Fermyon Cloud with `spin deploy`
 
 ## Navigation
 

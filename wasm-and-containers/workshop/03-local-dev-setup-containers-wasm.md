@@ -1,7 +1,7 @@
 # Local dev setup
 
 - [Local dev setup](#local-dev-setup)
-  - [Make file with Docker compose](#make-file-with-docker-compose)
+  - [Makefile with Docker compose](#make-file-with-docker-compose)
     - [Docker Compose](#docker-compose)
     - [Makefile](#makefile)
   - [.NET Aspire](#net-aspire)
@@ -9,14 +9,14 @@
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
-It's hard to get a nice experience for building application consisting of multiple "thing". Creating a local development environments, where you need to run a container, two services, and maybe a cloud service, is hard to get right. Tools like Make or Just are popular to create setups to help with the "run, evaluate, debug, change"-loop, and still get meaningful diagnostics about what's happening across those services, containers, and cloud services you are running.
+It's hard to get a nice experience for building application consisting of multiple "things". Creating a local development environments, where you need to run a container, two services, and maybe a cloud service, is hard to get right. Tools like Make or Just are popular to create setups to help with the "run, evaluate, debug, change"-loop, and still get meaningful diagnostics about what's happening across those services, containers, and cloud services you are running.
 
 In this section, we'll give a few different options to create a good local dev experience, for a scenario, where we're using two Spin components and a Redis container for our setup. Feel free to choose your own adventure for this section:
 
-- [Make file with Docker compose](#make-file-with-docker-compose)
+- [Makefile with Docker compose](#make-file-with-docker-compose)
 - [.NET Aspire](#net-aspire)
 
-## Make file with Docker compose
+## Makefile with Docker compose
 
 We want to run the following as part of our application:
 1. A Spin application storing data in a KeyValue store
