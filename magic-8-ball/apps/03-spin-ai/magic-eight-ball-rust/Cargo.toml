@@ -14,6 +14,6 @@ anyhow = "1"
 # Library to get random response
 rand = "0.8.5"
 # The Spin SDK.
-spin-sdk = "2.2.0"
+spin-sdk = "3.0.0"
 
 [workspace]
