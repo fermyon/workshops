@@ -1,8 +1,8 @@
-# Using a KeyValue Store with Spin
+# Using a Key Value Store with Spin
 
-- [Using a KeyValue Store with Spin](#using-a-keyvalue-store-with-spin)
+- [Using a Key Value Store with Spin](#using-a-keyvalue-store-with-spin)
   - [Implement a Counter](#implement-a-counter)
-  - [Using Redis for KeyValue](#using-redis-for-keyvalue)
+  - [Using Redis for Key Value](#using-redis-for-keyvalue)
   - [Code samples for this Section](#code-samples-for-this-section)
     - [Using TypeScript](#using-typescript)
     - [Using Rust](#using-rust)
@@ -11,7 +11,7 @@
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
-In this module, we'll use a KeyValue store to increment a counter on each request. As Spin loads a new instance of the component on each request, components have no shared memory in-between requests. Therefore we can use the KeyValue store in Spin to persist data.
+In this module, we'll use a Key Value store to increment a counter on each request. As Spin loads a new instance of the component on each request, components have no shared memory in-between requests. Therefore we can use the Key Value store in Spin to persist data.
 
 > **Note**
 > This document assumes you have followed [the previous step](./01-spin-getting-started.md) and have a working Spin application.
@@ -21,7 +21,7 @@ In this module, we'll use a KeyValue store to increment a counter on each reques
 
 ## Implement a Counter
 
-The Spin SDK provides an easy way to use a KeyValue store. Depending on the programming language you've chosen, please refer to the [Quick Reference for this Section](#quick-reference-for-this-section) to see the complete sample code. In this section we'll be using TypeScript as an example.
+The Spin SDK provides an easy way to use a Key Value store. Depending on the programming language you've chosen, please refer to the [Quick Reference for this Section](#quick-reference-for-this-section) to see the complete sample code. In this section we'll be using TypeScript as an example.
 
 First we need to open a store, then check if a counter exists, and finally either set it, or increment it.
 
@@ -84,15 +84,15 @@ You should now see the counter increment on each request.
 > **Note**
 > When using the "default" store locally, Spin stores the value i a sqlite file in the `.spin` directory in the root of the app directory. If you need to reset the KV store, simply delete the `sqlite_key_value.db` file in that folder.
 
-That's it, we now have a Spin application with the ability to persist state in a KeyValue store.
+That's it, we now have a Spin application with the ability to persist state in a Key Value store.
 
-## Using Redis for KeyValue
+## Using Redis for Key Value
 
-Moving our Spin application to any other environment, we probably want a better solution than a sqlite file to store our data. Spin provides the ability to map the KeyValue store to an external provider - e.g., [Redis](https://developer.fermyon.com/spin/v2/dynamic-configuration#redis-key-value-store-provider) and [Azure Cosmos DB](https://developer.fermyon.com/spin/v2/dynamic-configuration#azure-cosmosdb-key-value-store-provider).
+Moving our Spin application to any other environment, we probably want a better solution than a sqlite file to store our data. Spin provides the ability to map the Key Value store to an external provider - e.g., [Redis](https://developer.fermyon.com/spin/v2/dynamic-configuration#redis-key-value-store-provider) and [Azure Cosmos DB](https://developer.fermyon.com/spin/v2/dynamic-configuration#azure-cosmosdb-key-value-store-provider).
 
 In order to do so, we can provide a [Runtime Configuration](https://developer.fermyon.com/spin/v2/dynamic-configuration) to our Spin application.
 
-Let's go ahead and use a Redis container as the provider for a KeyValue store in Spin. 
+Let's go ahead and use a Redis container as the provider for a Key Value store in Spin. 
 
 Let's start by running a Redis container instance, by running the following command:
 
@@ -368,8 +368,8 @@ class IncomingHandler(IncomingHandler):
 
 In this section you learned how to:
 
-- Use the KeyValue store feature in Spin
-- Use Runtime configuration to change the provider of the KeyValue store
+- Use the Key Value store feature in Spin
+- Use Runtime configuration to change the provider of the Key Value store
 
 ## Navigation
 
