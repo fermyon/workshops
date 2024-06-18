@@ -15,7 +15,7 @@
   - [Learning Summary](#learning-summary)
   - [Navigation](#navigation)
 
-In this module, we'll explore how to building an application using [Spin](https://github.com/fermyon/spin), an open source developer tool for building and running serverless applications with WebAssembly.
+In this module, we'll explore how to build an application using [Spin](https://github.com/fermyon/spin), an open-source developer tool for building and running serverless applications with WebAssembly (Wasm).
 
 Spin uses Wasm because of its portability, sandboxed execution environment, and near-native speed. [More and more languages have support for WebAssembly](https://www.fermyon.com/wasm-languages/webassembly-language-support), so you should be able to use your favorite language to build your first serverless application with Wasm. In this workshop, we've provided sample code for Rust, TypeScript, Go, and Python.
 
@@ -27,9 +27,9 @@ Spin uses Wasm because of its portability, sandboxed execution environment, and 
 
 ## 1. Spin New - Create a Spin application and choose a template
 
-`spin new` is the command you'll use to initialize a new Spin application. A Spin application consists of multiple components, which will be triggered independently.
+`spin new` is the command you'll use to initialize a new Spin application. A Spin application can consist of multiple components, which are triggered independently.
 
-When you run `spin new`, you are provided with a list of available templates for a Spin component. Please pick any template, which starts with `http-` from the list.
+When you run `spin new`, you are provided with a list of available templates for a Spin component. Please pick any template, which starts with `http-` prefix from the list.
 
 > **Note**
 > We recommend Rust, Python, JS, or TS. If choosing any other template, it is not guaranteed that all modules of this workshop can be completed successfully. 
@@ -71,7 +71,7 @@ $ tree
 |-- webpack.config.js
 ```
 
-Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard that matches any request sent to this application. Spin applications can consists of many components, where you can define which components that are triggered for requests on different routes.
+Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard expression that matches any request sent to this application. Spin applications can consists of many components, where you can define which components that are triggered for requests on different routes.
 
 ```toml
 spin_manifest_version = 2
@@ -135,7 +135,7 @@ Available Routes:
   my-application: http://127.0.0.1:3000 (wildcard)
 ```
 
-The command will start Spin on port 3000 (use `--listen <ADDRESS>` to change the address and port - e.g., `--listen 0.0.0.0:3030`). You can now access the application by navigating to `localhost:3000` in your browser, or by using `curl`:
+The command will start Spin on port `3000` (use `--listen <ADDRESS>` to change the address and port - e.g., `--listen 0.0.0.0:3030`). You can now access the application by navigating to `localhost:3000` in your browser, or by using `curl`:
 
 ```bash
 curl localhost:3000/         
@@ -145,6 +145,7 @@ Hello from TS-SDK
 That response is coming from the handler function for this component. The application consists of a single function, which  (for TypeScript) takes the HTTP request (`HTTPRequest`) as an argument and returns a Promise with an HTTP response (`Promise<HttpResponse>`).
 
 Typescript example
+
 ```typescript
 import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
 
@@ -170,15 +171,14 @@ Hello, Friend
 
 ## Deploy your Spin application
 
-Spin applications can run in many places.  You can run them: 
+Spin applications can run in many places. You can run them: 
 
-* anywhere you can run the Spin CLI
-* anywhere you can run a Docker container using containerd (see the next section)
+* Anywhere you can run the Spin CLI
+* Anywhere you can run a Docker container using containerd (see the next section)
 * [Fermyon Cloud](https://www.fermyon.com/cloud)
-* [Wasmtime 14](https://wasmtime.dev/)
+* [Wasmtime](https://wasmtime.dev/)
 * [NGINX Unit](https://unit.nginx.org/)
 * [wasmCloud](https://wasmcloud.com/)
-* [Cosmonic](https://cosmonic.com/)
 
 * and probably a few other place we've forgot to mention here...
 
@@ -223,7 +223,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "text/plain" },
-    body: "Hello, Friend"
+    body: "Hello from TS-SDK"
   }
 }
 ```
@@ -238,20 +238,18 @@ $ spin build --up
 
 ```rust
 // Content of src/lib.rs
-use anyhow::Result;
-use spin_sdk::{
-    http::{Request, Response},
-    http_component,
-};
+use spin_sdk::http::{IntoResponse, Request, Response};
+use spin_sdk::http_component;
 
 /// A simple Spin HTTP component.
 #[http_component]
-fn handle_my_application(req: Request) -> Result<Response> {
-    println!("{:?}", req.headers());
-    Ok(http::Response::builder()
+fn handle_my_application(req: Request) -> anyhow::Result<impl IntoResponse> {
+    println!("Handling request to {:?}", req.header("spin-full-url"));
+    Ok(Response::builder()
         .status(200)
-        .header("foo", "bar")
-        .body(Some("Hello, Friend!".into()))?)
+        .header("content-type", "text/plain")
+        .body("Hello, Fermyon")
+        .build())
 }
 ```
 
@@ -271,13 +269,13 @@ import (
 	"fmt"
 	"net/http"
 
-	spinhttp "github.com/fermyon/spin/sdk/go/http"
+	spinhttp "github.com/fermyon/spin/sdk/go/v2/http"
 )
 
 func init() {
 	spinhttp.Handle(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprintln(w, "Hello, Friend!")
+		fmt.Fprintln(w, "Hello Fermyon!")
 	})
 }
 
@@ -294,13 +292,15 @@ $ spin build --up
 
 ```python
 # Content of app.py
-from spin_http import Response
+from spin_sdk.http import IncomingHandler, Request, Response
 
-def handle_request(request):
-
-    return Response(200,
-                    {"content-type": "text/plain"},
-                    bytes(f"Hello, Friend!", "utf-8"))
+class IncomingHandler(IncomingHandler):
+    def handle_request(self, request: Request) -> Response:
+        return Response(
+            200,
+            {"content-type": "text/plain"},
+            bytes("Hello from Python!", "utf-8")
+        )
 ```
 
 ## Do more with Spin
@@ -314,10 +314,11 @@ In this section you learned how to:
 - Create a new Spin app using a template
 - Build your Spin application with `spin build`
 - Run your application locally with `spin up`
+- Deployed your Spin application to Fermyon Cloud with `spin cloud deploy`
 
 ## Navigation
 
-- Go back to [0. Setup](00-setup.md) if you still have questions on previous section
-- Otherwise, proceed to [2. Run your first WebAssembly application in a container](02-running-in-a-container.md) if you still have questions on previous section.
+- Go back to [0. Setup](./00-setup.md) if you still have questions on previous section
+- Otherwise, proceed to [2. Using Key Value stores with Spin](./02-key-value-store.md) if you still have questions on previous section.
 
 Let us know what you think in this short [Survey](https://fibsu0jcu2g.typeform.com/workshop).
