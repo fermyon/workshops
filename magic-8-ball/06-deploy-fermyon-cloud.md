@@ -29,3 +29,4 @@ In this section you learned how to:
 
 - Go back to [05 - Persisting Magic 8 Ball Responses](05-spin-kv.md) if you still have questions on previous section
 - Otherwise, proceed to [07 - Storing data in an external database](07-external-db.md)
+- To learn how to deploy this Spin application to Kubernetes using SpinKube, check out this step in our [Wasm and Containers workshop]([url](https://github.com/fermyon/workshops/blob/main/wasm-and-containers/workshop/04-kubernetes-and-spinkube.md)). **Note**: This workshop has its own pre-requisites.
