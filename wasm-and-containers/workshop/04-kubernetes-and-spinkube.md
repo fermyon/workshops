@@ -37,7 +37,7 @@ $ k3d cluster create wasm-cluster \
   --port "8081:80@loadbalancer" \
   --agents 2
 
-# Install required Custom Resource Definitions and Resrouces
+# Install required Custom Resource Definitions and Resources
 $ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.3/cert-manager.yaml
 $ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.runtime-class.yaml
 $ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.crds.yaml
