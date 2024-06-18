@@ -11,14 +11,14 @@
 
 In this section the goal is to get our application up and running in a Kubernetes cluster. [SpinKube](https://www.spinkube.dev) is "...an open source project that streamlines developing, deploying and operating WebAssembly workloads in Kubernetes." - https://www.spinkube.dev
 
-We will be using [k3d](https://k3d.io/), which "makes it very easy to create single- and multi-node k3s clusters for local development on Kubernetes." - https://k3d.io/
+We will be using [k3d](https://k3d.io/), which "makes it very easy to create single- and multi-node k3s clusters for local development on Kubernetes."
 
 > **Note**
-> You can choose to use any other Kubernetes distribution or service supporting SpinKube. Check out the SpinKube tutorials for other options: https://www.spinkube.dev/docs/spin-operator/tutorials/
+> You can choose to use any other Kubernetes distribution or service supporting SpinKube. Check out the [SpinKube tutorials page](https://www.spinkube.dev/docs/spin-operator/tutorials/) for other options
 
 ## Pre-requisites
 
-In addition to the requirements from the previous sections, you'll need the following to installed:
+In addition to the requirements from the previous sections, you'll need the following installed:
 
 - [k3d](https://k3d.io/v5.4.6/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
@@ -26,9 +26,9 @@ In addition to the requirements from the previous sections, you'll need the foll
 
 ## 1. Create and Configure the k3d cluster with SpinKube
 
-The SpinKube project provides a pre-built container image, with the containerd configuration needed to support Spin applications. Spin applications can run on Kubernetes thanks to the [containerd-shim-spin](https://github.com/spinkube/containerd-shim-spin) project.
+The SpinKube project provides a pre-built container image, with the [containerd]([url](https://containerd.io/)) configuration needed to support Spin applications. Spin applications can run on Kubernetes thanks to the [containerd-shim-spin](https://github.com/spinkube/containerd-shim-spin) project.
 
-The following instructions are copied from: https://www.spinkube.dev/docs/spin-operator/quickstart/. Please refer back to that source for further explanations.
+The following instructions are copied from the [Spin Operator quickstart](https://www.spinkube.dev/docs/spin-operator/quickstart/). Please refer back to the source for further explanations.
 
 ```bash
 # Create the k3d cluster
@@ -54,13 +54,13 @@ $ helm install spin-operator \
 $ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.shim-executor.yaml
 ```
 
-To validate your installation, you can follow these instructions: https://www.spinkube.dev/docs/spin-operator/quickstart/#run-the-sample-application
+To validate your installation, you can follow [these instructions]([url](https://www.spinkube.dev/docs/spin-operator/quickstart/#run-the-sample-application)).
 
 ## 2. Deploy you application to Kubernetes
 
 With SpinKube, it's possible to deploy Spin applications to Kubernetes, without creating container images consisting of file layers (e.g., with a Dockerfile). As WebAssembly applications are self-contained, we simply need the .wasm file, the Spin manifest, and any potential static asset which goes together with it. All of this is easily packaged  using the `spin registry push` command.
 
-We can use any OCI registry, for an easy publicly available ephemeral OCI registry, we can ues [ttl.sh](https://ttl.sh).
+We can use any OCI registry for this. For an easy, publicly-available ephemeral OCI registry, we can use [ttl.sh](https://ttl.sh).
 
 In the directory containing `spin.toml` run the following command:
 
@@ -100,7 +100,7 @@ spec:
   replicas: 2
 ```
 
-Before we can make our application run, we need a runtime configuration, as well as a Redis container for our KeyValue store.
+Before we can run our application, we need a runtime configuration, as well as a Redis container for our Key Value store.
 
 You can add both to the `app.yaml` file, so it will look like this:
 
@@ -168,13 +168,13 @@ To deploy the combined Redis container and Spin application, run:
 $ kubectl apply -f app.yaml
 ```
 
-You can now set up a port-forward to the Spin applications service, which is set up by the SpinKube Operator.
+You can now set up a port-forward to the Spin application's service, which is set up by the Spin Operator.
 
 ```bash
 $ kubectl port-forward svc/{something_unique} 8080:80
 ```
 
-And then 'curl' it:
+And then a 'curl' request to the address:
 
 ```bash
 $ curl -i localhost:8080
