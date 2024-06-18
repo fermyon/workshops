@@ -155,6 +155,6 @@ In this section you learned how to:
 ## Navigation
 
 - Go back to [2. Using Key Value stores with Spin](./02-key-value-store.md) if you still have questions on previous section
-- Otherwise, proceed to [4. Deploy your Spin applications to Kubernetes ans SpinKube](./04-kubernetes-and-spinkube.md).
+- Otherwise, proceed to [4. Deploy your Spin applications to Kubernetes and SpinKube](./04-kubernetes-and-spinkube.md).
 
 Let us know what you think in this short [Survey](https://fibsu0jcu2g.typeform.com/workshop).
