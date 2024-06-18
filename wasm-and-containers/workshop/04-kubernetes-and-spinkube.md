@@ -9,7 +9,7 @@
   - [Navigation](#navigation)
 
 
-In this section the goal is to get our application up and running in a Kubernetes cluster. [SpinKube](https://www.spinkube.dev) is "...an open source project that streamlines developing, deploying and operating WebAssembly workloads in Kubernetes." - https://www.spinkube.dev
+In this section the goal is to get our application up and running in a Kubernetes cluster. [SpinKube](https://www.spinkube.dev) is "...an open source project that streamlines developing, deploying and operating WebAssembly workloads in Kubernetes."
 
 We will be using [k3d](https://k3d.io/), which "makes it very easy to create single- and multi-node k3s clusters for local development on Kubernetes."
 
