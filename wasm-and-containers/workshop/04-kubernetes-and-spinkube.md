@@ -26,7 +26,7 @@ In addition to the requirements from the previous sections, you'll need the foll
 
 ## 1. Create and Configure the k3d cluster with SpinKube
 
-The SpinKube project provides a pre-built container image, with the [containerd]([url](https://containerd.io/)) configuration needed to support Spin applications. Spin applications can run on Kubernetes thanks to the [containerd-shim-spin](https://github.com/spinkube/containerd-shim-spin) project.
+The SpinKube project provides a pre-built container image, with the [containerd](https://containerd.io/) configuration needed to support Spin applications. Spin applications can run on Kubernetes thanks to the [containerd-shim-spin](https://github.com/spinkube/containerd-shim-spin) project.
 
 The following instructions are copied from the [Spin Operator quickstart](https://www.spinkube.dev/docs/spin-operator/quickstart/). Please refer back to the source for further explanations.
 
@@ -54,7 +54,7 @@ $ helm install spin-operator \
 $ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.shim-executor.yaml
 ```
 
-To validate your installation, you can follow [these instructions]([url](https://www.spinkube.dev/docs/spin-operator/quickstart/#run-the-sample-application)).
+To validate your installation, you can follow [these instructions](https://www.spinkube.dev/docs/spin-operator/quickstart/#run-the-sample-application).
 
 ## 2. Deploy you application to Kubernetes
 
