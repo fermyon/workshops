@@ -4,7 +4,7 @@
 - Includes using Serverless AI, and deploying to Kubernetes.
 
 **Last Updated**
-This workshop was last updated for O' Reilly Virtual Live Event on March 26th 2024
+This workshop was last updated for DevOpsDays Amsterdam on June 19th 2024
 
 ## Workshop Modules
 
