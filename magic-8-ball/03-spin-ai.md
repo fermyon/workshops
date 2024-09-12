@@ -72,10 +72,9 @@ fn answer(question: &str) -> Result<String> {
     let answer = llm::infer_with_options(
         model,
         &prompt,
-        llm::InferencingParams {
+        llm::InferencingParams 
             max_tokens: 20,
-            repeat_penalty: 1.5,
-            repeat_penalty_last_n_token_count: 20,
+            repeat_penalty: 1.5,            repeat_penalty_last_n_token_count: 20,
             temperature: 0.25,
             top_k: 5,
             top_p: 0.25,
@@ -98,6 +97,15 @@ Now, build your application and see the [deploy to Fermyon Cloud section](#deplo
 spin build
 ```
 
+### Configure access to an AI model
+
+By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following ai_models configuration inside its `[[component]]` section:
+
+```toml
+[[component.magic-8-ball]]
+ai_models = ["llama2-chat"]
+```
+
 ## b. Building your Magic 8 Ball application with TypeScript
 
 We need to modify our `magic-eight-ball` component to:
@@ -106,22 +114,20 @@ We need to modify our `magic-eight-ball` component to:
 1. Get a yes/no question from the body of the HTTP request
 1. Use the `Llm.infer` function Spin `Llm` library to generate a response to the question
 
-First, create a `TextDecoder` at the top level:
+Then, update the `handler` function to get the question from the request body. We also need to add `Llm` as an import from the Spin SDK:
 
 ```ts
-const decoder = new TextDecoder();
-```
+import { ResponseBuilder, Llm } from "@fermyon/spin-sdk";
 
-Then, update the `handleRequest` function to get the question from the request body and return an error if
-the body is empty:
-
-```ts
-const question = decoder.decode(request.body);
-if (question.length == 0) {
-  return {
-    status: 400,
-    body: encoder.encode("No question asked").buffer,
-  };
+export async function handler(req: Request, res: ResponseBuilder) {
+    const response: Answer = await req.text().then(data => {
+        console.log(data);
+        return answer(data);
+    });
+    console.log(response);
+    res.statusCode = 200;
+    res.headers.append("Content-Type", "application/json");
+    res.send(JSON.stringify(response));
 }
 ```
 
@@ -130,29 +136,30 @@ Use the `Llm.infer` function, passing in a prompt to tell the system what type o
 should give along with the user provided question.
 
 ```ts
-function answer(question: string): string {
-  const prompt = `<s>[INST] <<SYS>>
+function answer(question: string): Answer {
+    const prompt: string = `<s>[INST] <<SYS>>
         You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
         Your tone should be expressive yet polite.
         Your answers should be 10 words or less.
         Prefix your response with 'Answer:'.
         <</SYS>>
         User: ${question}[/INST]"`;
-  let response = Llm.infer(InferencingModels.Llama2Chat, prompt, {
-    maxTokens: 20,
-    repeatPenalty: 1.5,
-    repeatPenaltyLastNTokenCount: 20,
-    temperature: 0.25,
-    topK: 5,
-    topP: 0.25,
-  }).text;
-  // Parse the response to remove the expected `Answer:` prefix from the response
-  const answerPrefix = "Answer:";
-  response = response.trim();
-  if (response.startsWith(answerPrefix)) {
-    response = response.substring(answerPrefix.length);
-  }
-  return response;
+    let response: Answer = { answer: Llm.infer(Llm.InferencingModels.Llama2Chat, prompt, {
+        maxTokens: 20,
+        repeatPenalty: 1.5,
+        repeatPenaltyLastNTokenCount: 20,
+        temperature: 0.25,
+        topK: 5,
+        topP: 0.25,
+    }).text};
+    // Parse the response to remove the expected `Answer:` prefix from the response
+    console.log(response.answer);
+    const answerPrefix = "Answer:";
+    response.answer = response.answer.trim();
+    if (response.answer.startsWith(answerPrefix)) {
+        response.answer = response.answer.substring(answerPrefix.length);
+    };
+    return response;
 }
 ```
 
@@ -163,13 +170,12 @@ npm install
 spin build
 ```
 
-## Configure access to an AI model
+### Configure access to an AI model
 
 By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following ai_models configuration inside its `[[component]]` section:
 
 ```toml
-[[component]]
-id = "magic-8-ball"
+[[component.magic-8-ball]]
 ai_models = ["llama2-chat"]
 ```
 
@@ -232,13 +238,12 @@ Now, build your application.
 $ spin build
 ```
 
-## Configure access to an AI model
+### Configure access to an AI model
 
 By default, a given component of a Spin application will not have access to any Serverless AI models. Access must be provided explicitly via the Spin application’s manifest (the `spin.toml` file). We can give our `magic-8` component access to the llama2-chat model by adding the following `ai_models` configuration inside its `[[component]]` section:
 
 ```toml
-[[component]]
-id = "magic-8-ball"
+[[component.magic-8-ball]]
 ai_models = ["llama2-chat"]
 ```
 

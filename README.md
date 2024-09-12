@@ -2,7 +2,9 @@
 
 Welcome to the home for all Fermyon workshops!
 
-Complete a workshop, submit a survey, and claim a ![**Slat KeyCap**](./media/slats-keycap-cropped.png)
+The below workshops are available for you to go and run on your own, or use in an instructor-led setting. Feel free to have fun and share with the world :-)
+
+Best - The Fermyon Team
 
 ## Workshops
 

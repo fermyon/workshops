@@ -1,11 +1,6 @@
-import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk";
+import { ResponseBuilder } from "@fermyon/spin-sdk";
 
-export const handleRequest: HandleRequest = async function (
-  request: HttpRequest
-): Promise<HttpResponse> {
-  return {
-    status: 200,
-    headers: { "content-type": "text/plain" },
-    body: "Hello, WebAssembly!",
-  };
-};
+export async function handler(req: Request, res: ResponseBuilder) {
+    console.log(req);
+    res.send("Hello, WebAssembly!");
+}

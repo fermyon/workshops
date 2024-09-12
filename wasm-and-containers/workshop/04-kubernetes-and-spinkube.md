@@ -33,25 +33,25 @@ The following instructions are copied from the [Spin Operator quickstart](https:
 ```bash
 # Create the k3d cluster
 $ k3d cluster create wasm-cluster \
-  --image ghcr.io/spinkube/containerd-shim-spin/k3d:v0.14.1 \
+  --image ghcr.io/spinkube/containerd-shim-spin/k3d:v0.15.1 \
   --port "8081:80@loadbalancer" \
   --agents 2
 
 # Install required Custom Resource Definitions and Resources
 $ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.3/cert-manager.yaml
-$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.runtime-class.yaml
-$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.crds.yaml
+$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.3.0/spin-operator.runtime-class.yaml
+$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.3.0/spin-operator.crds.yaml
 
 # Install the Spin Operator
 $ helm install spin-operator \
   --namespace spin-operator \
   --create-namespace \
-  --version 0.2.0 \
+  --version 0.3.0 \
   --wait \
   oci://ghcr.io/spinkube/charts/spin-operator
 
 # Install the Runtime Executor for containerd-shim-spin
-$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.2.0/spin-operator.shim-executor.yaml
+$ kubectl apply -f https://github.com/spinkube/spin-operator/releases/download/v0.3.0/spin-operator.shim-executor.yaml
 ```
 
 To validate your installation, you can follow [these instructions](https://www.spinkube.dev/docs/spin-operator/quickstart/#run-the-sample-application).

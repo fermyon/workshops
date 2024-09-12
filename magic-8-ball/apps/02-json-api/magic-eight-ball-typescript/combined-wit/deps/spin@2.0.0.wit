@@ -1,0 +1,336 @@
+package fermyon:spin@2.0.0;
+
+interface key-value {
+  resource store {
+    open: static func(label: string) -> result<store, error>;
+    get: func(key: string) -> result<option<list<u8>>, error>;
+    set: func(key: string, value: list<u8>) -> result<_, error>;
+    delete: func(key: string) -> result<_, error>;
+    exists: func(key: string) -> result<bool, error>;
+    get-keys: func() -> result<list<string>, error>;
+  }
+
+  variant error {
+    store-table-full,
+    no-such-store,
+    access-denied,
+    other(string),
+  }
+}
+
+interface llm {
+  type inferencing-model = string;
+
+  record inferencing-params {
+    max-tokens: u32,
+    repeat-penalty: f32,
+    repeat-penalty-last-n-token-count: u32,
+    temperature: f32,
+    top-k: u32,
+    top-p: f32,
+  }
+
+  variant error {
+    model-not-supported,
+    runtime-error(string),
+    invalid-input(string),
+  }
+
+  record inferencing-usage {
+    prompt-token-count: u32,
+    generated-token-count: u32,
+  }
+
+  record inferencing-result {
+    text: string,
+    usage: inferencing-usage,
+  }
+
+  type embedding-model = string;
+
+  record embeddings-usage {
+    prompt-token-count: u32,
+  }
+
+  record embeddings-result {
+    embeddings: list<list<f32>>,
+    usage: embeddings-usage,
+  }
+
+  infer: func(model: inferencing-model, prompt: string, params: option<inferencing-params>) -> result<inferencing-result, error>;
+
+  generate-embeddings: func(model: embedding-model, text: list<string>) -> result<embeddings-result, error>;
+}
+
+interface mqtt {
+  variant error {
+    invalid-address,
+    too-many-connections,
+    connection-failed(string),
+    other(string),
+  }
+
+  enum qos {
+    at-most-once,
+    at-least-once,
+    exactly-once,
+  }
+
+  resource connection {
+    open: static func(address: string, username: string, password: string, keep-alive-interval-in-secs: u64) -> result<connection, error>;
+    publish: func(topic: string, payload: payload, qos: qos) -> result<_, error>;
+  }
+
+  type payload = list<u8>;
+}
+
+interface rdbms-types {
+  variant error {
+    connection-failed(string),
+    bad-parameter(string),
+    query-failed(string),
+    value-conversion-failed(string),
+    other(string),
+  }
+
+  enum db-data-type {
+    boolean,
+    int8,
+    int16,
+    int32,
+    int64,
+    uint8,
+    uint16,
+    uint32,
+    uint64,
+    floating32,
+    floating64,
+    str,
+    binary,
+    other,
+  }
+
+  variant db-value {
+    boolean(bool),
+    int8(s8),
+    int16(s16),
+    int32(s32),
+    int64(s64),
+    uint8(u8),
+    uint16(u16),
+    uint32(u32),
+    uint64(u64),
+    floating32(f32),
+    floating64(f64),
+    str(string),
+    binary(list<u8>),
+    db-null,
+    unsupported,
+  }
+
+  variant parameter-value {
+    boolean(bool),
+    int8(s8),
+    int16(s16),
+    int32(s32),
+    int64(s64),
+    uint8(u8),
+    uint16(u16),
+    uint32(u32),
+    uint64(u64),
+    floating32(f32),
+    floating64(f64),
+    str(string),
+    binary(list<u8>),
+    db-null,
+  }
+
+  record column {
+    name: string,
+    data-type: db-data-type,
+  }
+
+  type row = list<db-value>;
+
+  record row-set {
+    columns: list<column>,
+    rows: list<row>,
+  }
+}
+
+interface mysql {
+  use rdbms-types.{parameter-value, row-set, error};
+
+  resource connection {
+    open: static func(address: string) -> result<connection, error>;
+    query: func(statement: string, params: list<parameter-value>) -> result<row-set, error>;
+    execute: func(statement: string, params: list<parameter-value>) -> result<_, error>;
+  }
+}
+
+interface postgres {
+  use rdbms-types.{parameter-value, row-set, error};
+
+  resource connection {
+    open: static func(address: string) -> result<connection, error>;
+    query: func(statement: string, params: list<parameter-value>) -> result<row-set, error>;
+    execute: func(statement: string, params: list<parameter-value>) -> result<u64, error>;
+  }
+}
+
+interface redis {
+  variant error {
+    invalid-address,
+    too-many-connections,
+    type-error,
+    other(string),
+  }
+
+  resource connection {
+    open: static func(address: string) -> result<connection, error>;
+    publish: func(channel: string, payload: payload) -> result<_, error>;
+    get: func(key: string) -> result<option<payload>, error>;
+    set: func(key: string, value: payload) -> result<_, error>;
+    incr: func(key: string) -> result<s64, error>;
+    del: func(keys: list<string>) -> result<u32, error>;
+    sadd: func(key: string, values: list<string>) -> result<u32, error>;
+    smembers: func(key: string) -> result<list<string>, error>;
+    srem: func(key: string, values: list<string>) -> result<u32, error>;
+    execute: func(command: string, arguments: list<redis-parameter>) -> result<list<redis-result>, error>;
+  }
+
+  type payload = list<u8>;
+
+  variant redis-parameter {
+    int64(s64),
+    binary(payload),
+  }
+
+  variant redis-result {
+    nil,
+    status(string),
+    int64(s64),
+    binary(payload),
+  }
+}
+
+interface sqlite {
+  resource connection {
+    open: static func(database: string) -> result<connection, error>;
+    execute: func(statement: string, parameters: list<value>) -> result<query-result, error>;
+  }
+
+  variant error {
+    no-such-database,
+    access-denied,
+    invalid-connection,
+    database-full,
+    io(string),
+  }
+
+  variant value {
+    integer(s64),
+    real(f64),
+    text(string),
+    blob(list<u8>),
+    null,
+  }
+
+  record row-result {
+    values: list<value>,
+  }
+
+  record query-result {
+    columns: list<string>,
+    rows: list<row-result>,
+  }
+}
+
+interface variables {
+  variant error {
+    invalid-name(string),
+    undefined(string),
+    provider(string),
+    other(string),
+  }
+
+  get: func(name: string) -> result<string, error>;
+}
+
+world spin-imports {
+  import wasi:io/poll@0.2.0;
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:io/error@0.2.0;
+  import wasi:io/streams@0.2.0;
+  import wasi:http/types@0.2.0;
+  import wasi:http/outgoing-handler@0.2.0;
+  import llm;
+  import redis;
+  import rdbms-types;
+  import postgres;
+  import mysql;
+  import mqtt;
+  import sqlite;
+  import key-value;
+  import variables;
+}
+world spin-redis {
+  import fermyon:spin/redis-types;
+  import wasi:io/poll@0.2.0;
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:io/error@0.2.0;
+  import wasi:io/streams@0.2.0;
+  import wasi:http/types@0.2.0;
+  import wasi:http/outgoing-handler@0.2.0;
+  import llm;
+  import redis;
+  import rdbms-types;
+  import postgres;
+  import mysql;
+  import mqtt;
+  import sqlite;
+  import key-value;
+  import variables;
+
+  export fermyon:spin/inbound-redis;
+}
+world spin-http {
+  import wasi:io/poll@0.2.0;
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:io/error@0.2.0;
+  import wasi:io/streams@0.2.0;
+  import wasi:http/types@0.2.0;
+  import wasi:http/outgoing-handler@0.2.0;
+  import llm;
+  import redis;
+  import rdbms-types;
+  import postgres;
+  import mysql;
+  import mqtt;
+  import sqlite;
+  import key-value;
+  import variables;
+
+  export wasi:http/incoming-handler@0.2.0;
+}
+world spin-all {
+  import fermyon:spin/redis-types;
+  import wasi:io/poll@0.2.0;
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:io/error@0.2.0;
+  import wasi:io/streams@0.2.0;
+  import wasi:http/types@0.2.0;
+  import wasi:http/outgoing-handler@0.2.0;
+  import llm;
+  import redis;
+  import rdbms-types;
+  import postgres;
+  import mysql;
+  import mqtt;
+  import sqlite;
+  import key-value;
+  import variables;
+
+  export fermyon:spin/inbound-redis;
+  export wasi:http/incoming-handler@0.2.0;
+}

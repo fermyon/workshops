@@ -4,7 +4,7 @@
 - Includes using Serverless AI, and deploying to Kubernetes.
 
 **Last Updated**
-This workshop was last updated for DevOpsDays Amsterdam on June 19th 2024
+This workshop was last updated for DevOpsDays Vilnius on Sep 10th 2024
 
 ## Workshop Modules
 
@@ -14,7 +14,7 @@ This workshop was last updated for DevOpsDays Amsterdam on June 19th 2024
 - [3. Using Fermyon Serverless AI from a JSON API](03-spin-ai.md)
 - [4. Running your front-end application with Spin](04-frontend.md)
 - [5. Persisting non-relational data with Spin's key/value store](05-spin-kv.md)
-- [6. Deploying to Fermyon Cloud](06-deploy-fermyon-cloud.md)
+- [6. Deploying](06-deploy.md)
 - [7. Using external databases](07-external-db.md)
 - [8. Generating embeddings and using SQLite](08-embedding-and-sqlite.md)
 - (_optionally_) - Let us know what you think about this workshop using this short [form](https://form.typeform.com/to/RK08OLSy).
