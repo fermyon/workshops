@@ -4,8 +4,10 @@ This document assumes you have followed [the setup guide](./00-setup.md) and hav
 
 ```bash
 $ spin --version
-spin 2.3.0 (ee6706c8 2024-02-29)
+spin 2.7.0 (a111517 2024-07-30)
 ```
+
+> Note: The workshop was last tested with Spin 2.7.0
 
 [Spin](https://github.com/fermyon/spin) is an open source framework for building, distributing, and running serverless applications and microservices with WebAssembly (or Wasm).
 
@@ -135,7 +137,7 @@ You are now ready to expand your application. You can follow the [guide for buil
 
 ## b. Building your first Spin application with JavaScript or TypeScript
 
-JavaScript is one of the most popular programming languages. Spin has an [experimental SDK and toolchain](https://github.com/fermyon/spin-js-sdk) for JavaScript and TypeScript which is based on [QuickJS](https://bellard.org/quickjs/), a small embeddable JavaScript runtime.
+JavaScript is one of the most popular programming languages. Spin has an [experimental SDK and toolchain](https://github.com/fermyon/spin-js-sdk) for JavaScript and TypeScript.
 
 > Note: you can [read more about how the Spin SDK for JavaScript and TypeScript is built on Fermyon's blog](https://www.fermyon.com/blog/spin-js-sdk).
 
@@ -144,13 +146,15 @@ Let's create a new Spin application in TypeScript, based on the HTTP template. T
 ```bash
 $ spin new hello-typescript -t http-ts --accept-defaults && cd hello-typescript
 $ tree
-|-- README.md
-|-- package.json
-|-- spin.toml
-|-- src
-|    -- index.ts
-|-- tsconfig.json
-|-- webpack.config.js
+.
+├── knitwit.json
+├── package.json
+├── spin.toml
+├── src
+│   ├── index.ts
+│   └── spin.ts
+├── tsconfig.json
+└── webpack.config.js
 ```
 
 > You can `sudo apt-get install tree` if you do not have `tree` installed.
@@ -158,11 +162,13 @@ $ tree
 Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In our case we have a HTTP trigger at the route `/...` — a wildcard that matches any request sent to this application. The trigger sends requests to our component `hello-rust`. In more complex applications, you can define multiple components that are triggered for requests on different routes.
 
 ```toml
+spin_manifest_version = 2
+
 [application]
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+description = ""
 name = "hello-typescript"
 version = "0.1.0"
-authors = ["Fermyon Engineering <engineering@fermyon.com>"]
-description = "Hello World Rust Application"
 
 [[trigger.http]]
 route = "/..."
@@ -211,7 +217,7 @@ The command will start Spin on port 3000. You can now access the application by 
 
 ```bash
 $ curl localhost:3000
-Hello from TS-SDK
+hello universe
 ```
 
 That response is coming from the handler function for this component — in the case of a TypeScript component, defined in the index file from `src/index.ts`. Our entire application consists of a single function, `handleRequest`, which takes the HTTP request as an argument and returns an HTTP response.
@@ -219,24 +225,23 @@ That response is coming from the handler function for this component — in the 
 Let's change the message body to "Hello, WebAssembly!":
 
 ```typescript
-export const handleRequest: HandleRequest = async function (
-  request: HttpRequest
-): Promise<HttpResponse> {
-  return {
-    status: 200,
-    headers: { "content-type": "text/plain" },
-    body: "Hello, WebAssembly!",
-  };
-};
+import { ResponseBuilder } from "@fermyon/spin-sdk";
+
+export async function handler(req: Request, res: ResponseBuilder) {
+    console.log(req);
+    res.send("Hello, WebAssembly!");
+}
 ```
 
 We can now run `spin build` again, which will compile our component, and we can use the `--up` flag to automatically start the application, then send another request:
 
 ```bash
 $ spin build --up
-$ curl -v localhost:3000
-< HTTP/1.1 200 OK
-< content-type: text/plain
+$ curl -i localhost:3000
+HTTP/1.1 200 OK
+content-length: 19
+content-type: text/plain;charset=UTF-8
+date: Thu, 12 Sep 2024 11:19:37 GMT
 
 Hello, WebAssembly!
 ```

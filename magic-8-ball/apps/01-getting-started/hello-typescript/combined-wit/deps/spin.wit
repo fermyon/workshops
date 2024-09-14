@@ -1,0 +1,29 @@
+package fermyon:spin;
+
+interface redis-types {
+  enum error {
+    success,
+    error,
+  }
+
+  type payload = list<u8>;
+
+  variant redis-parameter {
+    int64(s64),
+    binary(payload),
+  }
+
+  variant redis-result {
+    nil,
+    status(string),
+    int64(s64),
+    binary(payload),
+  }
+}
+
+interface inbound-redis {
+  use redis-types.{payload, error};
+
+  handle-message: func(message: payload) -> result<_, error>;
+}
+

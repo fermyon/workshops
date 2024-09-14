@@ -15,48 +15,20 @@ We will need to:
 
 ## 1: Giving our component access to a KV store
 
-Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file. Here's how it would look in **Rust** component
+Give your `magic-8-ball` component access to a key/value store by adding `key_value_stores = ["default"]` to the component in your `spin.toml` file.
 
 ```toml
 [component.magic-eight-ball]
-source = "target/wasm32-wasi/release/magic_eight_ball.wasm"
-allowed_outbound_hosts = []
+...
 ai_models = ["llama2-chat"]
 key_value_stores = ["default"]
-[component.magic-eight-ball.build]
-command = "cargo build --target wasm32-wasi --release"
-watch = ["src/**/*.rs", "Cargo.toml"]
-```
-
-Here's how `spin.toml` would look like in the **TypeScript** component
-
-```toml
-[component.magic-eight-ball]
-source = "target/magic-eight-ball.wasm"
-exclude_files = ["**/node_modules"]
-ai_models = ["llama2-chat"]
-key_value_stores = ["default"]
-[component.magic-eight-ball.build]
-command = "npm run build"
-watch = ["src/**/*.ts", "package.json"]
-```
-Here's how `spin.toml` would look like in the **Python** component
-
-```toml
-[component.magic-eight-ball-python]
-source = "app.wasm"
-ai_models = ["llama2-chat"]
-key_value_stores = ["default"]
-[component.magic-eight-ball-python.build]
-command = "componentize-py -w spin-http componentize app -o app.wasm"
-watch = ["*.py", "requirements.txt"]
 ```
 
 ## 2: Storing questions and answers in our key/value store
 
 The Spin SDK surfaces the Spin key value store interface to your language with operations such as `open` `get` `set` `delete` and more. The [Spin KV store API guide](https://developer.fermyon.com/spin/kv-store-api-guide) can be used to set and check previous question-answer pairs. 
 
-Here's the code snippet in **Rust** to do this
+### Here's the code snippet in **Rust** to do this
 
 ```rust
 // Checks key/value store to see if the question has already been answered.
@@ -86,27 +58,67 @@ fn get_or_set_answer(question: String) -> Result<String> {
 }
 ```
 
-Here's the code in **TypeScript**
+### Here's the code in **TypeScript**
 
 ```ts
-function getOrSetAnswer(question: string): string {
-  let store = Kv.openDefault();
-  let response = "";
-  if (store.exists(question)) {
-    response = decoder.decode(store.get(question));
-    if (response == "Ask again later.") {
-      response = answer(question);
-      store.set(question, response);
+import { ResponseBuilder, Llm } from "@fermyon/spin-sdk";
+
+interface Answer {
+    answer: String;
+};
+
+export async function handler(req: Request, res: ResponseBuilder) {
+    const response: Answer = await req.text().then(data => {
+        console.log(data);
+        return answer(data);
+    });
+    console.log(response);
+    res.statusCode = 200;
+    res.headers.append("Content-Type", "application/json");
+    res.send(JSON.stringify(response));
+}
+
+function getOrSetAnswer(question: string): Answer {
+    let store = Kv.open("default");
+    let response: Answer;
+    let cachedResponse = store.get(question);
+    if (cachedResponse == null) {
+        response = askLlm(question);
+        store.set(question, response);
+    } else {
+        response = JSON.parse(decoder.decode(cachedResponse));
     }
-  } else {
-    response = answer(question);
-    store.set(question, response);
-  }
-  return response;
+    return response;
+}
+
+function answer(question: string): Answer {
+    const prompt: string = `<s>[INST] <<SYS>>
+        You are acting as a Magic 8 Ball that predicts the answer to a questions about events now or in the future.
+        Your tone should be expressive yet polite.
+        Your answers should be 10 words or less.
+        Prefix your response with 'Answer:'.
+        <</SYS>>
+        User: ${question}[/INST]"`;
+    let response: Answer = { answer: Llm.infer(Llm.InferencingModels.Llama2Chat, prompt, {
+        maxTokens: 20,
+        repeatPenalty: 1.5,
+        repeatPenaltyLastNTokenCount: 20,
+        temperature: 0.25,
+        topK: 5,
+        topP: 0.25,
+    }).text};
+    // Parse the response to remove the expected `Answer:` prefix from the response
+    console.log(response.answer);
+    const answerPrefix = "Answer:";
+    response.answer = response.answer.trim();
+    if (response.answer.startsWith(answerPrefix)) {
+        response.answer = response.answer.substring(answerPrefix.length);
+    };
+    return response;
 }
 ```
 
-Here's the code in **Python**.
+### Here's the code in **Python**.
 
 ```Python
 from spin_sdk import key_value

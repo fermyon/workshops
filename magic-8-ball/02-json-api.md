@@ -103,28 +103,27 @@ We will create another Spin application in TypeScript based on the HTTP template
 $ spin new magic-eight-ball -t http-ts
 Description: A Magic 8 Ball App
 HTTP path: /magic-8
+Enable AoT Compilation [y/N]: N
+
 $ cd magic-eight-ball
 ```
 
 We will now write a HTTP component in our `index.ts` file that returns a Magic 8 Ball responses. Your `index.ts` file should look like this:
 
 ```typescript
-import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk";
+import { ResponseBuilder } from "@fermyon/spin-sdk";
 
-const encoder = new TextEncoder();
-
-export const handleRequest: HandleRequest = async function (
-  request: HttpRequest
-): Promise<HttpResponse> {
-  let answerJson = `{\"answer\": \"${answer()}\"}`;
-  return {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-    body: answerJson,
-  };
+interface Answer {
+    answer: String;
 };
 
-function answer(): string {
+export async function handler(req: Request, res: ResponseBuilder) {
+    res.statusCode = 200;
+    res.headers.append("Content-Type", "application/json");
+    res.send(JSON.stringify(answer()));
+}
+
+function answer(): Answer {
   let answers = [
     "Ask again later.",
     "Absolutely!",
@@ -132,7 +131,7 @@ function answer(): string {
     "Simply put, no",
   ];
   let idx = Math.floor(Math.random() * answers.length);
-  return answers[idx];
+  return { answer: answers[idx] };
 }
 ```
 
@@ -151,7 +150,7 @@ Your Magic 8 Ball app is now running locally! Remember, we earlier had set our `
 
 ```bash
 $ curl localhost:3000/magic-8
-{"answer": "Absolutely!"}%
+{"answer": "Absolutely!"}
 ```
 
 > Note: you can find the complete applications used in this workshop in the [`apps` directory](./apps/).
