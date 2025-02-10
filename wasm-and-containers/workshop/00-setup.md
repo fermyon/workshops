@@ -17,7 +17,6 @@ First, you have to install and configure [Spin](https://fermyon.com/spin) by fol
 To complete the exercises of this workshop, you must have the following Spin plugins and templates installed:
 
 - `cloud`
-- `js2wasm`
 - `py2wasm`
 
 You can install them using the following commands:
@@ -28,7 +27,6 @@ $ spin plugins update
 
 # Install required Spin plugins
 $ spin plugins install cloud
-$ spin plugins install js2wasm
 $ spin plugins install py2wasm
 ```
 

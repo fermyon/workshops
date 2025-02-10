@@ -1,15 +1,15 @@
 # Using a Key Value Store with Spin
 
-- [Using a Key Value Store with Spin](#using-a-keyvalue-store-with-spin)
-  - [Implement a Counter](#implement-a-counter)
-  - [Using Redis for Key Value](#using-redis-for-keyvalue)
-  - [Code samples for this Section](#code-samples-for-this-section)
-    - [Using TypeScript](#using-typescript)
-    - [Using Rust](#using-rust)
-    - [Using Go](#using-go)
-    - [Using Python](#using-python)
-  - [Learning Summary](#learning-summary)
-  - [Navigation](#navigation)
+* [Using a Key Value Store with Spin](#using-a-key-value-store-with-spin)
+  * [Implement a Counter](#implement-a-counter)
+  * [Using Redis for Key Value](#using-redis-for-key-value)
+  * [Code samples for this Section](#code-samples-for-this-section)
+    * [Using TypeScript](#using-typescript)
+    * [Using Rust](#using-rust)
+    * [Using Go](#using-go)
+    * [Using Python](#using-python)
+  * [Learning Summary](#learning-summary)
+  * [Navigation](#navigation)
 
 In this module, we'll use a Key Value store to increment a counter on each request. As Spin loads a new instance of the component on each request, components have no shared memory in-between requests. Therefore we can use the Key Value store in Spin to persist data.
 
@@ -36,38 +36,50 @@ When opening a store, we can provide the name of the store. This is because you 
 Now, let's check for a counter key, and either increment or set it, and then return the counter in the body.
 
 ```typescript
-import { HandleRequest, HttpRequest, HttpResponse, Kv } from "@fermyon/spin-sdk"
+// For AutoRouter documentation refer to https://itty.dev/itty-router/routers/autorouter
+import { Kv } from '@fermyon/spin-sdk';
+import { AutoRouter } from 'itty-router';
+
 // Let's add an interface
 interface Counter {
     count: number;
 }
 
-export const handleRequest: HandleRequest = async function(request: HttpRequest): Promise<HttpResponse> {
+let router = AutoRouter();
 
-    // Open the KV Store named "default"
-    const store = Kv.open("default");
+router
+    .get("/hello/:name", (req) => {
+        let { name } = req.params;
+            // Open the KV Store named "default"
+        let store = Kv.open("default");
 
-    // Get the key "counter" or create a new instance of the interface and set count to 0
-    let counter: Counter = store.getJson("counter") ?? { count: 0 };
-    // Increment the counter
-    counter.count++;
-    // Store the instance of the counter
-    store.setJson("counter", counter);
+        // Get the key "counter" or create a new instance of the interface and set count to 0
+        let counter: Counter;
+        if (store.exists(name)) {
+            counter = store.getJson(name);
+        } else {
+            counter = { count: 0 }
+        }
+        // Increment the counter
+        counter.count++;
+        // Store the instance of the counter
+        store.setJson(name, counter);
 
-    return {
-        status: 200,
-        headers: { "content-type": "text/plain" },
-        // Let's return the counter in the body
-        body: JSON.stringify(counter)
-    }
-}
+        // Return the counter as JSON
+        return new Response(JSON.stringify(counter), { status: 200, headers: { 'content-type': 'application/json' } })
+    })
+
+//@ts-ignore
+addEventListener('fetch', async (event: FetchEvent) => {
+    event.respondWith(router.fetch(event.request));
+});
 ```
 
 Now we need to allow the Spin component to access the Key Value store. In the `spin.toml` file, add the name of the store to the stores which will be made available for the Spin component:
 
 ```toml
 [component.mycomponent]
-source = "target/wasm32-wasi/release/mycomponent.wasm"
+source = "dist/mycomponent.wasm"
 key_value_stores = ["default"]
 ```
 
@@ -82,7 +94,7 @@ curl localhost:3000
 You should now see the counter increment on each request.
 
 > **Note**
-> When using the "default" store locally, Spin stores the value i a sqlite file in the `.spin` directory in the root of the app directory. If you need to reset the KV store, simply delete the `sqlite_key_value.db` file in that folder.
+> When using the "default" store locally, Spin stores the value in a sqlite file in the `.spin` directory in the root of the app directory. If you need to reset the KV store, simply delete the `sqlite_key_value.db` file in that folder.
 
 That's it, we now have a Spin application with the ability to persist state in a Key Value store.
 
@@ -137,26 +149,41 @@ The below sections contains code samples for this section.
 ### Using TypeScript
 
 ```typescript
-import { HandleRequest, HttpRequest, HttpResponse, Kv } from "@fermyon/spin-sdk"
+// For AutoRouter documentation refer to https://itty.dev/itty-router/routers/autorouter
+import { Kv } from '@fermyon/spin-sdk';
+import { AutoRouter } from 'itty-router';
 
+// Let's add an interface
 interface Counter {
     count: number;
 }
 
-export const handleRequest: HandleRequest = async function(request: HttpRequest): Promise<HttpResponse> {
+let router = AutoRouter();
 
-    const store = Kv.open("default");
+router
+    .get("/hello/:name", (req) => {
+        let { name } = req.params;
+        let store = Kv.openDefault();
 
-    let counter: Counter = store.getJson("counter") ?? { count: 0 };
-    counter.count++;
-    store.setJson("counter", counter);
+        let counter: Counter;
+        if (store.exists(name)) {
+            counter = store.getJson(name);
+        } else {
+            counter = { count: 0 }
+        }
+        // Increment the counter
+        counter.count++;
+        // Store the instance of the counter
+        store.setJson(name, counter);
 
-    return {
-        status: 200,
-        headers: { "content-type": "text/plain" },
-        body: JSON.stringify(counter)
-    }
-}
+        // Return the counter as JSON
+        return new Response(JSON.stringify(counter), { status: 200, headers: { 'content-type': 'application/json' } })
+    })
+
+//@ts-ignore
+addEventListener('fetch', async (event: FetchEvent) => {
+    event.respondWith(router.fetch(event.request));
+});
 ```
 
 ### Using Rust
