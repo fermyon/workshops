@@ -1,19 +1,19 @@
 # Getting started with Spin and WebAssembly
 
-- [Getting started with Spin and WebAssembly](#getting-started-with-spin-and-webassembly)
-  - [1. Spin New - Create a Spin application and choose a template](#1-spin-new---create-a-spin-application-and-choose-a-template)
-    - [A few words about choosing a programming language](#a-few-words-about-choosing-a-programming-language)
-  - [2. Spin Build and Spin Up - Build and run the application](#2-spin-build-and-spin-up---build-and-run-the-application)
-  - [Deploy your Spin application](#deploy-your-spin-application)
-  - [3. Fermyon Cloud - Deploy the application to Fermyon Cloud](#3-fermyon-cloud---deploy-the-application-to-fermyon-cloud)
-  - [Quick Reference for this Section](#quick-reference-for-this-section)
-    - [Using TypeScript](#using-typescript)
-    - [Using Rust](#using-rust)
-    - [Using Go](#using-go)
-    - [Using Python](#using-python)
-  - [Do more with Spin](#do-more-with-spin)
-  - [Learning Summary](#learning-summary)
-  - [Navigation](#navigation)
+* [Getting started with Spin and WebAssembly](#getting-started-with-spin-and-webassembly)
+  * [1. Spin New - Create a Spin application and choose a template](#1-spin-new---create-a-spin-application-and-choose-a-template)
+    * [A few words about choosing a programming language](#a-few-words-about-choosing-a-programming-language)
+  * [2. Spin Build and Spin Up - Build and run the application](#2-spin-build-and-spin-up---build-and-run-the-application)
+  * [Deploy your Spin application](#deploy-your-spin-application)
+  * [3. Fermyon Cloud - Deploy the application to Fermyon Cloud](#3-fermyon-cloud---deploy-the-application-to-fermyon-cloud)
+  * [Quick Reference for this Section](#quick-reference-for-this-section)
+    * [Using TypeScript](#using-typescript)
+    * [Using Rust](#using-rust)
+    * [Using Go](#using-go)
+    * [Using Python](#using-python)
+  * [Do more with Spin](#do-more-with-spin)
+  * [Learning Summary](#learning-summary)
+  * [Navigation](#navigation)
 
 In this module, we'll explore how to build an application using [Spin](https://github.com/fermyon/spin), an open-source developer tool for building and running serverless applications with WebAssembly (Wasm).
 
@@ -62,13 +62,15 @@ E.g. having used the `http-ts` template:
 ```bash
 $ cd my-application
 $ tree
-|-- README.md
-|-- package.json
-|-- spin.toml         <-- Spin manifest
-|-- src
-|    -- index.ts      <-- Source file for the first component
-|-- tsconfig.json
-|-- webpack.config.js
+tree .
+├── config
+│   └── knitwit.json
+├── package.json
+├── spin.toml         <-- Spin manifest
+├── src
+│   └── index.ts      <-- Source file for the first component
+├── tsconfig.json
+└── webpack.config.js
 ```
 
 Let's explore the `spin.toml` file. This is the Spin manifest file, which tells Spin what events should trigger what components. In this case our trigger is HTTP, for a web application, and we have only one component, at the route `/...` — a wildcard expression that matches any request sent to this application. Spin applications can consists of many components, where you can define which components that are triggered for requests on different routes.
@@ -87,7 +89,7 @@ route = "/..."
 component = "my-application"
 
 [component.my-application]
-source = "target/my-application.wasm"
+source = "dist/my-application.wasm"
 exclude_files = ["**/node_modules"]
 [component.my-application.build]
 command = "npm run build"
@@ -108,17 +110,13 @@ The Spin documentation also provides guides for the most popular languages, whic
 
 You are now ready to build your application using `spin build`, which will invoke each component's `[component.MYAPP.build.command]` from `spin.toml`.
 
-> For JS and TS apps, use `npm install` to fetch and install all the usual dependencies.
-
-E.g.: 
+E.g.:
 ```bash
-# For TypeScript applications, you need to install dependencies once
-$ npm install
 # Building the application
 $ spin build
-Building component my-application with `npm run build`
-...
-Finished building all Spin components
+Building component hi-civo-navigate (2 commands)
+Running build step 1/2 for component my-application with 'npm install'
+Running build step 2/2 for component my-application with 'npm run build'
 ```
 
 > **Note**
@@ -138,24 +136,34 @@ Available Routes:
 The command will start Spin on port `3000` (use `--listen <ADDRESS>` to change the address and port - e.g., `--listen 0.0.0.0:3030`). You can now access the application by navigating to `localhost:3000` in your browser, or by using `curl`:
 
 ```bash
-curl localhost:3000/         
-Hello from TS-SDK
+$ curl localhost:3000/         
+"hello universe"
+
+$curl localhost:3000/hello/friends
+"Hello, friends!"
 ```
 
-That response is coming from the handler function for this component. The application consists of a single function, which  (for TypeScript) takes the HTTP request (`HTTPRequest`) as an argument and returns a Promise with an HTTP response (`Promise<HttpResponse>`).
+That response is coming from the handler function for this component. The application consists of a single function, which (for TypeScript) takes the HTTP request as an argument and returns the HTTP response.
 
 Typescript example
 
 ```typescript
-import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+// For AutoRouter documentation refer to https://itty.dev/itty-router/routers/autorouter
+import { AutoRouter } from 'itty-router';
 
-export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
-  return {
-    status: 200,
-    headers: { "content-type": "text/plain" },
-    body: "Hello from TS-SDK"
-  }
-}
+let router = AutoRouter();
+
+// Route ordering matters, the first route that matches will be used
+// Any route that does not return will be treated as a middleware
+// Any unmatched route will return a 404
+router
+    .get("/", () => new Response("hello universe"))
+    .get('/hello/:name', ({ name }) => `Hello, ${name}!`)
+
+//@ts-ignore
+addEventListener('fetch', async (event: FetchEvent) => {
+    event.respondWith(router.fetch(event.request));
+});
 ```
 
 We can try changing the message body returned to `Hello, Friend`. We can now run `spin build` again, which will compile our component, and we can use the `--up` flag to automatically start the application, then send another request:
@@ -196,6 +204,7 @@ First, login to Fermyon Cloud with your GitHub ID:
 ```bash
 $ spin cloud login
 ```
+
 And follow the steps to authorize the device.  Then you can deploy your application:
 
 ```bash
@@ -217,15 +226,21 @@ $ spin build --up
 
 ```typescript
 // Content of src/index.ts
-import { HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+import { AutoRouter } from 'itty-router';
 
-export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
-  return {
-    status: 200,
-    headers: { "content-type": "text/plain" },
-    body: "Hello from TS-SDK"
-  }
-}
+let router = AutoRouter();
+
+// Route ordering matters, the first route that matches will be used
+// Any route that does not return will be treated as a middleware
+// Any unmatched route will return a 404
+router
+    .get("/", () => new Response("hello universe"))
+    .get('/hello/:name', ({ name }) => `Hello, ${name}!`)
+
+//@ts-ignore
+addEventListener('fetch', async (event: FetchEvent) => {
+    event.respondWith(router.fetch(event.request));
+});
 ```
 
 ### Using Rust

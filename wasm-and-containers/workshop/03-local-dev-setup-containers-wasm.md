@@ -1,17 +1,17 @@
 # Local dev setup
 
-- [Local dev setup](#local-dev-setup)
-  - [Makefile with Docker compose](#make-file-with-docker-compose)
-    - [Docker Compose](#docker-compose)
-    - [Makefile](#makefile)
-  - [.NET Aspire](#net-aspire)
-    - [Create a new Aspire project](#create-a-new-aspire-project)
-  - [Learning Summary](#learning-summary)
-  - [Navigation](#navigation)
+* [Local dev setup](#local-dev-setup)
+  * [Makefile with Docker compose](#makefile-with-docker-compose)
+    * [Docker Compose](#docker-compose)
+    * [Makefile](#makefile)
+  * [.NET Aspire](#net-aspire)
+    * [Create a new Aspire project](#create-a-new-aspire-project)
+  * [Learning Summary](#learning-summary)
+  * [Navigation](#navigation)
 
-It's hard to get a nice experience for building applications consisting of multiple "things". Creating a local development environment where you need to run a container, two services, and a cloud service, is hard to get right. Tools like Make or Just are popular to create setups to help with the "run, evaluate, debug, change"-loop, and still get meaningful diagnostics about what's happening across those services, containers, and cloud services you are running.
+It's hard to get a nice experience for building applications consisting of multiple "things". Creating a local development environment where you need to run a container, two services, and a cloud service is hard to get right. Tools like Make or Just are popular to create setups to help with the "run, evaluate, debug, change"-loop, and still get meaningful diagnostics about what's happening across those services, containers, and cloud services you are running.
 
-In this section, we'll give a few different options to create a good local dev experience, for a scenario, where we're using two Spin components and a Redis container for our setup. Feel free to choose your own adventure for this section:
+In this section, we'll give a few different options to create a good local dev experience for a scenario, where we're using two Spin components and a Redis container for our setup. Feel free to choose your own adventure for this section:
 
 - [Makefile with Docker compose](#make-file-with-docker-compose)
 - [.NET Aspire](#net-aspire)
@@ -67,7 +67,7 @@ start_all:
 ```
 
 > ***Note**
->  A Makefile is very particular about using tabs and not spaces to inline the commands.
+> A Makefile is very particular about using tabs and not spaces to inline the commands.
 
 You can now run the following command as part of your setup:
 
